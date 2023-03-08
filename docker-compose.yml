@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+
+  nginx:
+    image: nginx
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+
+  front-end:
+    image: front-end
+    build:
+      dockerfile: Dockerfile
+      context: ./front-end
+    container_name: front-end
+  
+  back-end:
+    image: back-end
+    build:
+      dockerfile: Dockerfile
+      context: ./back-end
+
+  db:
+    image: mongo
+    container_name: mongodb
