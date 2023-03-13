@@ -4,7 +4,7 @@ mobile application
 
 - front-end : Expo
 - back-end  : NestJs
-- database  : MySQL
+- database  : MongoDB
 
 # react-native
 
