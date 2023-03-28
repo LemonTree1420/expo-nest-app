@@ -8,17 +8,17 @@ import { Feather } from "@expo/vector-icons";
 import { useRecoilState } from "recoil";
 import { storeState } from "../recoil/atoms";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { tks } from "../constants/asyncStorage";
 import axios from "axios";
-import { API_HEADER, API_URL } from "../constants/api";
+import { API_HEADER } from "../constants/api";
 import { Alert } from "react-native";
+import getEnvVars from "../../environment";
+const { apiUrl, asyncStorageTokenName } = getEnvVars();
 
 export default function Settings({ navigation }: any) {
   const [store, setStore] = useRecoilState(storeState);
-  console.log("@@@", store);
 
   const onSignOutHandler = async () => {
-    await AsyncStorage.removeItem(tks);
+    await AsyncStorage.removeItem(asyncStorageTokenName);
     setStore(null);
     navigation.replace("noToken", { screen: "signIn" });
   };
@@ -34,10 +34,10 @@ export default function Settings({ navigation }: any) {
     );
   };
   const onWithDrawalHandler = async () => {
-    const token = await AsyncStorage.getItem(tks);
+    const token = await AsyncStorage.getItem(asyncStorageTokenName);
     await axios
       .delete(
-        `${API_URL}store/delete/${store._doc._id}`,
+        `${apiUrl}store/delete/${store._doc._id}`,
         API_HEADER(token as string)
       )
       .then((res) =>

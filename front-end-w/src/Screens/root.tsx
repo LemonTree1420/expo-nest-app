@@ -2,32 +2,33 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
-import { API_HEADER, API_URL } from "../constants/api";
-import { tkw } from "../constants/asyncStorage";
+import { API_HEADER } from "../constants/api";
 import { workerState } from "../recoil/atoms";
+import getEnvVars from "../../environment";
+const { apiUrl, asyncStorageTokenName } = getEnvVars();
 
 export default function Root({ navigation }: any) {
   const setWorker = useSetRecoilState(workerState);
 
   const validateToken = async () => {
-    const token = (await AsyncStorage.getItem(tkw)) as string;
+    const token = (await AsyncStorage.getItem(asyncStorageTokenName)) as string;
     if (!token) return validateFailHandler();
 
     return await axios
-      .post(`${API_URL}worker/validate/token`, null, API_HEADER(token))
+      .post(`${apiUrl}worker/validate/token`, null, API_HEADER(token))
       .then((res) => validateSuccessHandler(res.data))
       .catch((err) => validateFailHandler());
   };
 
   const validateSuccessHandler = async (data: any) => {
-    await AsyncStorage.setItem(tkw, data.token);
+    await AsyncStorage.setItem(asyncStorageTokenName, data.token);
     delete data.token;
     setWorker(data);
     return navigation.replace("token", { screen: "home" });
   };
 
   const validateFailHandler = async () => {
-    await AsyncStorage.removeItem(tkw);
+    await AsyncStorage.removeItem(asyncStorageTokenName);
     setWorker(null);
     return navigation.replace("noToken", { screen: "signIn" });
   };

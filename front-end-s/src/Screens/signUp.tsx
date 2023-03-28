@@ -12,9 +12,9 @@ import { basicRegEx, formRegEx } from "../constants/regEx";
 import axios from "axios";
 import { useSetRecoilState } from "recoil";
 import { storeState } from "../recoil/atoms";
-import { API_URL } from "../constants/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { tks } from "../constants/asyncStorage";
+import getEnvVars from "../../environment";
+const { apiUrl, asyncStorageTokenName } = getEnvVars();
 
 export default function SignUp({ navigation }: any) {
   const {
@@ -53,7 +53,7 @@ export default function SignUp({ navigation }: any) {
     const userId = watch("userId");
     if (!userId || userId.length === 0) return false;
     return await axios
-      .get(`${API_URL}store/duplicate/${userId}`)
+      .get(`${apiUrl}store/duplicate/${userId}`)
       .then((res) => idCheckSuccessHandler(res.data))
       .catch((err) => console.error(err));
   };
@@ -90,7 +90,7 @@ export default function SignUp({ navigation }: any) {
     };
 
     return await axios
-      .post(`${API_URL}store/register`, signUpData)
+      .post(`${apiUrl}store/register`, signUpData)
       .then((res) => signUpSuccessHandler(res.data))
       .catch((err) => {
         if (err.response.data.message === "cellPhoneNumber")
@@ -99,7 +99,7 @@ export default function SignUp({ navigation }: any) {
   };
 
   const signUpSuccessHandler = async (data: any) => {
-    await AsyncStorage.setItem(tks, data.token);
+    await AsyncStorage.setItem(asyncStorageTokenName, data.token);
     delete data.token;
     setStore(data);
     return navigation.replace("token", { screen: "home" });

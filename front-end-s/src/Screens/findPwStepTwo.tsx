@@ -4,8 +4,9 @@ import { Controller, useForm } from "react-hook-form";
 import { Alert, Text, View } from "react-native";
 import { Button, HelperText, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { API_URL } from "../constants/api";
 import { formRegEx } from "../constants/regEx";
+import getEnvVars from "../../environment";
+const { apiUrl } = getEnvVars();
 
 export default function FindPwStepTwo({ navigation, route }: any) {
   const {
@@ -43,7 +44,7 @@ export default function FindPwStepTwo({ navigation, route }: any) {
       password: data.password,
     };
     await axios
-      .patch(`${API_URL}store/update/password/${_id}`, changeData)
+      .patch(`${apiUrl}store/update/password/${_id}`, changeData)
       .then((res) => changeSuccessHandler(res.data))
       .catch((err) => console.error(err));
   };

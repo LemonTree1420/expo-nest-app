@@ -4,8 +4,9 @@ import { Controller, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import { Button, HelperText, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { API_URL } from "../constants/api";
 import { basicRegEx } from "../constants/regEx";
+import getEnvVars from "../../environment";
+const { apiUrl } = getEnvVars();
 
 export default function FindPwStepOne({ navigation }: any) {
   const {
@@ -29,7 +30,7 @@ export default function FindPwStepOne({ navigation }: any) {
 
   const onFindHandler = async (data: any) => {
     await axios
-      .post(`${API_URL}worker/validate/pin`, data)
+      .post(`${apiUrl}worker/validate/pin`, data)
       .then((res) => findSuccessHandler(res.data))
       .catch((err) =>
         setCheckErr(

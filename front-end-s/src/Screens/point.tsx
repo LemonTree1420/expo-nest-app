@@ -13,6 +13,15 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { BottomSheet } from "react-native-btr";
 import { Ionicons } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
+import axios from "axios";
+import getEnvVars from "../../environment";
+import { registerIndieID } from "native-notify";
+const {
+  apiUrl,
+  pushNotificationUrl,
+  pushNotificationAppId,
+  pushNotificationAppToken,
+} = getEnvVars();
 
 export default function Point({ navigation }: any) {
   const [money, setMoney] = useState<number>(0);
@@ -20,12 +29,27 @@ export default function Point({ navigation }: any) {
   const [visibleBottomSheet, setVisibleBottomSheet] = useState<boolean>(false);
   const [visibleSnackBar, setVisibleSnackBar] = useState<boolean>(false);
 
-  const onPayHandler = () => {
+  const onPayHandler = async () => {
     if (money === 0 || point === 0) setVisibleSnackBar(true);
     else {
-      alert(money + "/" + point);
-      setMoney(0);
-      setPoint(0);
+      await registerIndieID(
+        "test1234",
+        pushNotificationAppId,
+        pushNotificationAppToken
+      );
+      const pushNotificationOption = {
+        subID: "test1234",
+        appId: pushNotificationAppId,
+        appToken: pushNotificationAppToken,
+        title: "wow",
+        message: "goooooooood",
+      };
+      console.log("!!!", pushNotificationAppId, pushNotificationAppToken);
+      console.log("###", pushNotificationOption);
+      await axios
+        .post(pushNotificationUrl, pushNotificationOption)
+        .then((res) => console.log("@@", res.data))
+        .catch((err) => console.error(err));
     }
   };
 

@@ -12,10 +12,10 @@ import {
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSetRecoilState } from "recoil";
-import { API_URL } from "../constants/api";
-import { tks } from "../constants/asyncStorage";
 import { PLATFORM_NAME } from "../constants/configure";
 import { storeState } from "../recoil/atoms";
+import getEnvVars from "../../environment";
+const { apiUrl, asyncStorageTokenName } = getEnvVars();
 
 export default function SignIn({ navigation }: any) {
   const { control, handleSubmit, watch, clearErrors } = useForm();
@@ -34,7 +34,7 @@ export default function SignIn({ navigation }: any) {
 
   const onSignInHandler = async (data: any) => {
     await axios
-      .post(`${API_URL}store/login`, data)
+      .post(`${apiUrl}store/login`, data)
       .then((res) => signInSuccess(res.data))
       .catch((err) =>
         setCheckAccount(
@@ -44,7 +44,7 @@ export default function SignIn({ navigation }: any) {
   };
 
   const signInSuccess = async (data: any) => {
-    await AsyncStorage.setItem(tks, data.token);
+    await AsyncStorage.setItem(asyncStorageTokenName, data.token);
     delete data.token;
     setStore(data);
     return navigation.replace("token", { screen: "home" });

@@ -8,10 +8,10 @@ import { basicRegEx, formRegEx } from "../constants/regEx";
 import axios from "axios";
 import { useSetRecoilState } from "recoil";
 import { workerState } from "../recoil/atoms";
-import { API_URL } from "../constants/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { tkw } from "../constants/asyncStorage";
 import AgeDialouge from "./dialog/age.dialog";
+import getEnvVars from "../../environment";
+const { apiUrl, asyncStorageTokenName } = getEnvVars();
 
 export default function SignUp({ navigation }: any) {
   const {
@@ -45,7 +45,7 @@ export default function SignUp({ navigation }: any) {
     const userId = watch("userId");
     if (!userId || userId.length === 0) return false;
     return await axios
-      .get(`${API_URL}worker/duplicate/${userId}`)
+      .get(`${apiUrl}worker/duplicate/${userId}`)
       .then((res) => idCheckSuccessHandler(res.data))
       .catch((err) => console.error(err));
   };
@@ -69,7 +69,7 @@ export default function SignUp({ navigation }: any) {
     data.age = Number(data.age.substr(0, 2));
 
     return await axios
-      .post(`${API_URL}worker/register`, data)
+      .post(`${apiUrl}worker/register`, data)
       .then((res) => signUpSuccessHandler(res.data))
       .catch((err) => {
         if (err.response.data.message === "cellPhoneNumber")
@@ -78,7 +78,7 @@ export default function SignUp({ navigation }: any) {
   };
 
   const signUpSuccessHandler = async (data: any) => {
-    await AsyncStorage.setItem(tkw, data.token);
+    await AsyncStorage.setItem(asyncStorageTokenName, data.token);
     delete data.token;
     setWorker(data);
     return navigation.replace("token", { screen: "home" });

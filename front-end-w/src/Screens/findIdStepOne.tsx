@@ -4,8 +4,9 @@ import { Controller, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import { Button, HelperText, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { API_URL } from "../constants/api";
 import { formRegEx } from "../constants/regEx";
+import getEnvVars from "../../environment";
+const { apiUrl } = getEnvVars();
 
 export default function FindIdStepOne({ navigation }: any) {
   const {
@@ -26,7 +27,7 @@ export default function FindIdStepOne({ navigation }: any) {
 
   const onFindHandler = async (data: any) => {
     await axios
-      .get(`${API_URL}worker/find/account/${data.cellPhoneNumber}`)
+      .get(`${apiUrl}worker/find/account/${data.cellPhoneNumber}`)
       .then((res) => findSuccessHandler(res.data))
       .catch((err) => setError("cellPhoneNumber", { type: "check" }));
   };

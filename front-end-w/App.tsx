@@ -5,9 +5,14 @@ import { RecoilRoot } from "recoil";
 import Navigation from "./navigation";
 import { useNetInfo, NetInfoState } from "@react-native-community/netinfo";
 import NoNetWork from "./src/Screens/noNetWork";
+import getEnvVars from "./environment";
+import registerNNPushToken, { registerIndieID } from "native-notify";
+const { pushNotificationAppId, pushNotificationAppToken } = getEnvVars();
 
 export default function App() {
   const internetState: NetInfoState = useNetInfo();
+  registerNNPushToken(pushNotificationAppId, pushNotificationAppToken);
+  registerIndieID("admin1234", pushNotificationAppId, pushNotificationAppToken);
 
   return (
     <RecoilRoot>
