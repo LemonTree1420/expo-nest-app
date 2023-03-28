@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  back-end:
+    depends_on:
+      - db
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./back-end
+    ports:
+      - 9196:9196
+    environment:
+      PORT: 9196
+      MONGO_URL: mongodb://lemontree1420:rudqud9196@db:27017
+      DB_NAME: choice
+
+  db:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INIT_ROOT_USERNAME: lemontree1420
+      MONGO_INIT_ROOT_PASSWORD: rudqud9196!
+      MONGO_INITDB_DATABASE: choice
+
+volumes:
+  db-data: {}
