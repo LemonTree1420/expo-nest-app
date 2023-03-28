@@ -6,10 +6,11 @@ import { Alert } from "react-native";
 import { Button, HelperText, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRecoilState } from "recoil";
-import { API_HEADER, API_URL } from "../constants/api";
-import { tks } from "../constants/asyncStorage";
+import { API_HEADER } from "../constants/api";
 import { formRegEx } from "../constants/regEx";
 import { storeState } from "../recoil/atoms";
+import getEnvVars from "../../environment";
+const { apiUrl, asyncStorageTokenName } = getEnvVars();
 
 export default function PhoneNumEdit({ navigation }: any) {
   const {
@@ -26,11 +27,11 @@ export default function PhoneNumEdit({ navigation }: any) {
   }, []);
 
   const onEditHandler = async (data: any) => {
-    const token = await AsyncStorage.getItem(tks);
+    const token = await AsyncStorage.getItem(asyncStorageTokenName);
 
     return await axios
       .patch(
-        `${API_URL}store/update/${store._id}`,
+        `${apiUrl}store/update/${store._id}`,
         data,
         API_HEADER(token as string)
       )
@@ -52,7 +53,7 @@ export default function PhoneNumEdit({ navigation }: any) {
   };
 
   const onSignOutHandler = async () => {
-    await AsyncStorage.removeItem(tks);
+    await AsyncStorage.removeItem(asyncStorageTokenName);
     setStore(null);
     navigation.replace("noToken", { screen: "signIn" });
   };

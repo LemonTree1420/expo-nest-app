@@ -6,10 +6,12 @@ import Navigation from "./navigation";
 import { useNetInfo, NetInfoState } from "@react-native-community/netinfo";
 import NoNetWork from "./src/Screens/noNetWork";
 import registerNNPushToken from "native-notify";
+import getEnvVars from "./environment";
+const { pushNotificationAppId, pushNotificationAppToken } = getEnvVars();
 
 export default function App() {
   const internetState: NetInfoState = useNetInfo();
-  registerNNPushToken(6966, "5AFyHR9a0QxPtoqgcmNmWl");
+  registerNNPushToken(pushNotificationAppId, pushNotificationAppToken);
 
   return (
     <RecoilRoot>
