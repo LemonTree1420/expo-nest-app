@@ -33,6 +33,7 @@ export class StoreService {
   ): Promise<StoreWithToken> {
     try {
       const createdStore = new this.storeModel(createStoreAccountDto);
+      console.log(createdStore);
 
       const hashedPassword = await this.authService.encryptSecret(
         createStoreAccountDto.password,

@@ -44,8 +44,9 @@ export class WorkerService {
 
       createdWorker.password = hashedPassword;
       createdWorker.pin = hashedPin;
-
+      console.log('created', createdWorker);
       const worker = await createdWorker.save();
+      console.log('save', worker);
       if (!worker) throw new BadRequestException('SignUp failed.');
 
       const authTokenDto: AuthTokenDto = {
@@ -54,6 +55,7 @@ export class WorkerService {
         auth: worker.auth,
       };
       const token = await this.authService.createToken(authTokenDto);
+      console.log(token);
       return { ...worker.toObject(), token: token };
     } catch (err) {
       handleMongooseErr(err);
