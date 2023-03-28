@@ -12,7 +12,6 @@ const { pushNotificationAppId, pushNotificationAppToken } = getEnvVars();
 export default function App() {
   const internetState: NetInfoState = useNetInfo();
   registerNNPushToken(pushNotificationAppId, pushNotificationAppToken);
-  registerIndieID("admin1234", pushNotificationAppId, pushNotificationAppToken);
 
   return (
     <RecoilRoot>

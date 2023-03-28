@@ -14,7 +14,13 @@ import { useSetRecoilState } from "recoil";
 import { storeState } from "../recoil/atoms";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import getEnvVars from "../../environment";
-const { apiUrl, asyncStorageTokenName } = getEnvVars();
+import { registerIndieID } from "native-notify";
+const {
+  apiUrl,
+  asyncStorageTokenName,
+  pushNotificationAppId,
+  pushNotificationAppToken,
+} = getEnvVars();
 
 export default function SignUp({ navigation }: any) {
   const {
@@ -102,6 +108,11 @@ export default function SignUp({ navigation }: any) {
     await AsyncStorage.setItem(asyncStorageTokenName, data.token);
     delete data.token;
     setStore(data);
+    await registerIndieID(
+      data._id,
+      pushNotificationAppId,
+      pushNotificationAppToken
+    );
     return navigation.replace("token", { screen: "home" });
   };
 
