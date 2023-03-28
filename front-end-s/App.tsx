@@ -5,9 +5,18 @@ import { RecoilRoot } from "recoil";
 import Navigation from "./navigation";
 import { useNetInfo, NetInfoState } from "@react-native-community/netinfo";
 import NoNetWork from "./src/Screens/noNetWork";
+import * as Notifications from "expo-notifications";
 import registerNNPushToken from "native-notify";
 import getEnvVars from "./environment";
 const { pushNotificationAppId, pushNotificationAppToken } = getEnvVars();
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: false,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 export default function App() {
   const internetState: NetInfoState = useNetInfo();

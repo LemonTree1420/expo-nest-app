@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Pressable, Share, View } from "react-native";
+import { Alert, Pressable, Share, View } from "react-native";
 import { Button, Divider, Snackbar, Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -13,19 +13,47 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { BottomSheet } from "react-native-btr";
 import { Ionicons } from "@expo/vector-icons";
 import * as Clipboard from "expo-clipboard";
+import getEnvVars from "../../environment";
+import axios from "axios";
+import { workerState } from "../recoil/atoms";
+import { useRecoilValue } from "recoil";
+const {
+  apiUrl,
+  pushNotificationUrl,
+  pushNotificationAppId,
+  pushNotificationAppToken,
+  pushNotificationAdminId,
+} = getEnvVars();
 
 export default function Point({ navigation }: any) {
   const [money, setMoney] = useState<number>(0);
   const [point, setPoint] = useState<number>(0);
   const [visibleBottomSheet, setVisibleBottomSheet] = useState<boolean>(false);
   const [visibleSnackBar, setVisibleSnackBar] = useState<boolean>(false);
+  const [pointSnackBar, setPointSnackBar] = useState<boolean>(false);
+  const worker = useRecoilValue(workerState);
 
-  const onPayHandler = () => {
+  const onPayHandler = async () => {
     if (money === 0 || point === 0) setVisibleSnackBar(true);
     else {
-      alert(money + "/" + point);
-      setMoney(0);
-      setPoint(0);
+      // // 서버에 포인트 저장 api 연결 필요
+      // const pushNotificationOption = {
+      //   subID: pushNotificationAdminId,
+      //   appId: pushNotificationAppId,
+      //   appToken: pushNotificationAppToken,
+      //   title: "충전 요청",
+      //   message: `${worker.name}에서 ${money}(+ ${point}) 충전했습니다.`,
+      // };
+      // console.log("!!!", pushNotificationAppId, pushNotificationAppToken);
+      // console.log("###", pushNotificationOption);
+      // await axios
+      //   .post(pushNotificationUrl, pushNotificationOption)
+      //   .then((res) => setPointSnackBar(true))
+      //   .catch((err) =>
+      //     Alert.alert("", "서버 에러로 충전 요청이 발송되지 않았습니다.", [
+      //       { text: "확인" },
+      //     ])
+      //   );
     }
   };
 
@@ -148,15 +176,12 @@ export default function Point({ navigation }: any) {
       </View>
       <BottomSheet
         visible={visibleBottomSheet}
-        //setting the visibility state of the bottom shee
         onBackButtonPress={() => {
           setVisibleBottomSheet(false);
         }}
-        //Toggling the visibility state on the click of the back botton
         onBackdropPress={() => {
           setVisibleBottomSheet(false);
         }}
-        //Toggling the visibility state on the clicking out side of the sheet
       >
         <View className="bg-white w-full h-36 justify-center items-center rounded-t-lg">
           <Pressable
@@ -194,6 +219,26 @@ export default function Point({ navigation }: any) {
         <View className="flex-row items-center">
           <Entypo name="warning" size={18} color="#fff" />
           <Text className="ml-2 text-white">충전하실 금액을 선택하세요.</Text>
+        </View>
+      </Snackbar>
+      <Snackbar
+        className="bg-gray-600"
+        visible={pointSnackBar}
+        onDismiss={() => setPointSnackBar(false)}
+        action={{
+          label: "x",
+          labelStyle: {
+            color: "#fff",
+          },
+          onPress: () => {
+            setPointSnackBar(false);
+          },
+        }}
+        duration={2000}
+      >
+        <View className="flex-row items-center">
+          <Entypo name="warning" size={18} color="#fff" />
+          <Text className="ml-2 text-white">충전 요청이 발송되었습니다.</Text>
         </View>
       </Snackbar>
     </SafeAreaView>

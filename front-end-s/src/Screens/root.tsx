@@ -5,7 +5,13 @@ import { useSetRecoilState } from "recoil";
 import { API_HEADER } from "../constants/api";
 import { storeState } from "../recoil/atoms";
 import getEnvVars from "../../environment";
-const { apiUrl, asyncStorageTokenName } = getEnvVars();
+import { registerIndieID } from "native-notify";
+const {
+  apiUrl,
+  asyncStorageTokenName,
+  pushNotificationAppId,
+  pushNotificationAppToken,
+} = getEnvVars();
 
 export default function Root({ navigation }: any) {
   const setStore = useSetRecoilState(storeState);
@@ -24,6 +30,11 @@ export default function Root({ navigation }: any) {
     await AsyncStorage.setItem(asyncStorageTokenName, data.token);
     delete data.token;
     setStore(data);
+    await registerIndieID(
+      data._id,
+      pushNotificationAppId,
+      pushNotificationAppToken
+    );
     return navigation.replace("token", { screen: "home" });
   };
 
