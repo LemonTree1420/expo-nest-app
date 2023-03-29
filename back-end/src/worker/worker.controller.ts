@@ -46,8 +46,7 @@ export class WorkerController {
     const worker = await this.workerService.getWorkerByToken(token);
     const token2 = await this.authService.createToken(token);
     logging(worker.userId, Process.CONTROLLER, 'validateToken');
-    const a = { ...worker, token: token2 };
-    return a;
+    return { ...worker.toObject(), token: token2 };
   }
 
   /**

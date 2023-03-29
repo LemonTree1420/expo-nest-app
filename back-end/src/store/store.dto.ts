@@ -42,10 +42,6 @@ export class CreateStoreAccountDto {
 export class StoreFindOptions {
   @IsOptional()
   @IsString()
-  _id: Types.ObjectId;
-
-  @IsOptional()
-  @IsString()
   userId: string;
 
   @IsOptional()

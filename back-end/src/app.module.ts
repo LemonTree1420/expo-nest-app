@@ -1,14 +1,12 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { StoreModule } from './store/store.module';
-import { CallModule } from './call/call.module';
-import { WorkerModule } from './worker/worker.module';
 import { AuthModule } from './auth/auth.module';
+import { CallModule } from './call/call.module';
 import { PointModule } from './point/point.module';
-import { ConfigModule } from '@nestjs/config';
+import { StoreModule } from './store/store.module';
+import { WorkerModule } from './worker/worker.module';
 @Module({
   imports: [
-    ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.DB_URI, {
       user: process.env.DB_USERNAME,
       pass: process.env.DB_PASSWORD,

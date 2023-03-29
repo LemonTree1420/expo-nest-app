@@ -26,10 +26,6 @@ export class CreateWorkerAccountDto {
 export class WorkerFindOptions {
   @IsOptional()
   @IsString()
-  _id: Types.ObjectId;
-
-  @IsOptional()
-  @IsString()
   userId: string;
 
   @IsOptional()

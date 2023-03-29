@@ -1,13 +1,18 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument, Types } from 'mongoose';
 import { Store } from 'src/store/store.schema';
 
 export type CallDocument = HydratedDocument<Call>;
 
 @Schema()
 export class Call {
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Store' })
-  store: Store;
+  _id: Types.ObjectId;
+
+  @Prop({ type: Types.ObjectId, ref: 'Store' })
+  store: Types.ObjectId;
+
+  @Prop()
+  region: string;
 
   @Prop()
   customerAge: number;
@@ -21,14 +26,11 @@ export class Call {
   @Prop()
   fee: number;
 
-  @Prop({ unique: true })
+  @Prop()
   workerNumbers: string[];
 
   @Prop()
   memo: string;
-
-  @Prop({ default: false })
-  status: boolean;
 }
 
 export const CallSchema = SchemaFactory.createForClass(Call);

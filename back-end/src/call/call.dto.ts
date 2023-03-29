@@ -1,9 +1,10 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Types } from 'mongoose';
 
 export class CreateCallDto {
   @IsNotEmpty()
   @IsString()
-  store: string;
+  store: Types.ObjectId;
 
   @IsNotEmpty()
   @IsNumber()
@@ -40,4 +41,8 @@ export class ModifyCallDto {
   memo: string;
 }
 
-export class TakeCall {}
+export class TakeCallDto {
+  @IsNotEmpty()
+  @IsString()
+  workerNumber: string;
+}

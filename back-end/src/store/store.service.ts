@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { AuthTokenDto, LoginDto, PinDto } from 'src/auth/auth.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { handleMongooseErr } from 'src/constants/handleErr';
@@ -33,7 +33,6 @@ export class StoreService {
   ): Promise<StoreWithToken> {
     try {
       const createdStore = new this.storeModel(createStoreAccountDto);
-      console.log(createdStore);
 
       const hashedPassword = await this.authService.encryptSecret(
         createStoreAccountDto.password,
@@ -58,6 +57,15 @@ export class StoreService {
     } catch (err) {
       handleMongooseErr(err);
     }
+  }
+
+  /**
+   * Object id로 특정 Store 검색
+   * @param id
+   * @returns
+   */
+  async getStoreById(id: Types.ObjectId): Promise<Store> {
+    return await this.storeModel.findById(id);
   }
 
   /**

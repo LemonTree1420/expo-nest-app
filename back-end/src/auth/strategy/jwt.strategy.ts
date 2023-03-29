@@ -21,15 +21,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: AuthTokenDto): Promise<Store | Worker> {
-    const filter = { _id: payload._id };
     if (payload.auth === Auth.STORE) {
-      const store = await this.storeService.getStoreByOption(filter);
+      const store = await this.storeService.getStoreById(payload._id);
       if (!store) {
         throw new UnauthorizedException('no store');
       }
       return store;
     } else if (payload.auth === Auth.WORKER) {
-      const worker = await this.workerService.getWorkerByOption(filter);
+      const worker = await this.workerService.getWorkerById(payload._id);
       if (!worker) {
         throw new UnauthorizedException();
       }

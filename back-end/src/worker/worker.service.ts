@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Auth } from 'src/auth/auth.constants';
 import { AuthTokenDto, LoginDto, PinDto } from 'src/auth/auth.dto';
 import { AuthService } from 'src/auth/auth.service';
@@ -44,9 +44,7 @@ export class WorkerService {
 
       createdWorker.password = hashedPassword;
       createdWorker.pin = hashedPin;
-      console.log('created', createdWorker);
       const worker = await createdWorker.save();
-      console.log('save', worker);
       if (!worker) throw new BadRequestException('SignUp failed.');
 
       const authTokenDto: AuthTokenDto = {
@@ -55,11 +53,20 @@ export class WorkerService {
         auth: worker.auth,
       };
       const token = await this.authService.createToken(authTokenDto);
-      console.log(token);
+
       return { ...worker.toObject(), token: token };
     } catch (err) {
       handleMongooseErr(err);
     }
+  }
+
+  /**
+   * Object id로 특정 worker 검색
+   * @param id
+   * @returns
+   */
+  async getWorkerById(id: Types.ObjectId): Promise<Worker> {
+    return await this.workerModel.findById(id);
   }
 
   /**
