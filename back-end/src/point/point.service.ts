@@ -42,7 +42,7 @@ export class PointService {
   }
 
   /**
-   * 콜 삭제 - Store, Worker, Admin
+   * 콜 삭제(취소) - Store, Worker, Admin
    * @param id
    * @returns
    */

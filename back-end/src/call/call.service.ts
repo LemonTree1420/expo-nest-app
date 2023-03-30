@@ -1,6 +1,7 @@
 import { Injectable, Type } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, SortOrder, Types } from 'mongoose';
+import { DEDUCT_POINT } from 'src/point/point.constants';
 import { StoreService } from 'src/store/store.service';
 import { WorkerService } from 'src/worker/worker.service';
 import { CreateCallDto, ModifyCallDto, TakeCallDto } from './call.dto';
@@ -20,9 +21,17 @@ export class CallService {
    * @returns
    */
   async createCall(createCallDto: CreateCallDto): Promise<Call> {
-    const storeId = createCallDto.store;
-    const region = (await this.storeService.getStoreById(storeId)).region;
-    const createCallOption = { ...createCallDto, region: region };
+    const store = await this.storeService.getStoreById(createCallDto.store);
+    if (store.point < DEDUCT_POINT) {
+      throw new Error('Point is not enough. Please charge.');
+    }
+    const storeOption = { point: store.point - DEDUCT_POINT };
+    await this.storeService.updateStoreAccount(
+      createCallDto.store,
+      storeOption,
+    );
+
+    const createCallOption = { ...createCallDto, region: store.region };
     return await new this.callModel(createCallOption).save();
   }
 
@@ -89,6 +98,15 @@ export class CallService {
    * @returns
    */
   async takeCall(id: Types.ObjectId, takeCallDto: TakeCallDto): Promise<Call> {
+    const workerFilter = { cellPhoneNumber: takeCallDto.workerNumber };
+    const worker = await this.workerService.getWorkerByOption(workerFilter);
+    if (worker.point < DEDUCT_POINT) {
+      throw new Error('Point is not enough. Please charge.');
+    }
+
+    const workerOption = { point: worker.point - DEDUCT_POINT };
+    await this.workerService.updateWorkerAccount(worker._id, workerOption);
+
     const call = await this.callModel.findById(id);
     let workerNumbers = call.workerNumbers;
     workerNumbers.push(takeCallDto.workerNumber);
