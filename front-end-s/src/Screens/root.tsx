@@ -5,20 +5,14 @@ import { useSetRecoilState } from "recoil";
 import { API_HEADER } from "../constants/api";
 import { storeState } from "../recoil/atoms";
 import getEnvVars from "../../environment";
-import { registerIndieID } from "native-notify";
-const {
-  apiUrl,
-  asyncStorageTokenName,
-  pushNotificationAppId,
-  pushNotificationAppToken,
-} = getEnvVars();
+import { tokenValidateHandler } from "../constants/validate";
+const { apiUrl, asyncStorageTokenName } = getEnvVars();
 
 export default function Root({ navigation }: any) {
   const setStore = useSetRecoilState(storeState);
 
   const validateToken = async () => {
-    const token = (await AsyncStorage.getItem(asyncStorageTokenName)) as string;
-    if (!token) return validateFailHandler();
+    const token = await tokenValidateHandler(setStore, navigation);
 
     return await axios
       .post(`${apiUrl}store/validate/token`, null, API_HEADER(token))
@@ -30,12 +24,7 @@ export default function Root({ navigation }: any) {
     await AsyncStorage.setItem(asyncStorageTokenName, data.token);
     delete data.token;
     setStore(data);
-    await registerIndieID(
-      data._id,
-      pushNotificationAppId,
-      pushNotificationAppToken
-    );
-    return navigation.replace("token", { screen: "home" });
+    return navigation.replace("token", { screen: "list" });
   };
 
   const validateFailHandler = async () => {

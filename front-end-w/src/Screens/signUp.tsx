@@ -11,13 +11,7 @@ import { workerState } from "../recoil/atoms";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AgeDialouge from "./dialog/age.dialog";
 import getEnvVars from "../../environment";
-import { registerIndieID } from "native-notify";
-const {
-  apiUrl,
-  asyncStorageTokenName,
-  pushNotificationAppId,
-  pushNotificationAppToken,
-} = getEnvVars();
+const { apiUrl, asyncStorageTokenName } = getEnvVars();
 
 export default function SignUp({ navigation }: any) {
   const {
@@ -87,11 +81,6 @@ export default function SignUp({ navigation }: any) {
     await AsyncStorage.setItem(asyncStorageTokenName, data.token);
     delete data.token;
     setWorker(data);
-    await registerIndieID(
-      data._id,
-      pushNotificationAppId,
-      pushNotificationAppToken
-    );
     return navigation.replace("token", { screen: "home" });
   };
 
@@ -100,6 +89,7 @@ export default function SignUp({ navigation }: any) {
     close: () => {
       setAgeDialog(false);
     },
+    value: watch("age"),
     setValue,
     clearErrors,
   };

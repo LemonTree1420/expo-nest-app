@@ -15,13 +15,7 @@ import { useSetRecoilState } from "recoil";
 import { PLATFORM_NAME } from "../constants/configure";
 import { workerState } from "../recoil/atoms";
 import getEnvVars from "../../environment";
-import { registerIndieID } from "native-notify";
-const {
-  apiUrl,
-  asyncStorageTokenName,
-  pushNotificationAppId,
-  pushNotificationAppToken,
-} = getEnvVars();
+const { apiUrl, asyncStorageTokenName } = getEnvVars();
 
 export default function SignIn({ navigation }: any) {
   const { control, handleSubmit, watch, clearErrors } = useForm();
@@ -53,11 +47,6 @@ export default function SignIn({ navigation }: any) {
     await AsyncStorage.setItem(asyncStorageTokenName, data.token);
     delete data.token;
     setWorker(data);
-    await registerIndieID(
-      data._id,
-      pushNotificationAppId,
-      pushNotificationAppToken
-    );
     return navigation.replace("token", { screen: "home" });
   };
 
