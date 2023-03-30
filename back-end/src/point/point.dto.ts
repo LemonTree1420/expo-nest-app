@@ -1,11 +1,14 @@
-import { IsNotEmpty, IsNumber, IsObject, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Types } from 'mongoose';
+import { Auth } from 'src/auth/auth.constants';
 
-export class StoreChargePointDto {
+export class RequestChargePointDto {
   @IsNotEmpty()
-  @IsObject()
-  request: {
-    store: string;
-  };
+  request_id: Types.ObjectId;
+
+  @IsNotEmpty()
+  @IsString()
+  requestName: string;
 
   @IsNotEmpty()
   @IsNumber()
@@ -13,21 +16,11 @@ export class StoreChargePointDto {
 
   @IsNotEmpty()
   @IsNumber()
-  chargePoint: number;
+  requestPoint: number;
 }
 
-export class WorkerChargePointDto {
-  @IsNotEmpty()
-  @IsObject()
-  request: {
-    worker: string;
-  };
-
+export class ResponseChargePointDto {
   @IsNotEmpty()
   @IsNumber()
-  depositAmount: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  chargePoint: number;
+  responsePoint: number;
 }

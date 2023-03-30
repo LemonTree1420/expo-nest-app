@@ -106,7 +106,7 @@ export class StoreService {
    * @returns
    */
   async updateStoreAccount(
-    id: string,
+    id: Types.ObjectId,
     updateStoreAccountDto: UpdateStoreAccountDto,
   ): Promise<Store> {
     const filter = { _id: id };
@@ -136,7 +136,7 @@ export class StoreService {
    * @param id
    * @returns
    */
-  async deleteStoreAccountById(id: string): Promise<void> {
+  async deleteStoreAccountById(id: Types.ObjectId): Promise<void> {
     const filter = { _id: id };
     await this.storeModel.findOneAndDelete(filter);
     return;
@@ -189,7 +189,6 @@ export class StoreService {
         auth: store.auth,
       };
       const token = await this.authService.createToken(authTokenDto);
-
       store.password = undefined;
       return { ...store.toObject(), token: token };
     } else {

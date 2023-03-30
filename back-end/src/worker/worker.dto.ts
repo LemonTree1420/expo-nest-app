@@ -26,27 +26,31 @@ export class CreateWorkerAccountDto {
 export class WorkerFindOptions {
   @IsOptional()
   @IsString()
-  userId: string;
+  userId?: string;
 
   @IsOptional()
   @IsString()
-  cellPhoneNumber: string;
+  cellPhoneNumber?: string;
 }
 
 export class UpdateWorkerAccountDto {
   @IsOptional()
   @IsString()
-  password: string;
+  password?: string;
 
   @IsOptional()
   @IsString()
-  pin: string;
+  pin?: string;
 
   @IsOptional()
   @IsNumber()
-  age: number;
+  age?: number;
 
   @IsOptional()
   @IsString()
-  cellPhoneNumber: string;
+  cellPhoneNumber?: string;
+
+  @IsOptional()
+  @IsNumber()
+  point?: number;
 }

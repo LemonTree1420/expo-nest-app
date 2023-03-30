@@ -1,28 +1,32 @@
-import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument } from 'mongoose';
-import { Store } from 'src/store/store.schema';
-import { Worker } from 'src/worker/worker.schema';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { HydratedDocument, Types } from 'mongoose';
+import { DEDUCT_POINT } from './point.constants';
 
 export type PointDocument = HydratedDocument<Point>;
 
 @Schema()
 export class Point {
-  @Prop(
-    raw({
-      store: { type: mongoose.Schema.Types.ObjectId, ref: 'Store' },
-      worker: { type: mongoose.Types.ObjectId, ref: 'Worker' },
-    }),
-  )
-  request: Record<string, any>;
+  _id: Types.ObjectId;
 
+  // 요청자의 ObjectId - Store, Worker
+  @Prop()
+  request_id: Types.ObjectId;
+
+  // 입금 계좌의 예금주
+  @Prop()
+  requestName: string;
+
+  // 충전 신청 포인트 - 입금액 / 10
+  @Prop()
+  requestPoint: number;
+
+  // 입금액
   @Prop()
   depositAmount: number;
 
-  @Prop()
-  chargePoint: number;
-
-  @Prop({ default: 20 })
-  deductPoint: number;
+  // 충전 포인트
+  @Prop({ default: 0 })
+  responsePoint: number;
 }
 
 export const PointSchema = SchemaFactory.createForClass(Point);

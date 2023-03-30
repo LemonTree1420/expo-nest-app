@@ -11,6 +11,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Types } from 'mongoose';
 import { AuthTokenInfo } from 'src/auth/auth.decorator';
 import { AuthTokenDto, LoginDto, PinDto } from 'src/auth/auth.dto';
 import { AuthService } from 'src/auth/auth.service';
@@ -91,7 +92,7 @@ export class StoreController {
   @UseGuards(AuthGuard())
   @UsePipes(ValidationPipe)
   updateStoreAccount(
-    @Param('id') id: string,
+    @Param('id') id: Types.ObjectId,
     @Body() updateStoreAccountDto: UpdateStoreAccountDto,
   ): Promise<Store> {
     return this.storeService.updateStoreAccount(id, updateStoreAccountDto);
@@ -106,7 +107,7 @@ export class StoreController {
   @Patch('/update/password/:id')
   @UsePipes(ValidationPipe)
   updateStorePassword(
-    @Param('id') id: string,
+    @Param('id') id: Types.ObjectId,
     @Body() updateStoreAccountDto: UpdateStoreAccountDto,
   ): Promise<Store> {
     return this.storeService.updateStoreAccount(id, updateStoreAccountDto);
@@ -118,7 +119,7 @@ export class StoreController {
    * @returns
    */
   @Delete('/delete/:id')
-  deleteStoreAccountById(@Param('id') id: string): Promise<void> {
+  deleteStoreAccountById(@Param('id') id: Types.ObjectId): Promise<void> {
     return this.storeService.deleteStoreAccountById(id);
   }
 

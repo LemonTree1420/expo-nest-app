@@ -20,7 +20,7 @@ export class CreateStoreAccountDto {
 
   @IsOptional()
   @IsString()
-  phoneNumber: string;
+  phoneNumber?: string;
 
   @IsNotEmpty()
   @IsString()
@@ -32,7 +32,7 @@ export class CreateStoreAccountDto {
 
   @IsOptional()
   @IsString()
-  address2: string;
+  address2?: string;
 
   @IsNotEmpty()
   @IsString()
@@ -42,35 +42,35 @@ export class CreateStoreAccountDto {
 export class StoreFindOptions {
   @IsOptional()
   @IsString()
-  userId: string;
+  userId?: string;
 
   @IsOptional()
   @IsString()
-  name: string;
+  name?: string;
 
   @IsOptional()
   @IsString()
-  cellPhoneNumber: string;
+  cellPhoneNumber?: string;
 }
 
 export class UpdateStoreAccountDto {
   @IsOptional()
   @IsString()
-  password: string;
+  password?: string;
 
   @IsOptional()
   @IsString()
-  pin: string;
+  pin?: string;
 
   @IsOptional()
   @IsString()
-  phoneNumber: string;
+  phoneNumber?: string;
 
   @IsOptional()
   @IsString()
-  cellPhoneNumber: string;
+  cellPhoneNumber?: string;
 
   @IsOptional()
   @IsNumber()
-  point: number;
+  point?: number;
 }

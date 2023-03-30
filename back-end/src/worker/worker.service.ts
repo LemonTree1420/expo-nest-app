@@ -111,7 +111,7 @@ export class WorkerService {
    * @returns
    */
   async updateWorkerAccount(
-    id: string,
+    id: Types.ObjectId,
     updateWorkerAccountDto: UpdateWorkerAccountDto,
   ): Promise<Worker> {
     const filter = { _id: id };
@@ -141,7 +141,7 @@ export class WorkerService {
    * @param id
    * @returns
    */
-  async deleteWorkerAccountById(id: string): Promise<void> {
+  async deleteWorkerAccountById(id: Types.ObjectId): Promise<void> {
     const filter = { _id: id };
     await this.workerModel.findOneAndDelete(filter);
     return;

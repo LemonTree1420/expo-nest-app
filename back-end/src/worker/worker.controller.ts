@@ -12,6 +12,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Types } from 'mongoose';
 import { AuthTokenInfo } from 'src/auth/auth.decorator';
 import { AuthTokenDto, LoginDto, PinDto } from 'src/auth/auth.dto';
 import { AuthService } from 'src/auth/auth.service';
@@ -97,7 +98,7 @@ export class WorkerController {
   @UseGuards(AuthGuard())
   @UsePipes(ValidationPipe)
   updateWorkerAccount(
-    @Param('id') id: string,
+    @Param('id') id: Types.ObjectId,
     @Body() updateWorkerAccountDto: UpdateWorkerAccountDto,
   ): Promise<Worker> {
     return this.workerService.updateWorkerAccount(id, updateWorkerAccountDto);
@@ -112,7 +113,7 @@ export class WorkerController {
   @Patch('/update/password/:id')
   @UsePipes(ValidationPipe)
   updateStorePassword(
-    @Param('id') id: string,
+    @Param('id') id: Types.ObjectId,
     @Body() updateWorkerAccountDto: UpdateWorkerAccountDto,
   ): Promise<Worker> {
     return this.workerService.updateWorkerAccount(id, updateWorkerAccountDto);
@@ -124,7 +125,7 @@ export class WorkerController {
    * @returns
    */
   @Delete('/delete/:id')
-  deleteWorkerAccountById(@Param('id') id: string): Promise<void> {
+  deleteWorkerAccountById(@Param('id') id: Types.ObjectId): Promise<void> {
     return this.workerService.deleteWorkerAccountById(id);
   }
 
