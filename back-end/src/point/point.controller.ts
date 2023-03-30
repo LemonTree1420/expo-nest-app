@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   Patch,
   Post,
@@ -13,7 +14,7 @@ import { Point } from './point.schema';
 import { PointService } from './point.service';
 
 @Controller('point')
-@UseGuards(AuthGuard())
+// @UseGuards(AuthGuard())
 export class PointController {
   constructor(private pointService: PointService) {}
 
@@ -27,6 +28,15 @@ export class PointController {
     @Body() requestChargePointDto: RequestChargePointDto,
   ): Promise<Point> {
     return this.pointService.requestChargePoint(requestChargePointDto);
+  }
+
+  /**
+   * 충전 요청 중인 포인트들 받아오기
+   * @returns
+   */
+  @Get('/yet')
+  getRequestPoints(): Promise<Point[]> {
+    return this.pointService.getRequestPoints();
   }
 
   /**
