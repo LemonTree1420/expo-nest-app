@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -35,8 +36,12 @@ export class CallController {
    * @returns
    */
   @Get('/store/:id')
-  getCallsByStore(@Param('id') storeObjectId: Types.ObjectId): Promise<Call[]> {
-    return this.callService.getCallsByStore(storeObjectId);
+  getCallsByStore(
+    @Param('id') storeObjectId: Types.ObjectId,
+    @Query('limit') limit: string,
+    @Query('page') page: string,
+  ): Promise<Call[]> {
+    return this.callService.getCallsByStore(storeObjectId, limit, page);
   }
 
   /**
@@ -48,7 +53,7 @@ export class CallController {
   @Patch('/update/store/:id')
   updateCallByStore(
     @Param('id') id: Types.ObjectId,
-    modifyCallDto: ModifyCallDto,
+    @Body() modifyCallDto: ModifyCallDto,
   ): Promise<Call> {
     return this.callService.updateCallByStore(id, modifyCallDto);
   }

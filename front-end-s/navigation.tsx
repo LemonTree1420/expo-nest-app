@@ -3,20 +3,21 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import FindIdStepOne from "./src/Screens/findIdStepOne";
 import FindPwStepOne from "./src/Screens/findPwStepOne";
-import Home from "./src/Screens/home";
+import CallList from "./src/Screens/callList";
 import Settings from "./src/Screens/settings";
 import SignIn from "./src/Screens/signIn";
 import SignUp from "./src/Screens/signUp";
-import { Entypo } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
 import Point from "./src/Screens/point";
-import { Feather } from "@expo/vector-icons";
 import PhoneNumEdit from "./src/Screens/phoneNumEdit";
 import Root from "./src/Screens/root";
 import FindIdStepTwo from "./src/Screens/findIdStepTwo";
 import FindPwStepTwo from "./src/Screens/findPwStepTwo";
 import FindPwStepThree from "./src/Screens/findPwStepThree";
+import { Text } from "react-native-paper";
+import { Pressable } from "react-native";
+import { FontAwesome5 } from "@expo/vector-icons";
+import CallDetail from "./src/Screens/callDetail";
+import AddCall from "./src/Screens/addCall";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -35,16 +36,6 @@ function NoToken({ navigation }: any) {
         },
         headerTitleAlign: "center",
         headerBackVisible: false,
-        headerRight: () => (
-          <Ionicons
-            name="close"
-            size={32}
-            color="#fff"
-            onPress={() => {
-              navigation.pop();
-            }}
-          />
-        ),
       }}
       initialRouteName={"signIn"}
     >
@@ -115,7 +106,21 @@ function SubScreen() {
         headerTitleAlign: "center",
       }}
     >
-      <Stack.Screen name="휴대폰번호 수정" component={PhoneNumEdit} />
+      <Stack.Screen
+        name="phoneNumEdit"
+        component={PhoneNumEdit}
+        options={{ headerTitle: "휴대폰 번호 수정" }}
+      />
+      <Stack.Screen
+        name="addCall"
+        component={AddCall}
+        options={{ headerTitle: "콜 추가" }}
+      />
+      <Stack.Screen
+        name="callDetail"
+        component={CallDetail}
+        options={{ headerTitle: "콜 정보" }}
+      />
     </Stack.Navigator>
   );
 }
@@ -139,18 +144,26 @@ function TokenBottom() {
         tabBarActiveTintColor: "#fff",
         headerShadowVisible: false,
       }}
-      initialRouteName="home"
+      initialRouteName="list"
     >
       <Tab.Screen
-        name="home"
-        component={Home}
-        options={{
-          headerTitle: "홈",
-          tabBarLabel: "홈",
+        name="list"
+        component={CallList}
+        options={({ navigation }) => ({
+          headerTitle: "콜 리스트",
+          tabBarLabel: "콜 리스트",
           tabBarIcon: ({ color, size }) => {
-            return <Entypo name="home" size={size} color={color} />;
+            return <FontAwesome5 name="list" size={size} color={color} />;
           },
-        }}
+          headerRight: () => (
+            <Pressable
+              className="px-4"
+              onPress={() => navigation.navigate("sub", { screen: "addCall" })}
+            >
+              <Text className="text-white font-bold text-lg">추가</Text>
+            </Pressable>
+          ),
+        })}
       />
       <Tab.Screen
         name="point"
@@ -159,13 +172,7 @@ function TokenBottom() {
           headerTitle: "포인트",
           tabBarLabel: "포인트 충전",
           tabBarIcon: ({ color, size }) => {
-            return (
-              <MaterialCommunityIcons
-                name="cash-plus"
-                size={size}
-                color={color}
-              />
-            );
+            return <FontAwesome5 name="coins" size={size} color={color} />;
           },
         }}
       />
@@ -174,10 +181,9 @@ function TokenBottom() {
         component={Settings}
         options={{
           headerTitle: "내 정보",
-
           tabBarLabel: "내 정보",
           tabBarIcon: ({ color, size }) => {
-            return <Feather name="user" size={24} color={color} />;
+            return <FontAwesome5 name="user-alt" size={24} color={color} />;
           },
         }}
       />

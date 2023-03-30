@@ -4,26 +4,14 @@ const ENV: any = {
   dev: {
     apiUrl: "http://13.209.57.85:9001/",
     asyncStorageTokenName: "@tkw",
-    pushNotificationUrl: "https://app.nativenotify.com/api/indie/notification",
-    pushNotificationAppId: 6973,
-    pushNotificationAppToken: "km10STqzVOMfvoHqchEskm",
-    pushNotificationAdminId: "admin1234",
   },
   staging: {
     apiUrl: "http://13.209.57.85:9001/",
     asyncStorageTokenName: "@tkw",
-    pushNotificationUrl: "https://app.nativenotify.com/api/indie/notification",
-    pushNotificationAppId: 6973,
-    pushNotificationAppToken: "km10STqzVOMfvoHqchEskm",
-    pushNotificationAdminId: "admin1234",
   },
   prod: {
     apiUrl: "http://13.209.57.85:9001/",
     asyncStorageTokenName: "@tkw",
-    pushNotificationUrl: "https://app.nativenotify.com/api/indie/notification",
-    pushNotificationAppId: 6973,
-    pushNotificationAppToken: "km10STqzVOMfvoHqchEskm",
-    pushNotificationAdminId: "admin1234",
   },
 };
 

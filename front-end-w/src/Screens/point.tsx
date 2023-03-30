@@ -17,13 +17,7 @@ import getEnvVars from "../../environment";
 import axios from "axios";
 import { workerState } from "../recoil/atoms";
 import { useRecoilValue } from "recoil";
-const {
-  apiUrl,
-  pushNotificationUrl,
-  pushNotificationAppId,
-  pushNotificationAppToken,
-  pushNotificationAdminId,
-} = getEnvVars();
+const { apiUrl } = getEnvVars();
 
 export default function Point({ navigation }: any) {
   const [money, setMoney] = useState<number>(0);
@@ -37,23 +31,6 @@ export default function Point({ navigation }: any) {
     if (money === 0 || point === 0) setVisibleSnackBar(true);
     else {
       // // 서버에 포인트 저장 api 연결 필요
-      // const pushNotificationOption = {
-      //   subID: pushNotificationAdminId,
-      //   appId: pushNotificationAppId,
-      //   appToken: pushNotificationAppToken,
-      //   title: "충전 요청",
-      //   message: `${worker.name}에서 ${money}(+ ${point}) 충전했습니다.`,
-      // };
-      // console.log("!!!", pushNotificationAppId, pushNotificationAppToken);
-      // console.log("###", pushNotificationOption);
-      // await axios
-      //   .post(pushNotificationUrl, pushNotificationOption)
-      //   .then((res) => setPointSnackBar(true))
-      //   .catch((err) =>
-      //     Alert.alert("", "서버 에러로 충전 요청이 발송되지 않았습니다.", [
-      //       { text: "확인" },
-      //     ])
-      //   );
     }
   };
 

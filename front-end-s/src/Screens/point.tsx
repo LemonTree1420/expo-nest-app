@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, Pressable, Share, View } from "react-native";
+import { Pressable, Share, View } from "react-native";
 import { Button, Divider, Snackbar, Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
@@ -17,13 +17,7 @@ import axios from "axios";
 import getEnvVars from "../../environment";
 import { useRecoilValue } from "recoil";
 import { storeState } from "../recoil/atoms";
-const {
-  apiUrl,
-  pushNotificationUrl,
-  pushNotificationAppId,
-  pushNotificationAppToken,
-  pushNotificationAdminId,
-} = getEnvVars();
+const { apiUrl } = getEnvVars();
 
 export default function Point({ navigation }: any) {
   const store = useRecoilValue(storeState);
@@ -38,23 +32,6 @@ export default function Point({ navigation }: any) {
     else {
       setPointSnackBar(true);
       // // 서버에 포인트 저장 api 연결 필요
-      // const pushNotificationOption = {
-      //   subID: pushNotificationAdminId,
-      //   appId: pushNotificationAppId,
-      //   appToken: pushNotificationAppToken,
-      //   title: "충전 요청",
-      //   message: `${store.name}에서 ${money}(+ ${point}) 충전했습니다.`,
-      // };
-      // console.log("!!!", pushNotificationAppId, pushNotificationAppToken);
-      // console.log("###", pushNotificationOption);
-      // await axios
-      //   .post(pushNotificationUrl, pushNotificationOption)
-      //   .then((res) => setPointSnackBar(true))
-      //   .catch((err) =>
-      //     Alert.alert("", "서버 에러로 충전 요청이 발송되지 않았습니다.", [
-      //       { text: "확인" },
-      //     ])
-      //   );
     }
   };
 

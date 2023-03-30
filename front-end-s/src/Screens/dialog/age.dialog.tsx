@@ -11,11 +11,10 @@ import { ageList } from "../../constants/age";
 
 export default function AgeDialouge(props: any) {
   const [select, setSelect] = useState<number>(0);
-
   const onSelectAgeHandler = (value: number) => {
     setSelect(value);
-    props.setValue("age", `${value}대`);
-    props.clearErrors("age");
+    props.setValue(props.inputKey, `${value}대`);
+    props.clearErrors(props.inputKey);
     props.close();
   };
 

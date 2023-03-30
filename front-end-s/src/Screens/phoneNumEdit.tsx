@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -10,7 +9,8 @@ import { API_HEADER } from "../constants/api";
 import { formRegEx } from "../constants/regEx";
 import { storeState } from "../recoil/atoms";
 import getEnvVars from "../../environment";
-const { apiUrl, asyncStorageTokenName } = getEnvVars();
+import { onSignOutHandler, tokenValidateHandler } from "../constants/validate";
+const { apiUrl } = getEnvVars();
 
 export default function PhoneNumEdit({ navigation }: any) {
   const {
@@ -27,7 +27,7 @@ export default function PhoneNumEdit({ navigation }: any) {
   }, []);
 
   const onEditHandler = async (data: any) => {
-    const token = await AsyncStorage.getItem(asyncStorageTokenName);
+    const token = await tokenValidateHandler(setStore, navigation);
 
     return await axios
       .patch(
@@ -44,18 +44,12 @@ export default function PhoneNumEdit({ navigation }: any) {
           Alert.alert("", "인증 세션이 만료되었습니다.\n다시 로그인하세요.", [
             {
               text: "확인",
-              onPress: onSignOutHandler,
+              onPress: async () => await onSignOutHandler(setStore, navigation),
             },
           ]);
         }
         console.error(err);
       });
-  };
-
-  const onSignOutHandler = async () => {
-    await AsyncStorage.removeItem(asyncStorageTokenName);
-    setStore(null);
-    navigation.replace("noToken", { screen: "signIn" });
   };
 
   return (

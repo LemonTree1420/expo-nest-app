@@ -1,6 +1,6 @@
 import { Injectable, Type } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model, SortOrder, Types } from 'mongoose';
 import { StoreService } from 'src/store/store.service';
 import { WorkerService } from 'src/worker/worker.service';
 import { CreateCallDto, ModifyCallDto, TakeCallDto } from './call.dto';
@@ -31,9 +31,18 @@ export class CallService {
    * @param storeObjectId
    * @returns
    */
-  async getCallsByStore(storeObjectId: Types.ObjectId): Promise<Call[]> {
+  async getCallsByStore(
+    storeObjectId: Types.ObjectId,
+    limit: string,
+    page: string,
+  ): Promise<Call[]> {
     const filter = { store: storeObjectId };
-    return await this.callModel.find(filter);
+    const skip = Number(page) * Number(limit);
+    return await this.callModel
+      .find(filter)
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(Number(limit));
   }
 
   /**

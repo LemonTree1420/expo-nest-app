@@ -7,21 +7,15 @@ import { Text } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
 import { useRecoilState } from "recoil";
 import { storeState } from "../recoil/atoms";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { API_HEADER } from "../constants/api";
 import { Alert } from "react-native";
 import getEnvVars from "../../environment";
-const { apiUrl, asyncStorageTokenName } = getEnvVars();
+import { onSignOutHandler, tokenValidateHandler } from "../constants/validate";
+const { apiUrl } = getEnvVars();
 
 export default function Settings({ navigation }: any) {
   const [store, setStore] = useRecoilState(storeState);
-
-  const onSignOutHandler = async () => {
-    await AsyncStorage.removeItem(asyncStorageTokenName);
-    setStore(null);
-    navigation.replace("noToken", { screen: "signIn" });
-  };
 
   const onReConfirmHandler = () => {
     Alert.alert(
@@ -34,7 +28,7 @@ export default function Settings({ navigation }: any) {
     );
   };
   const onWithDrawalHandler = async () => {
-    const token = await AsyncStorage.getItem(asyncStorageTokenName);
+    const token = await tokenValidateHandler(setStore, navigation);
     await axios
       .delete(
         `${apiUrl}store/delete/${store._doc._id}`,
@@ -53,7 +47,7 @@ export default function Settings({ navigation }: any) {
           Alert.alert("", "인증 세션이 만료되었습니다.\n다시 로그인하세요.", [
             {
               text: "확인",
-              onPress: onSignOutHandler,
+              onPress: async () => await onSignOutHandler(setStore, navigation),
             },
           ]);
         }
@@ -148,7 +142,9 @@ export default function Settings({ navigation }: any) {
                   name="sign-out"
                   size={24}
                   color="#3F3F46"
-                  onPress={onSignOutHandler}
+                  onPress={async () =>
+                    await onSignOutHandler(setStore, navigation)
+                  }
                 />
               }
               titleTextStyle={styles.cellTitle}
