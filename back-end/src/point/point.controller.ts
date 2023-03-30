@@ -31,6 +31,20 @@ export class PointController {
   }
 
   /**
+   * 요청자에 따른 포인트 리스트 - Store, Worker
+   * @param request_id
+   * @returns
+   */
+  @Get('/:id')
+  getPointsById(
+    @Param('id') request_id: Types.ObjectId,
+    limit: string,
+    page: string,
+  ): Promise<Point[]> {
+    return this.pointService.getPointsById(request_id, limit, page);
+  }
+
+  /**
    * 충전 요청 중인 포인트들 받아오기
    * @returns
    */

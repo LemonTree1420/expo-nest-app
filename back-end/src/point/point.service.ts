@@ -27,7 +27,32 @@ export class PointService {
   }
 
   /**
-   * 충전 요청 중인 포인트들 받아오기
+   * 요청자에 따른 포인트 리스트 - Store, Worker
+   * @param request_id
+   * @returns
+   */
+  async getPointsById(
+    request_id: Types.ObjectId,
+    limit: string,
+    page: string,
+  ): Promise<Point[]> {
+    const filter = { request_id: request_id };
+    const skip = Number(page) * Number(limit);
+    return await this.pointModel.find(filter).skip(skip).limit(Number(limit));
+  }
+
+  /**
+   * 콜 삭제 - Store, Worker, Admin
+   * @param id
+   * @returns
+   */
+  async deletePoint(id: Types.ObjectId): Promise<void> {
+    const filter = { _id: id };
+    return await this.pointModel.findOneAndDelete(filter);
+  }
+
+  /**
+   * 충전 요청 중인 포인트들 받아오기 - Admin
    * @returns
    */
   async getRequestPoints(): Promise<Point[]> {
