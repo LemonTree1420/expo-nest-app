@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -70,6 +71,7 @@ export class ManagerController {
    * @returns
    */
   @Patch('/update/account/:id')
+  @UseGuards(AuthGuard())
   @UsePipes(ValidationPipe)
   updateAccount(
     @Param('id') id: Types.ObjectId,
@@ -83,6 +85,7 @@ export class ManagerController {
    * @returns
    */
   @Get('/account')
+  @UseGuards(AuthGuard())
   getManagerAccount(): Promise<AccountInfo> {
     return this.managerService.getManagerAccount();
   }

@@ -6,14 +6,16 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Types } from 'mongoose';
 import { RequestChargePointDto, ResponseChargePointDto } from './point.dto';
 import { Point } from './point.schema';
 import { PointService } from './point.service';
 
 @Controller('point')
-// @UseGuards(AuthGuard())
+@UseGuards(AuthGuard())
 export class PointController {
   constructor(private pointService: PointService) {}
 
