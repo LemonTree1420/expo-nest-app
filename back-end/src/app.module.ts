@@ -5,6 +5,7 @@ import { CallModule } from './call/call.module';
 import { PointModule } from './point/point.module';
 import { StoreModule } from './store/store.module';
 import { WorkerModule } from './worker/worker.module';
+import { ManagerModule } from './manager/manager.module';
 @Module({
   imports: [
     MongooseModule.forRoot(process.env.DB_URI, {
@@ -17,6 +18,7 @@ import { WorkerModule } from './worker/worker.module';
     WorkerModule,
     AuthModule,
     PointModule,
+    ManagerModule,
   ],
 })
 export class AppModule {}
