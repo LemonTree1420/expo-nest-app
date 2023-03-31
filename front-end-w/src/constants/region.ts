@@ -560,7 +560,7 @@ export const regionList: {
         value: "유성구",
       },
       {
-        label: "대덕",
+        label: "대덕구",
         value: "대덕구",
       },
     ],
