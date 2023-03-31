@@ -1,10 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConsoleLogger, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { AuthTokenDto, LoginDto } from 'src/auth/auth.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { CreateManagerDto, UpdateAccountDto } from './manager.dto';
-import { ManagerWithToken } from './manager.model';
+import { AccountInfo, ManagerWithToken } from './manager.model';
 import { Manager, ManagerDocument } from './manager.schema';
 
 @Injectable()
@@ -110,5 +110,15 @@ export class ManagerService {
     return await this.managerModel.findOneAndUpdate(filter, updateAccountDto, {
       new: true,
     });
+  }
+
+  async getManagerAccount(): Promise<AccountInfo> {
+    const manager: AccountInfo = await this.managerModel.findOne();
+    const accountInfo = {
+      bank: manager.bank,
+      accountHolder: manager.accountHolder,
+      accountNumber: manager.accountNumber,
+    };
+    return accountInfo;
   }
 }

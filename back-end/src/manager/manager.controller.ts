@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   Patch,
   Post,
@@ -13,7 +14,7 @@ import { AuthTokenInfo } from 'src/auth/auth.decorator';
 import { AuthTokenDto, LoginDto } from 'src/auth/auth.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { CreateManagerDto, UpdateAccountDto } from './manager.dto';
-import { ManagerWithToken } from './manager.model';
+import { AccountInfo, ManagerWithToken } from './manager.model';
 import { Manager } from './manager.schema';
 import { ManagerService } from './manager.service';
 
@@ -75,5 +76,10 @@ export class ManagerController {
     updateAccountDto: UpdateAccountDto,
   ): Promise<Manager> {
     return this.managerService.updateAccount(id, updateAccountDto);
+  }
+
+  @Get('/account')
+  getManagerAccount(): Promise<AccountInfo> {
+    return this.managerService.getManagerAccount();
   }
 }
