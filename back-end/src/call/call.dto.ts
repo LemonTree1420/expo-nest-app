@@ -44,9 +44,9 @@ export class ModifyCallDto {
 export class TakeCallDto {
   @IsNotEmpty()
   @IsString()
-  workerNumber: string;
+  cellPhoneNumber: string;
 
   @IsNotEmpty()
-  @IsString()
-  count: string;
+  @IsNumber()
+  count: number;
 }

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
+import { TakeInfo } from './call.model';
 
 export type CallDocument = HydratedDocument<Call>;
 
@@ -29,7 +30,7 @@ export class Call {
   fee: number;
 
   @Prop()
-  workerNumbers: string[];
+  workers: TakeInfo[];
 
   @Prop()
   memo: string;

@@ -6,6 +6,7 @@ import { Store } from 'src/store/store.schema';
 import { StoreService } from 'src/store/store.service';
 import { WorkerService } from 'src/worker/worker.service';
 import { CreateCallDto, ModifyCallDto, TakeCallDto } from './call.dto';
+import { TakeInfo } from './call.model';
 import { Call, CallDocument } from './call.schema';
 
 @Injectable()
@@ -154,15 +155,15 @@ export class CallService {
    * @returns
    */
   async takeCall(id: Types.ObjectId, takeCallDto: TakeCallDto): Promise<Call> {
-    const workerFilter = { cellPhoneNumber: takeCallDto.workerNumber };
+    const workerFilter = { cellPhoneNumber: takeCallDto.cellPhoneNumber };
     const worker = await this.workerService.getWorkerByOption(workerFilter);
     if (worker.point < DEDUCT_POINT) {
       throw new BadRequestException('Point is not enough. Please charge.');
     }
 
     const call = await this.callModel.findById(id);
-    let workerNumbers = call.workerNumbers;
-    workerNumbers.push(takeCallDto.workerNumber);
+    let workers = call.workers;
+    workers.push(takeCallDto);
     let nowCount = call.nowCount + Number(takeCallDto.count);
     if (nowCount > call.headCount)
       throw new BadRequestException(
@@ -171,7 +172,7 @@ export class CallService {
 
     const filter = { _id: id };
     const option = {
-      workerNumbers: workerNumbers,
+      workers: workers,
       nowCount: nowCount,
       status: nowCount === call.headCount,
     };
@@ -197,11 +198,9 @@ export class CallService {
     takeCallDto: TakeCallDto,
   ): Promise<Call> {
     const call = await this.callModel.findById(id);
-    let workerNumbers = call.workerNumbers;
-    if (workerNumbers.includes(takeCallDto.workerNumber)) {
-      let removed = workerNumbers.filter(
-        (workerNum) => workerNum !== takeCallDto.workerNumber,
-      );
+    let workers = call.workers;
+    if (workers.includes(takeCallDto)) {
+      let removed = workers.filter((worker) => worker !== takeCallDto);
 
       let nowCount = call.nowCount - Number(takeCallDto.count);
       if (nowCount > call.headCount || nowCount < 0)
@@ -211,7 +210,7 @@ export class CallService {
 
       const filter = { _id: id };
       const option = {
-        workerNumbers: removed,
+        workers: removed,
         nowCount: nowCount,
         status: nowCount === call.headCount,
       };

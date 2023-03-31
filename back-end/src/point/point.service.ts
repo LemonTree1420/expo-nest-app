@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Auth } from 'src/auth/auth.constants';
 import { StoreService } from 'src/store/store.service';
 import { WorkerService } from 'src/worker/worker.service';
 import { RequestChargePointDto, ResponseChargePointDto } from './point.dto';
@@ -52,13 +51,12 @@ export class PointService {
   }
 
   /**
-   * 충전 요청 중인 포인트들 받아오기 - Admin
+   * 포인트들 받아오기 - Admin
    * @returns
    */
   async getRequestPoints(): Promise<Point[]> {
     const allPoints = await this.pointModel.find();
-    let requests = allPoints.filter((point) => point.responsePoint === 0);
-    return requests;
+    return allPoints;
   }
 
   /**

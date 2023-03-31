@@ -6,9 +6,7 @@ import {
   Patch,
   Post,
   Query,
-  UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { Types } from 'mongoose';
 import { RequestChargePointDto, ResponseChargePointDto } from './point.dto';
 import { Point } from './point.schema';
@@ -60,7 +58,7 @@ export class PointController {
    * @param responseChargePointDto
    * @returns
    */
-  @Patch('/charge/response/:id')
+  @Patch('/charge/response/store/:id')
   responseChargePointStore(
     @Param('id') id: Types.ObjectId,
     @Body() responseChargePointDto: ResponseChargePointDto,
@@ -77,10 +75,10 @@ export class PointController {
    * @param responseChargePointDto
    * @returns
    */
-  @Patch('/charge/response/:id')
+  @Patch('/charge/response/worker/:id')
   responseChargePointWorker(
     @Param('id') id: Types.ObjectId,
-    responseChargePointDto: ResponseChargePointDto,
+    @Body() responseChargePointDto: ResponseChargePointDto,
   ): Promise<Point> {
     return this.pointService.responseChargePointWorker(
       id,
