@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { AuthTokenDto, LoginDto } from 'src/auth/auth.dto';
 import { AuthService } from 'src/auth/auth.service';
-import { CreateManagerDto } from './manager.dto';
+import { CreateManagerDto, UpdateAccountDto } from './manager.dto';
 import { ManagerWithToken } from './manager.model';
 import { Manager, ManagerDocument } from './manager.schema';
 
@@ -22,7 +22,8 @@ export class ManagerService {
   async createManager(
     createManagerDto: CreateManagerDto,
   ): Promise<ManagerWithToken> {
-    const createdManager = await new this.managerModel(createManagerDto);
+    const createdManager = new this.managerModel(createManagerDto);
+    console.log(createdManager);
 
     const hashedPassword = await this.authService.encryptSecret(
       createManagerDto.password,
@@ -40,7 +41,7 @@ export class ManagerService {
       auth: manager.auth,
     };
     const token = await this.authService.createToken(authTokenDto);
-    return { ...manager, token: token };
+    return { ...manager.toObject(), token: token };
   }
 
   /**
@@ -50,6 +51,19 @@ export class ManagerService {
    */
   async getManagerById(id: Types.ObjectId): Promise<Manager> {
     return await this.managerModel.findById(id);
+  }
+
+  /**
+   * token으로 manager 검색 - validate token
+   * @param token
+   * @returns
+   */
+  async getManagerByToken(token: AuthTokenDto): Promise<ManagerDocument> {
+    const manager = await this.managerModel.findById(token._id);
+    if (!manager) {
+      throw new Error("Doesn't exist.");
+    }
+    return manager;
   }
 
   /**
@@ -79,6 +93,22 @@ export class ManagerService {
     };
     const token = await this.authService.createToken(authTokenDto);
     manager.password = undefined;
-    return { ...manager, token: token };
+    return { ...manager.toObject(), token: token };
+  }
+
+  /**
+   * 입금 계좌 변경
+   * @param id
+   * @param updateAccountDto
+   * @returns
+   */
+  async updateAccount(
+    id: Types.ObjectId,
+    updateAccountDto: UpdateAccountDto,
+  ): Promise<Manager> {
+    const filter = { _id: id };
+    return await this.managerModel.findOneAndUpdate(filter, updateAccountDto, {
+      new: true,
+    });
   }
 }

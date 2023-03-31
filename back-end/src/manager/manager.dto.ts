@@ -15,6 +15,10 @@ export class CreateManagerDto {
 
   @IsNotEmpty()
   @IsString()
+  accountHolder: string;
+
+  @IsNotEmpty()
+  @IsString()
   accountNumber: string;
 }
 
@@ -22,6 +26,10 @@ export class UpdateAccountDto {
   @IsNotEmpty()
   @IsString()
   bank: string;
+
+  @IsNotEmpty()
+  @IsString()
+  accountHolder: string;
 
   @IsNotEmpty()
   @IsString()

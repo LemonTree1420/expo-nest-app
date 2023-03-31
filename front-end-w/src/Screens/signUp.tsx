@@ -330,7 +330,7 @@ export default function SignUp({ navigation }: any) {
                   className="bg-transparent"
                   mode="flat"
                   label="나이"
-                  editable={true}
+                  editable={false}
                   underlineColor="#4B5563"
                   activeUnderlineColor="#2563EB"
                   value={value}

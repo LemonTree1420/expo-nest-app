@@ -1,16 +1,20 @@
 import {
   Body,
   Controller,
+  Param,
+  Patch,
   Post,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Types } from 'mongoose';
 import { AuthTokenInfo } from 'src/auth/auth.decorator';
 import { AuthTokenDto, LoginDto } from 'src/auth/auth.dto';
 import { AuthService } from 'src/auth/auth.service';
-import { CreateManagerDto } from './manager.dto';
+import { CreateManagerDto, UpdateAccountDto } from './manager.dto';
 import { ManagerWithToken } from './manager.model';
+import { Manager } from './manager.schema';
 import { ManagerService } from './manager.service';
 
 @Controller('manager')
@@ -29,9 +33,9 @@ export class ManagerController {
   async validateToken(
     @AuthTokenInfo() token: AuthTokenDto,
   ): Promise<ManagerWithToken> {
-    const manager = await this.managerService.getManagerById(token._id);
+    const manager = await this.managerService.getManagerByToken(token);
     const token2 = await this.authService.createToken(token);
-    return { ...manager, token: token2 };
+    return { ...manager.toObject(), token: token2 };
   }
 
   /**
@@ -41,7 +45,9 @@ export class ManagerController {
    */
   @Post('/create')
   @UsePipes(ValidationPipe)
-  createManager(createManagerDto: CreateManagerDto): Promise<ManagerWithToken> {
+  createManager(
+    @Body() createManagerDto: CreateManagerDto,
+  ): Promise<ManagerWithToken> {
     return this.managerService.createManager(createManagerDto);
   }
 
@@ -54,5 +60,20 @@ export class ManagerController {
   @UsePipes(ValidationPipe)
   loginManager(@Body() loginDto: LoginDto): Promise<ManagerWithToken> {
     return this.managerService.loginManager(loginDto);
+  }
+
+  /**
+   * 입금 계좌 수정
+   * @param id
+   * @param updateAccountDto
+   * @returns
+   */
+  @Patch('/update/account/:id')
+  @UsePipes(ValidationPipe)
+  updateAccount(
+    @Param('id') id: Types.ObjectId,
+    updateAccountDto: UpdateAccountDto,
+  ): Promise<Manager> {
+    return this.managerService.updateAccount(id, updateAccountDto);
   }
 }
