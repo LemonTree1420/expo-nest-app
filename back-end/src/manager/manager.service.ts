@@ -112,6 +112,10 @@ export class ManagerService {
     });
   }
 
+  /**
+   * 매니저 입금 계좌 정보 받기
+   * @returns
+   */
   async getManagerAccount(): Promise<AccountInfo> {
     const manager: AccountInfo = await this.managerModel.findOne();
     const accountInfo = {

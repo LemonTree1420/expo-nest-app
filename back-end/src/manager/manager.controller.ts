@@ -78,6 +78,10 @@ export class ManagerController {
     return this.managerService.updateAccount(id, updateAccountDto);
   }
 
+  /**
+   * 매니저 입금 계좌 정보 받기
+   * @returns
+   */
   @Get('/account')
   getManagerAccount(): Promise<AccountInfo> {
     return this.managerService.getManagerAccount();
