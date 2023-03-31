@@ -9,7 +9,7 @@ import axios from "axios";
 import { useSetRecoilState } from "recoil";
 import { workerState } from "../recoil/atoms";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import AgeDialouge from "./dialog/age.dialog";
+import AgeDialog from "./dialog/age.dialog";
 import getEnvVars from "../../environment";
 const { apiUrl, asyncStorageTokenName } = getEnvVars();
 
@@ -66,7 +66,7 @@ export default function SignUp({ navigation }: any) {
       return setError("passwordCheck", { type: "validate" });
 
     delete data.passwordCheck;
-    data.age = Number(data.age.substr(0, 2));
+    data.age = Number(data.age.substring(0, 2));
 
     return await axios
       .post(`${apiUrl}worker/register`, data)
@@ -81,7 +81,7 @@ export default function SignUp({ navigation }: any) {
     await AsyncStorage.setItem(asyncStorageTokenName, data.token);
     delete data.token;
     setWorker(data);
-    return navigation.replace("token", { screen: "home" });
+    return navigation.replace("token", { screen: "callList" });
   };
 
   const ageDialogProps = {
@@ -353,7 +353,7 @@ export default function SignUp({ navigation }: any) {
           </Button>
         </View>
       </SafeAreaView>
-      <AgeDialouge {...ageDialogProps} />
+      <AgeDialog {...ageDialogProps} />
     </ScrollView>
   );
 }

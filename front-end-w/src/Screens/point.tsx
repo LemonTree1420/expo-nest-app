@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Alert, Pressable, Share, View } from "react-native";
-import { Button, Divider, Snackbar, Text } from "react-native-paper";
+import { Pressable, Share, View } from "react-native";
+import { Button, Divider, Snackbar, Text, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   ACCOUNT_BANK,
   ACCOUNT_NUM,
   ACCOUNT_OWNER,
+  AUTH,
 } from "../constants/configure";
 import { moneyList } from "../constants/money";
 import { Entypo } from "@expo/vector-icons";
@@ -16,23 +17,71 @@ import * as Clipboard from "expo-clipboard";
 import getEnvVars from "../../environment";
 import axios from "axios";
 import { workerState } from "../recoil/atoms";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
+import { tokenValidateHandler } from "../constants/validate";
+import { API_ERROR, API_HEADER } from "../constants/api";
+import { Controller, useForm } from "react-hook-form";
 const { apiUrl } = getEnvVars();
 
 export default function Point({ navigation }: any) {
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm();
+
+  const [worker, setWorker] = useRecoilState<any>(workerState);
   const [money, setMoney] = useState<number>(0);
   const [point, setPoint] = useState<number>(0);
   const [visibleBottomSheet, setVisibleBottomSheet] = useState<boolean>(false);
+  const [pointBottomSheet, setPointBottomSheet] = useState<boolean>(false);
   const [visibleSnackBar, setVisibleSnackBar] = useState<boolean>(false);
   const [pointSnackBar, setPointSnackBar] = useState<boolean>(false);
-  const worker = useRecoilValue(workerState);
 
-  const onPayHandler = async () => {
-    if (money === 0 || point === 0) setVisibleSnackBar(true);
-    else {
-      // // 서버에 포인트 저장 api 연결 필요
-    }
+  const getWorkerInfo = async () => {
+    const token = await tokenValidateHandler(setWorker, navigation);
+    await axios
+      .get(`${apiUrl}worker/search/${worker._id}`, API_HEADER(token))
+      .then((res) => setWorker(res.data))
+      .catch((err) => API_ERROR(err, setWorker, navigation));
   };
+
+  useEffect(() => {
+    const focusScreen = navigation.addListener("focus", () => {
+      getWorkerInfo();
+    });
+    return focusScreen;
+  }, [navigation]);
+
+  const onInputPayHandler = () => {
+    if (money === 0 || point === 0) setVisibleSnackBar(true);
+    else setPointBottomSheet(true);
+  };
+
+  const onPayHandler = async (data: any) => {
+    const token = await tokenValidateHandler(setWorker, navigation);
+    const postData = {
+      ...data,
+      request_id: worker._id,
+      request_auth: AUTH,
+      depositAmount: money,
+      requestPoint: point,
+    };
+    await axios
+      .post(`${apiUrl}point/charge/request`, postData, API_HEADER(token))
+      .then((res) => setPointBottomSheet(false))
+      .catch((err) => API_ERROR(err, setWorker, navigation));
+  };
+
+  useEffect(() => {
+    if (!pointBottomSheet) {
+      setValue("requestBankHolder", "");
+      setValue("requestBankAccountNum", "");
+      setMoney(0);
+      setPoint(0);
+    }
+  }, [pointBottomSheet]);
 
   const copyToClipboard = async () => {
     await Clipboard.setStringAsync(ACCOUNT_NUM.replaceAll("-", ""));
@@ -62,7 +111,9 @@ export default function Point({ navigation }: any) {
         <Text variant="bodyLarge" className="text-blue-800">
           사용가능 포인트
         </Text>
-        <Text className="text-white font-bold text-5xl mt-4">777P</Text>
+        <Text className="text-white font-bold text-5xl mt-4">
+          {worker.point}P
+        </Text>
       </View>
       <View className="absolute top-36 left-1/2 transform -translate-x-6 rotate-45 w-12 h-12 bg-white"></View>
       <View className="absolute top-36 w-11/12">
@@ -119,7 +170,7 @@ export default function Point({ navigation }: any) {
         <View>
           <Button
             mode="contained"
-            onPress={onPayHandler}
+            onPress={onInputPayHandler}
             icon={() => (
               <MaterialCommunityIcons
                 name="lightning-bolt"
@@ -176,6 +227,80 @@ export default function Point({ navigation }: any) {
             <Entypo name="share" size={24} color="#475569" />
             <Text className="text-xl text-slate-600 ml-4">계좌 공유</Text>
           </Pressable>
+        </View>
+      </BottomSheet>
+      <BottomSheet
+        visible={pointBottomSheet}
+        onBackButtonPress={() => {
+          setPointBottomSheet(false);
+        }}
+        onBackdropPress={() => {
+          setPointBottomSheet(false);
+        }}
+      >
+        <View className="bg-white w-full p-4 justify-center items-center rounded-t-lg">
+          <Controller
+            control={control}
+            name="requestBankHolder"
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                className="bg-transparent w-full"
+                mode="flat"
+                label="예금주"
+                maxLength={12}
+                underlineColor="#4B5563"
+                activeUnderlineColor="#2563EB"
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                placeholder="예금주"
+                placeholderTextColor="#9CA3AF"
+                style={{ paddingHorizontal: 0 }}
+                error={!!errors.requestBankHolder}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="requestBankAccountNum"
+            rules={{ required: true }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                className="bg-transparent w-full"
+                mode="flat"
+                label="계좌번호"
+                maxLength={14}
+                underlineColor="#4B5563"
+                activeUnderlineColor="#2563EB"
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                placeholder="계좌번호(- 제외)"
+                placeholderTextColor="#9CA3AF"
+                keyboardType="numeric"
+                style={{ paddingHorizontal: 0 }}
+                error={!!errors.requestBankAccountNum}
+              />
+            )}
+          />
+          <Button
+            mode="contained"
+            className="w-full bg-blue-600 mt-4 py-1 rounded-xl"
+            labelStyle={{
+              fontSize: 16,
+            }}
+            onPress={handleSubmit(onPayHandler)}
+            icon={() => (
+              <MaterialCommunityIcons
+                name="lightning-bolt"
+                size={20}
+                color="#fff"
+              />
+            )}
+          >
+            충전
+          </Button>
         </View>
       </BottomSheet>
       <Snackbar

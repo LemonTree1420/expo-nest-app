@@ -37,15 +37,15 @@ export default function RegionSelect(props: any) {
       </View>
       <View className="bg-white py-1 px-2">
         <View className="flex-row border-b border-gray-200 py-2">
-          <View className="w-1/2">
+          <View className="w-2/5">
             <Text className="text-lg text-center">시/도</Text>
           </View>
-          <View className="w-1/2">
+          <View className="w-3/5">
             <Text className="text-lg text-center">구/군</Text>
           </View>
         </View>
         <View className="flex-row h-80 border-b border-gray-200">
-          <ScrollView className="w-1/2 border-r border-gray-200">
+          <ScrollView className="w-2/5 border-r border-gray-200">
             {regionList.map((item) => (
               <Pressable
                 key={item.label}
@@ -64,7 +64,7 @@ export default function RegionSelect(props: any) {
               </Pressable>
             ))}
           </ScrollView>
-          <ScrollView className="w-1/2">
+          <ScrollView className="w-3/5">
             {regionList
               .filter((item) => item.value === select1)
               .map((item) => (

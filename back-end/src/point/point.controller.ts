@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -38,8 +39,8 @@ export class PointController {
   @Get('/:id')
   getPointsById(
     @Param('id') request_id: Types.ObjectId,
-    limit: string,
-    page: string,
+    @Query('limit') limit: string,
+    @Query('page') page: string,
   ): Promise<Point[]> {
     return this.pointService.getPointsById(request_id, limit, page);
   }

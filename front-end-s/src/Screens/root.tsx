@@ -28,9 +28,9 @@ export default function Root({ navigation }: any) {
   };
 
   const validateFailHandler = async () => {
+    navigation.replace("noToken", { screen: "signIn" });
     await AsyncStorage.removeItem(asyncStorageTokenName);
     setStore(null);
-    return navigation.replace("noToken", { screen: "signIn" });
   };
 
   useEffect(() => {

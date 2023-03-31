@@ -13,7 +13,6 @@ export default function FindPwStepOne({ navigation }: any) {
     control,
     handleSubmit,
     setValue,
-    watch,
     clearErrors,
     formState: { errors },
   } = useForm();

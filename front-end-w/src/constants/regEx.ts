@@ -16,3 +16,7 @@ export const formRegEx = {
   HP_NUM: /^01[016789]{1}-?(\d{3,4})-?(\d{4})$/, // 휴대폰번호(-포함가능)
   PH_NUM: /^\d{2,3}-?\d{3,4}-?\d{4}$/, // 전화번호(-제외)
 };
+
+export const moneyComma = (str: string) => {
+  return str.replaceAll(/\B(?=(\d{3})+(?!\d))/g, ",");
+};

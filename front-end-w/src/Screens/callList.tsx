@@ -1,37 +1,39 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Text } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useRecoilState } from "recoil";
-import { storeState } from "../recoil/atoms";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import getEnvVars from "../../environment";
-const { apiUrl } = getEnvVars();
-import { API_ERROR, API_HEADER } from "../constants/api";
-import { tokenValidateHandler } from "../constants/validate";
 import { FlatList, Pressable, View } from "react-native";
+import { Button, Text } from "react-native-paper";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
+import getEnvVars from "../../environment";
+import { API_ERROR, API_HEADER } from "../constants/api";
 import { moneyComma } from "../constants/regEx";
+import { tokenValidateHandler } from "../constants/validate";
+import { callRegionState, workerState } from "../recoil/atoms";
 import Loading from "./loading";
+const { apiUrl } = getEnvVars();
 
 export default function CallList({ navigation }: any) {
-  const [store, setStore] = useRecoilState(storeState);
+  const [worker, setWorker] = useRecoilState(workerState);
+  const callRegion = useRecoilValue(callRegionState);
   const [callList, setCallList] = useState<any[]>([]);
   const [listPage, setListPage] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
 
   const getCallList = async () => {
-    const token = await tokenValidateHandler(setStore, navigation);
+    const token = await tokenValidateHandler(setWorker, navigation);
     return await axios
       .get(
-        `${apiUrl}call/store/${store._id}?limit=10&page=${listPage}`,
+        `${apiUrl}call/region/${callRegion}/${worker.cellPhoneNumber}?age=${worker.age}&limit=10&page=${listPage}`,
         API_HEADER(token)
       )
-      .then((res) => getCallSuccess(res.data))
-      .catch((err) => API_ERROR(err, setStore, navigation));
+      .then((res) => getCallListSuccess(res.data))
+      .catch((err) => API_ERROR(err, setWorker, navigation));
   };
 
-  const getCallSuccess = (data: any) => {
+  const getCallListSuccess = (data: any) => {
     setCallList(refresh ? data : callList.concat(data));
     setListPage(listPage + 1);
     setLoading(true);
@@ -48,8 +50,14 @@ export default function CallList({ navigation }: any) {
   }, [navigation]);
 
   useEffect(() => {
-    if (listPage === 0 && callList.length === 0 && !loading) getCallList();
-  }, [listPage, callList, loading]);
+    if (
+      listPage === 0 &&
+      callList.length === 0 &&
+      callRegion !== "" &&
+      !loading
+    )
+      getCallList();
+  }, [listPage, callList, callRegion, loading]);
 
   const onRefreshHandler = () => {
     setListPage(0);
@@ -96,30 +104,46 @@ export default function CallList({ navigation }: any) {
 
   return (
     <SafeAreaView className="flex-1" edges={["left", "right"]}>
-      {!loading ? (
-        <Loading />
-      ) : callList.length === 0 ? (
+      {callRegion ? (
+        !loading ? (
+          <Loading />
+        ) : callList.length === 0 ? (
+          <View className="flex-1 justify-center items-center">
+            <MaterialIcons name="search-off" size={80} color="#3F3F46" />
+            <Text className="mt-4 text-lg text-gray-600">
+              선택 지역에 콜 요청이 없습니다.
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={callList}
+            renderItem={renderCallList}
+            keyExtractor={(item) => item._id}
+            onEndReached={getCallList}
+            onEndReachedThreshold={1}
+            refreshing={refresh}
+            onRefresh={onRefreshHandler}
+            initialNumToRender={10}
+          />
+        )
+      ) : (
         <View className="flex-1 justify-center items-center">
           <MaterialCommunityIcons
-            name="playlist-remove"
+            name="map-marker-off"
             size={80}
             color="#3F3F46"
           />
           <Text className="mt-4 text-lg text-gray-600">
-            생성한 콜이 없습니다.
+            지역을 선택해 주세요.
           </Text>
+          <Button
+            mode="contained"
+            className="mt-4 bg-blue-600"
+            onPress={() => navigation.navigate("sub", { screen: "callRegion" })}
+          >
+            지역 선택
+          </Button>
         </View>
-      ) : (
-        <FlatList
-          data={callList}
-          renderItem={renderCallList}
-          keyExtractor={(item) => item._id}
-          onEndReached={getCallList}
-          onEndReachedThreshold={1}
-          refreshing={refresh}
-          onRefresh={onRefreshHandler}
-          initialNumToRender={10}
-        />
       )}
     </SafeAreaView>
   );

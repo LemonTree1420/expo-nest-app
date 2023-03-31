@@ -11,7 +11,7 @@ import { useSetRecoilState } from "recoil";
 import { storeState } from "../recoil/atoms";
 import axios from "axios";
 import getEnvVars from "../../environment";
-import { API_HEADER } from "../constants/api";
+import { API_ERROR, API_HEADER } from "../constants/api";
 const { apiUrl } = getEnvVars();
 
 export default function CallDetail({ navigation, route }: any) {
@@ -40,7 +40,7 @@ export default function CallDetail({ navigation, route }: any) {
   };
 
   const onEditCallHandler = async (data: any) => {
-    if (Number(data.headCount) < call.workerNumbers.length)
+    if (Number(data.headCount) < call.nowCount)
       return setError("headCount", { type: "check" });
     data.headCount = Number(data.headCount);
     data.fee = Number(data.fee.replaceAll(",", ""));
@@ -50,7 +50,7 @@ export default function CallDetail({ navigation, route }: any) {
     await axios
       .patch(`${apiUrl}call/update/store/${call._id}`, data, API_HEADER(token))
       .then((res) => navigation.navigate("token", { screen: "callList" }))
-      .catch((err) => console.error(err));
+      .catch((err) => API_ERROR(err, setStore, navigation));
   };
 
   const onDeleteCallHandler = async () => {
@@ -58,7 +58,7 @@ export default function CallDetail({ navigation, route }: any) {
     await axios
       .delete(`${apiUrl}call/delete/${call._id}`, API_HEADER(token))
       .then((res) => navigation.navigate("token", { screen: "callList" }))
-      .catch((err) => console.error(err));
+      .catch((err) => API_ERROR(err, setStore, navigation));
   };
 
   return (
@@ -73,9 +73,9 @@ export default function CallDetail({ navigation, route }: any) {
               요청 나이 : {call.expectedAge}대
             </Text>
             <Text className="font-bold text-lg text-white">
-              현재 매칭된 인원 : {call.workerNumbers.length}명
+              현재 매칭된 인원 : {call.nowCount}명
             </Text>
-            {call.workerNumbers.length > 0 && (
+            {call.nowCount.length > 0 && (
               <React.Fragment>
                 {phoneVisible ? (
                   <Octicons

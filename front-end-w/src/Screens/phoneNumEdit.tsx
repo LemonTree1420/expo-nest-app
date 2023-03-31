@@ -1,15 +1,14 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Alert } from "react-native";
 import { Button, HelperText, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRecoilState } from "recoil";
-import { API_HEADER } from "../constants/api";
+import { API_ERROR, API_HEADER } from "../constants/api";
 import { formRegEx } from "../constants/regEx";
 import { workerState } from "../recoil/atoms";
 import getEnvVars from "../../environment";
-import { onSignOutHandler, tokenValidateHandler } from "../constants/validate";
+import { tokenValidateHandler } from "../constants/validate";
 const { apiUrl } = getEnvVars();
 
 export default function PhoneNumEdit({ navigation }: any) {
@@ -17,6 +16,7 @@ export default function PhoneNumEdit({ navigation }: any) {
     control,
     handleSubmit,
     setValue,
+    setError,
     formState: { errors },
   } = useForm();
 
@@ -35,22 +35,19 @@ export default function PhoneNumEdit({ navigation }: any) {
         data,
         API_HEADER(token as string)
       )
-      .then((res) => {
-        setWorker(res.data);
-        return navigation.pop();
-      })
-      .catch((err) => {
-        if (err.response.status === 401) {
-          Alert.alert("", "인증 세션이 만료되었습니다.\n다시 로그인하세요.", [
-            {
-              text: "확인",
-              onPress: async () =>
-                await onSignOutHandler(setWorker, navigation),
-            },
-          ]);
-        }
-        console.error(err);
-      });
+      .then((res) => onEditSuccess(res.data))
+      .catch((err) => onEditError(err));
+  };
+
+  const onEditSuccess = (data: any) => {
+    setWorker(data);
+    return navigation.pop();
+  };
+
+  const onEditError = (err: any) => {
+    API_ERROR(err, setWorker, navigation);
+    if (err.response.data.message === "cellPhoneNumber")
+      setError("cellPhoneNumber", { type: "check" });
   };
 
   return (
@@ -81,6 +78,11 @@ export default function PhoneNumEdit({ navigation }: any) {
       {errors.cellPhoneNumber?.type === "pattern" && (
         <HelperText type="error" style={{ paddingHorizontal: 0 }}>
           형식에 맞게 입력하세요.
+        </HelperText>
+      )}
+      {errors.cellPhoneNumber?.type === "check" && (
+        <HelperText type="error" style={{ paddingHorizontal: 0 }}>
+          이미 가입된 휴대폰번호입니다.
         </HelperText>
       )}
       <Button

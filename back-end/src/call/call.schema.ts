@@ -1,10 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { HydratedDocument, Types } from 'mongoose';
-import { Store } from 'src/store/store.schema';
+import { HydratedDocument, Types } from 'mongoose';
 
 export type CallDocument = HydratedDocument<Call>;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Call {
   _id: Types.ObjectId;
 
@@ -20,6 +19,9 @@ export class Call {
   @Prop()
   headCount: number;
 
+  @Prop({ default: 0 })
+  nowCount: number;
+
   @Prop()
   expectedAge: number;
 
@@ -31,6 +33,10 @@ export class Call {
 
   @Prop()
   memo: string;
+
+  // true: 마감, false: 모집 중
+  @Prop({ default: false })
+  status: boolean;
 }
 
 export const CallSchema = SchemaFactory.createForClass(Call);

@@ -16,8 +16,13 @@ import FindPwStepThree from "./src/Screens/findPwStepThree";
 import { Text } from "react-native-paper";
 import { Pressable } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { Fontisto } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import CallDetail from "./src/Screens/callDetail";
 import AddCall from "./src/Screens/addCall";
+import CallEndList from "./src/Screens/callEndList";
+import CallEndDetail from "./src/Screens/callEndDetail";
+import PointChargeList from "./src/Screens/pointChargeList";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -121,6 +126,18 @@ function SubScreen() {
         component={CallDetail}
         options={{ headerTitle: "콜 정보" }}
       />
+      <Stack.Screen
+        name="callEndDetail"
+        component={CallEndDetail}
+        options={{ headerTitle: "마감된 콜 정보" }}
+      />
+      <Stack.Screen
+        name="pointChargeList"
+        component={PointChargeList}
+        options={{
+          headerTitle: "포인트 충전 내역",
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -144,10 +161,10 @@ function TokenBottom() {
         tabBarActiveTintColor: "#fff",
         headerShadowVisible: false,
       }}
-      initialRouteName="list"
+      initialRouteName="callList"
     >
       <Tab.Screen
-        name="list"
+        name="callList"
         component={CallList}
         options={({ navigation }) => ({
           headerTitle: "콜 리스트",
@@ -166,15 +183,53 @@ function TokenBottom() {
         })}
       />
       <Tab.Screen
+        name="callEndList"
+        component={CallEndList}
+        options={{
+          headerTitle: "마감 리스트",
+          tabBarLabel: "마감 리스트",
+          tabBarIcon: ({ color, size }) => {
+            return (
+              <FontAwesome5 name="calendar-check" size={size} color={color} />
+            );
+          },
+        }}
+      />
+      <Tab.Screen
         name="point"
         component={Point}
-        options={{
+        options={({ navigation }) => ({
           headerTitle: "포인트",
           tabBarLabel: "포인트 충전",
           tabBarIcon: ({ color, size }) => {
             return <FontAwesome5 name="coins" size={size} color={color} />;
           },
-        }}
+          // headerLeft: () => (
+          //   <Pressable
+          //     className="px-4"
+          //     onPress={
+          //       () => {}
+          //       // navigation.navigate("sub", { screen: "callRegion" })
+          //     }
+          //   >
+          //     <MaterialCommunityIcons
+          //       name="account-cash"
+          //       size={24}
+          //       color="#fff"
+          //     />
+          //   </Pressable>
+          // ),
+          headerRight: () => (
+            <Pressable
+              className="px-4"
+              onPress={() =>
+                navigation.navigate("sub", { screen: "pointChargeList" })
+              }
+            >
+              <Fontisto name="shopping-basket-add" size={24} color="#fff" />
+            </Pressable>
+          ),
+        })}
       />
       <Tab.Screen
         name="settings"

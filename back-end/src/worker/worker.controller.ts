@@ -60,7 +60,6 @@ export class WorkerController {
   createWorkerAccount(
     @Body() createWorkerAccountDto: CreateWorkerAccountDto,
   ): Promise<WorkerWithToken> {
-    console.log('dd');
     return this.workerService.createWorkerAccount(createWorkerAccountDto);
   }
 
@@ -154,5 +153,16 @@ export class WorkerController {
   @UseGuards(AuthGuard())
   test(@Req() req) {
     console.log(req);
+  }
+
+  /**
+   * Object Id로 특정 Worker 검색
+   * @param id
+   * @returns
+   */
+  @Get('/search/:id')
+  @UseGuards(AuthGuard())
+  async searchWorkerById(@Param('id') id: Types.ObjectId): Promise<Worker> {
+    return await this.workerService.getWorkerById(id);
   }
 }

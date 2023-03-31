@@ -45,4 +45,8 @@ export class TakeCallDto {
   @IsNotEmpty()
   @IsString()
   workerNumber: string;
+
+  @IsNotEmpty()
+  @IsString()
+  count: string;
 }

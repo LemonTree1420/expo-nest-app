@@ -8,7 +8,7 @@ import { Feather } from "@expo/vector-icons";
 import { useRecoilState } from "recoil";
 import { storeState } from "../recoil/atoms";
 import axios from "axios";
-import { API_HEADER } from "../constants/api";
+import { API_ERROR, API_HEADER } from "../constants/api";
 import { Alert } from "react-native";
 import getEnvVars from "../../environment";
 import { onSignOutHandler, tokenValidateHandler } from "../constants/validate";
@@ -34,25 +34,17 @@ export default function Settings({ navigation }: any) {
         `${apiUrl}store/delete/${store._doc._id}`,
         API_HEADER(token as string)
       )
-      .then((res) =>
-        Alert.alert("", "회원탈퇴가 완료되었습니다.", [
-          {
-            text: "확인",
-            onPress: () => navigation.replace("noToken", { screen: "signIn" }),
-          },
-        ])
-      )
-      .catch((err) => {
-        if (err.response.status === 401) {
-          Alert.alert("", "인증 세션이 만료되었습니다.\n다시 로그인하세요.", [
-            {
-              text: "확인",
-              onPress: async () => await onSignOutHandler(setStore, navigation),
-            },
-          ]);
-        }
-        console.error(err);
-      });
+      .then((res) => onWithDrawalSuccess())
+      .catch((err) => API_ERROR(err, setStore, navigation));
+  };
+
+  const onWithDrawalSuccess = () => {
+    Alert.alert("", "회원탈퇴가 완료되었습니다.", [
+      {
+        text: "확인",
+        onPress: () => navigation.replace("noToken", { screen: "signIn" }),
+      },
+    ]);
   };
 
   return (
@@ -66,7 +58,7 @@ export default function Settings({ navigation }: any) {
             <FontAwesome5 name="user-alt" size={48} color="#3F3F46" />
           </View>
         </View>
-        <View className="absolute top-14 left-1/2 transform -translate-x-40 bg-white rounded-md w-80 pt-12 pb-6 flex items-center">
+        <View className="absolute top-14 left-1/2 transform -translate-x-40 bg-white rounded-md w-80 pt-12 pb-6 flex items-center shadow-sm shadow-black">
           <Text className="text-lg font-bold text-zinc-600 mt-1">
             {store?.name}
           </Text>
@@ -101,7 +93,7 @@ export default function Settings({ navigation }: any) {
             />
           </Section>
           <Section header="업체정보" hideSurroundingSeparators>
-            <Cell
+            {/* <Cell
               contentContainerStyle={styles.cell}
               cellStyle="RightDetail"
               title="업체명"
@@ -110,12 +102,22 @@ export default function Settings({ navigation }: any) {
               rightDetailColor={"#3F3F46"}
               titleTextStyle={styles.cellTitle}
               hideSeparator
-            />
+            /> */}
             <Cell
               contentContainerStyle={styles.cell}
               cellStyle="RightDetail"
               title="주소"
-              detail={`${store?.address1}, ${store?.address2}`}
+              detail={store?.address1}
+              titleTextColor={"#3F3F46"}
+              rightDetailColor={"#3F3F46"}
+              titleTextStyle={styles.cellTitle}
+              hideSeparator
+            />
+            <Cell
+              contentContainerStyle={styles.cell}
+              cellStyle="RightDetail"
+              title="상세 주소"
+              detail={store?.address2}
               titleTextColor={"#3F3F46"}
               rightDetailColor={"#3F3F46"}
               titleTextStyle={styles.cellTitle}

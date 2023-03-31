@@ -12,7 +12,7 @@ export const tokenValidateHandler = async (setWorker: any, navigation: any) => {
 };
 
 export const onSignOutHandler = async (setWorker: any, navigation: any) => {
+  navigation.replace("noToken", { screen: "signIn" });
   await AsyncStorage.removeItem(asyncStorageTokenName);
   setWorker(null);
-  navigation.replace("noToken", { screen: "signIn" });
 };

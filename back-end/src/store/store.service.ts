@@ -111,24 +111,28 @@ export class StoreService {
   ): Promise<Store> {
     const filter = { _id: id };
 
-    if (updateStoreAccountDto.password) {
-      const hashedPassword = await this.authService.encryptSecret(
-        updateStoreAccountDto.password,
-      );
-      updateStoreAccountDto.password = hashedPassword;
-    }
-    if (updateStoreAccountDto.pin) {
-      const hashedPin = await this.authService.encryptSecret(
-        updateStoreAccountDto.pin,
-      );
-      updateStoreAccountDto.pin = hashedPin;
-    }
+    try {
+      if (updateStoreAccountDto.password) {
+        const hashedPassword = await this.authService.encryptSecret(
+          updateStoreAccountDto.password,
+        );
+        updateStoreAccountDto.password = hashedPassword;
+      }
+      if (updateStoreAccountDto.pin) {
+        const hashedPin = await this.authService.encryptSecret(
+          updateStoreAccountDto.pin,
+        );
+        updateStoreAccountDto.pin = hashedPin;
+      }
 
-    return await this.storeModel.findOneAndUpdate(
-      filter,
-      updateStoreAccountDto,
-      { new: true },
-    );
+      return await this.storeModel.findOneAndUpdate(
+        filter,
+        updateStoreAccountDto,
+        { new: true },
+      );
+    } catch (err) {
+      handleMongooseErr(err);
+    }
   }
 
   /**

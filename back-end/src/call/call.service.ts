@@ -1,7 +1,8 @@
-import { Injectable, Type } from '@nestjs/common';
+import { BadRequestException, Injectable, Type } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, SortOrder, Types } from 'mongoose';
 import { DEDUCT_POINT } from 'src/point/point.constants';
+import { Store } from 'src/store/store.schema';
 import { StoreService } from 'src/store/store.service';
 import { WorkerService } from 'src/worker/worker.service';
 import { CreateCallDto, ModifyCallDto, TakeCallDto } from './call.dto';
@@ -54,6 +55,20 @@ export class CallService {
       .limit(Number(limit));
   }
 
+  async getEndCallsByStore(
+    storeObjectId: Types.ObjectId,
+    limit: string,
+    page: string,
+  ): Promise<Call[]> {
+    const filter = { store: storeObjectId, status: true };
+    const skip = Number(page) * Number(limit);
+    return await this.callModel
+      .find(filter)
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(Number(limit));
+  }
+
   /**
    * 생성한 콜 수정 - Store
    * @param id
@@ -86,9 +101,50 @@ export class CallService {
    * @param region
    * @returns
    */
-  async getCallByRegion(region: string): Promise<Call[]> {
-    const filter = { region: region };
-    return await this.callModel.find(filter);
+  async getCallByRegion(
+    region: string,
+    phone: string,
+    age: string,
+    limit: string,
+    page: string,
+  ): Promise<Call[]> {
+    const filter = {
+      region: region,
+      expectedAge: age,
+      workerNumbers: { $nin: [phone] },
+    };
+    const skip = Number(page) * Number(limit);
+    return await this.callModel
+      .find(filter)
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(Number(limit));
+  }
+
+  /**
+   * 지역별 매칭된 콜 리스트 받아오기 - Worker
+   * @param phone
+   * @param age
+   * @param limit
+   * @param page
+   * @returns
+   */
+  async getMatchCall(
+    phone: string,
+    age: string,
+    limit: string,
+    page: string,
+  ): Promise<Call[]> {
+    const filter = {
+      expectedAge: age,
+      workerNumbers: { $in: [phone] },
+    };
+    const skip = Number(page) * Number(limit);
+    return await this.callModel
+      .find(filter)
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(Number(limit));
   }
 
   /**
@@ -101,20 +157,33 @@ export class CallService {
     const workerFilter = { cellPhoneNumber: takeCallDto.workerNumber };
     const worker = await this.workerService.getWorkerByOption(workerFilter);
     if (worker.point < DEDUCT_POINT) {
-      throw new Error('Point is not enough. Please charge.');
+      throw new BadRequestException('Point is not enough. Please charge.');
     }
-
-    const workerOption = { point: worker.point - DEDUCT_POINT };
-    await this.workerService.updateWorkerAccount(worker._id, workerOption);
 
     const call = await this.callModel.findById(id);
     let workerNumbers = call.workerNumbers;
     workerNumbers.push(takeCallDto.workerNumber);
+    let nowCount = call.nowCount + Number(takeCallDto.count);
+    if (nowCount > call.headCount)
+      throw new BadRequestException(
+        'Count is Wrong. Possibility of data falsification',
+      );
 
     const filter = { _id: id };
-    const option = { workerNumbers: workerNumbers };
+    const option = {
+      workerNumbers: workerNumbers,
+      nowCount: nowCount,
+      status: nowCount === call.headCount,
+    };
 
-    return await this.callModel.findOneAndUpdate(filter, option, { new: true });
+    const updateCall = await this.callModel.findOneAndUpdate(filter, option, {
+      new: true,
+    });
+
+    const workerOption = { point: worker.point - DEDUCT_POINT };
+    await this.workerService.updateWorkerAccount(worker._id, workerOption);
+
+    return updateCall;
   }
 
   /**
@@ -134,8 +203,18 @@ export class CallService {
         (workerNum) => workerNum !== takeCallDto.workerNumber,
       );
 
+      let nowCount = call.nowCount - Number(takeCallDto.count);
+      if (nowCount > call.headCount || nowCount < 0)
+        throw new BadRequestException(
+          'Count is Wrong. Possibility of data falsification',
+        );
+
       const filter = { _id: id };
-      const option = { workerNumbers: removed };
+      const option = {
+        workerNumbers: removed,
+        nowCount: nowCount,
+        status: nowCount === call.headCount,
+      };
 
       return await this.callModel.findOneAndUpdate(filter, option, {
         new: true,

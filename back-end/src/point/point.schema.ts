@@ -1,10 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
+import { Auth } from 'src/auth/auth.constants';
 import { DEDUCT_POINT } from './point.constants';
 
 export type PointDocument = HydratedDocument<Point>;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Point {
   _id: Types.ObjectId;
 
@@ -12,17 +13,25 @@ export class Point {
   @Prop()
   request_id: Types.ObjectId;
 
+  // Store or Worker
+  @Prop()
+  request_auth: Auth;
+
   // 입금 계좌의 예금주
   @Prop()
-  requestName: string;
+  requestBankHolder: string;
 
-  // 충전 신청 포인트 - 입금액 / 10
+  // 입금 계좌
   @Prop()
-  requestPoint: number;
+  requestBankAccountNum: string;
 
   // 입금액
   @Prop()
   depositAmount: number;
+
+  // 충전 신청 포인트 - 입금액 / 10
+  @Prop()
+  requestPoint: number;
 
   // 충전 포인트
   @Prop({ default: 0 })

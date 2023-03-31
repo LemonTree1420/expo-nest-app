@@ -47,7 +47,7 @@ export default function SignIn({ navigation }: any) {
     await AsyncStorage.setItem(asyncStorageTokenName, data.token);
     delete data.token;
     setWorker(data);
-    return navigation.replace("token", { screen: "home" });
+    return navigation.replace("token", { screen: "callList" });
   };
 
   return (

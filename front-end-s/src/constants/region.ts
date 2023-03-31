@@ -8,95 +8,95 @@ export const regionList: {
     value: "서울",
     sub: [
       {
-        label: "강남",
+        label: "강남구",
         value: "강남구",
       },
       {
-        label: "강동",
+        label: "강동구",
         value: "강동구",
       },
       {
-        label: "강북",
+        label: "강북구",
         value: "강북구",
       },
       {
-        label: "강서",
+        label: "강서구",
         value: "강서구",
       },
       {
-        label: "관악",
+        label: "관악구",
         value: "관악구",
       },
       {
-        label: "광진",
+        label: "광진구",
         value: "광진구",
       },
       {
-        label: "구로",
+        label: "구로구",
         value: "구로구",
       },
       {
-        label: "금천",
+        label: "금천구",
         value: "금천구",
       },
       {
-        label: "노원",
+        label: "노원구",
         value: "노원구",
       },
       {
-        label: "도봉",
+        label: "도봉구",
         value: "도봉구",
       },
       {
-        label: "동대문",
+        label: "동대문구",
         value: "동대문구",
       },
       {
-        label: "동작",
+        label: "동작구",
         value: "동작구",
       },
       {
-        label: "마포",
+        label: "마포구",
         value: "마포구",
       },
       {
-        label: "서대문",
+        label: "서대문구",
         value: "서대문구",
       },
       {
-        label: "서초",
+        label: "서초구",
         value: "서초구",
       },
       {
-        label: "성동",
+        label: "성동구",
         value: "성동구",
       },
       {
-        label: "성북",
+        label: "성북구",
         value: "성북구",
       },
       {
-        label: "송파",
+        label: "송파구",
         value: "송파구",
       },
       {
-        label: "양천",
+        label: "양천구",
         value: "양천구",
       },
       {
-        label: "영등포",
+        label: "영등포구",
         value: "영등포구",
       },
       {
-        label: "용산",
+        label: "용산구",
         value: "용산구",
       },
       {
-        label: "은평",
+        label: "은평구",
         value: "은평구",
       },
       {
-        label: "종로",
+        label: "종로구",
         value: "종로구",
       },
       {
@@ -104,7 +104,7 @@ export const regionList: {
         value: "중구",
       },
       {
-        label: "중랑",
+        label: "중랑구",
         value: "중랑구",
       },
     ],
@@ -114,20 +114,44 @@ export const regionList: {
     value: "경기",
     sub: [
       {
-        label: "수원",
-        value: "수원시",
+        label: "수원 장안구",
+        value: "수원시 장안구",
       },
       {
-        label: "성남",
-        value: "성남시",
+        label: "수원 권선구",
+        value: "수원시 권선구",
+      },
+      {
+        label: "수원 팔달구",
+        value: "수원시 팔달구",
+      },
+      {
+        label: "수원 영통구",
+        value: "수원시 영통구",
+      },
+      {
+        label: "성남 수정구",
+        value: "성남시 수정구",
+      },
+      {
+        label: "성남 중원구",
+        value: "성남시 중원구",
+      },
+      {
+        label: "성남 분당구",
+        value: "성남시 분당구",
       },
       {
         label: "의정부",
         value: "의정부시",
       },
       {
-        label: "안양",
-        value: "안양시",
+        label: "안양 만안구",
+        value: "안양시 만안구",
+      },
+      {
+        label: "안양 동안구",
+        value: "안양시 동안구",
       },
       {
         label: "부천",
@@ -138,20 +162,32 @@ export const regionList: {
         value: "광명시",
       },
       {
-        label: "평택",
-        value: "평택시",
-      },
-      {
         label: "동두천",
         value: "동두천시",
       },
       {
-        label: "안산",
-        value: "안산시",
+        label: "평택",
+        value: "평택시",
       },
       {
-        label: "고양",
-        value: "고양시",
+        label: "안산 상록구",
+        value: "안산시 상록구",
+      },
+      {
+        label: "안산 단원구",
+        value: "안산시 단원구",
+      },
+      {
+        label: "고양 덕양구",
+        value: "고양시 덕양구",
+      },
+      {
+        label: "고양 일산동구",
+        value: "고양시 일산동구",
+      },
+      {
+        label: "고양 일산서구",
+        value: "고양시 일산서구",
       },
       {
         label: "과천",
@@ -186,8 +222,16 @@ export const regionList: {
         value: "하남시",
       },
       {
-        label: "용인",
-        value: "용인시",
+        label: "용인 처인구",
+        value: "용인시 처인구",
+      },
+      {
+        label: "용인 기흥구",
+        value: "용인시 기흥구",
+      },
+      {
+        label: "용인 수지구",
+        value: "용인시 수지구",
       },
       {
         label: "파주",
@@ -244,36 +288,36 @@ export const regionList: {
     value: "인천",
     sub: [
       {
-        label: "계양",
-        value: "계양구",
-      },
-      {
-        label: "미추홀",
-        value: "미추홀구",
-      },
-      {
-        label: "남동",
-        value: "남동구",
+        label: "중구",
+        value: "중구",
       },
       {
         label: "동구",
         value: "동구",
       },
       {
-        label: "부평",
+        label: "미추홀구",
+        value: "미추홀구",
+      },
+      {
+        label: "연수구",
+        value: "연수구",
+      },
+      {
+        label: "남동구",
+        value: "남동구",
+      },
+      {
+        label: "부평구",
         value: "부평구",
+      },
+      {
+        label: "계양구",
+        value: "계양구",
       },
       {
         label: "서구",
         value: "서구",
-      },
-      {
-        label: "연수",
-        value: "연수구",
-      },
-      {
-        label: "중구",
-        value: "중구",
       },
       {
         label: "강화",
@@ -326,7 +370,7 @@ export const regionList: {
         value: "횡성군",
       },
       {
-        label: "영원",
+        label: "영월",
         value: "영월군",
       },
       {
@@ -368,8 +412,20 @@ export const regionList: {
     value: "충북",
     sub: [
       {
-        label: "청주",
-        value: "청주시",
+        label: "청주 상당구",
+        value: "청주시 상당구",
+      },
+      {
+        label: "청주 흥덕구",
+        value: "청주시 흥덕구",
+      },
+      {
+        label: "청주 서원구",
+        value: "청주시 서원구",
+      },
+      {
+        label: "청주 청원구",
+        value: "청주시 청원구",
       },
       {
         label: "충주",
@@ -392,7 +448,7 @@ export const regionList: {
         value: "영동군",
       },
       {
-        label: "쯩평",
+        label: "증평",
         value: "증평군",
       },
       {
@@ -418,8 +474,12 @@ export const regionList: {
     value: "충남",
     sub: [
       {
-        label: "천안",
-        value: "천안시",
+        label: "천안 동남구",
+        value: "천안시 동남구",
+      },
+      {
+        label: "천안 서북구",
+        value: "천안시 서북구",
       },
       {
         label: "공주",
@@ -484,24 +544,24 @@ export const regionList: {
     value: "대전",
     sub: [
       {
-        label: "대덕",
-        value: "대덕구",
-      },
-      {
         label: "동구",
         value: "동구",
+      },
+      {
+        label: "중구",
+        value: "중구",
       },
       {
         label: "서구",
         value: "서구",
       },
       {
-        label: "유성",
+        label: "유성구",
         value: "유성구",
       },
       {
-        label: "중구",
-        value: "중구",
+        label: "대덕",
+        value: "대덕구",
       },
     ],
   },
@@ -515,8 +575,12 @@ export const regionList: {
     value: "전북",
     sub: [
       {
-        label: "전주",
-        value: "전주시",
+        label: "전주 완산구",
+        value: "전주시 완산구",
+      },
+      {
+        label: "전주 덕진구",
+        value: "전주시 덕진구",
       },
       {
         label: "군산",
@@ -621,7 +685,7 @@ export const regionList: {
         value: "화순군",
       },
       {
-        label: "장홍",
+        label: "장흥",
         value: "장흥군",
       },
       {
@@ -671,24 +735,24 @@ export const regionList: {
     value: "광주",
     sub: [
       {
-        label: "광산",
-        value: "광산구",
+        label: "동구",
+        value: "동구",
+      },
+      {
+        label: "서구",
+        value: "서구",
       },
       {
         label: "남구",
         value: "남구",
       },
       {
-        label: "동구",
-        value: "동구",
-      },
-      {
         label: "북구",
         value: "북구",
       },
       {
-        label: "서구",
-        value: "서구",
+        label: "광산구",
+        value: "광산구",
       },
     ],
   },
@@ -697,8 +761,12 @@ export const regionList: {
     value: "경북",
     sub: [
       {
-        label: "포항",
-        value: "포항시",
+        label: "포항 남구",
+        value: "포항시 남구",
+      },
+      {
+        label: "포항 북구",
+        value: "포항시 북구",
       },
       {
         label: "경주",
@@ -795,8 +863,24 @@ export const regionList: {
     value: "경남",
     sub: [
       {
-        label: "창원",
-        value: "창원시",
+        label: "창원 의창구",
+        value: "창원시 의창구",
+      },
+      {
+        label: "창원 성산구",
+        value: "창원시 성산구",
+      },
+      {
+        label: "창원 마산합포구",
+        value: "창원시 마산합포구",
+      },
+      {
+        label: "창원 마산회원구",
+        value: "창원시 마산회원구",
+      },
+      {
+        label: "창원 진해구",
+        value: "창원시 진해구",
       },
       {
         label: "진주",
@@ -873,65 +957,67 @@ export const regionList: {
     value: "부산",
     sub: [
       {
-        label: "강서",
-        value: "강서구",
-      },
-      {
-        label: "금정",
-        value: "금정구",
-      },
-      {
-        label: "남구",
-        value: "남구",
-      },
-      {
-        label: "동구",
-        value: "동구",
-      },
-      {
-        label: "동래",
-        value: "동래구",
-      },
-      {
-        label: "부산진",
-        value: "부산진구",
-      },
-      {
-        label: "북구",
-        value: "북구",
-      },
-      {
-        label: "사상",
-        value: "사상구",
-      },
-      {
-        label: "사하",
-        value: "사하구",
+        label: "중구",
+        value: "중구",
       },
       {
         label: "서구",
         value: "서구",
       },
       {
-        label: "수영",
-        value: "수영구",
+        label: "동구",
+        value: "동구",
       },
       {
-        label: "연제",
-        value: "연제구",
-      },
-      {
-        label: "영도",
+        label: "영도구",
         value: "영도구",
       },
       {
-        label: "중구",
-        value: "중구",
+        label: "부산진구",
+        value: "부산진구",
       },
       {
-        label: "해운대",
+        label: "동래구",
+        value: "동래구",
+      },
+      {
+        label: "남구",
+        value: "남구",
+      },
+      {
+        label: "북구",
+        value: "북구",
+      },
+      {
+        label: "강서구",
+        value: "강서구",
+      },
+      {
+        label: "해운대구",
         value: "해운대구",
       },
+      {
+        label: "사하구",
+        value: "사하구",
+      },
+      {
+        label: "금정구",
+        value: "금정구",
+      },
+      {
+        label: "연제구",
+        value: "연제구",
+      },
+      {
+        label: "수영구",
+        value: "수영구",
+      },
+
+      {
+        label: "사상구",
+        value: "사상구",
+      },
+
       {
         label: "기장",
         value: "기장군",
@@ -943,32 +1029,32 @@ export const regionList: {
     value: "대구",
     sub: [
       {
-        label: "남구",
-        value: "남구",
-      },
-      {
-        label: "달서",
-        value: "달서구",
+        label: "중구",
+        value: "중구",
       },
       {
         label: "동구",
         value: "동구",
       },
       {
-        label: "북구",
-        value: "북구",
-      },
-      {
         label: "서구",
         value: "서구",
       },
       {
-        label: "수성",
+        label: "남구",
+        value: "남구",
+      },
+      {
+        label: "북구",
+        value: "북구",
+      },
+      {
+        label: "수성구",
         value: "수성구",
       },
       {
-        label: "중구",
-        value: "중구",
+        label: "달서구",
+        value: "달서구",
       },
       {
         label: "달성",
@@ -981,6 +1067,10 @@ export const regionList: {
     value: "울산",
     sub: [
       {
+        label: "중구",
+        value: "중구",
+      },
+      {
         label: "남구",
         value: "남구",
       },
@@ -991,10 +1081,6 @@ export const regionList: {
       {
         label: "북구",
         value: "북구",
-      },
-      {
-        label: "중구",
-        value: "중구",
       },
       {
         label: "울주",
@@ -1017,3 +1103,9 @@ export const regionList: {
     ],
   },
 ];
+
+export const regionSplit = (str: string) => {
+  const region1 = str.split(" ")[0];
+  const region2 = str.substring(region1.length + 1);
+  return { region1, region2 };
+};

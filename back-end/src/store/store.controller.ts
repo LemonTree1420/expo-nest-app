@@ -143,4 +143,15 @@ export class StoreController {
   loginStore(@Body() loginDto: LoginDto): Promise<StoreWithToken> {
     return this.storeService.loginStore(loginDto);
   }
+
+  /**
+   * Object Id로 특정 store 검색
+   * @param id
+   * @returns
+   */
+  @Get('/search/:id')
+  @UseGuards(AuthGuard())
+  async searchStoreById(@Param('id') id: Types.ObjectId): Promise<Store> {
+    return await this.storeService.getStoreById(id);
+  }
 }

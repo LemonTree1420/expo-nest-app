@@ -1,16 +1,18 @@
 import axios from "axios";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Pressable, ScrollView, View } from "react-native";
-import { Button, Text, TextInput } from "react-native-paper";
+import { Pressable, View } from "react-native";
+import { Button, Snackbar, Text, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRecoilState } from "recoil";
+import { Entypo } from "@expo/vector-icons";
 import { storeState } from "../recoil/atoms";
 import AgeDialouge from "./dialog/age.dialog";
 import getEnvVars from "../../environment";
-import { API_HEADER } from "../constants/api";
+import { API_ERROR, API_HEADER } from "../constants/api";
 import { tokenValidateHandler } from "../constants/validate";
 import { moneyComma } from "../constants/regEx";
+import { DEDUCT_POINT } from "../constants/point";
 const { apiUrl } = getEnvVars();
 
 export default function AddCall({ navigation }: any) {
@@ -26,10 +28,13 @@ export default function AddCall({ navigation }: any) {
   const [store, setStore] = useRecoilState(storeState);
   const [ageDialog, setAgeDialog] = useState<boolean>(false);
   const [inputKey, setInputKey] = useState<string>("");
+  const [visibleSnackBar, setVisibleSnackBar] = useState<boolean>(false);
 
   const onAddCallHandler = async (data: any) => {
-    data.customerAge = Number(data.customerAge.substr(0, 2));
-    data.expectedAge = Number(data.expectedAge.substr(0, 2));
+    if (store.point < DEDUCT_POINT) return setVisibleSnackBar(true);
+
+    data.customerAge = Number(data.customerAge.substring(0, 2));
+    data.expectedAge = Number(data.expectedAge.substring(0, 2));
     data.headCount = Number(data.headCount);
     data.fee = Number(data.fee.replaceAll(",", ""));
     if (!data.memo) delete data.memo;
@@ -38,8 +43,19 @@ export default function AddCall({ navigation }: any) {
     const token = await tokenValidateHandler(setStore, navigation);
     await axios
       .post(`${apiUrl}call/create`, data, API_HEADER(token))
-      .then((res) => navigation.navigate("token", { screen: "list" }))
-      .catch((err) => console.error(err));
+      .then((res) => onAddCallSuccess())
+      .catch((err) => onAddCallError(err));
+  };
+
+  const onAddCallSuccess = () => {
+    setStore({ ...store, point: store.point - DEDUCT_POINT });
+    navigation.navigate("token", { screen: "list" });
+  };
+
+  const onAddCallError = (err: any) => {
+    API_ERROR(err, setStore, navigation);
+    if (err.response.data.message.includes("Point"))
+      return setVisibleSnackBar(true);
   };
 
   const ageDialogProps = {
@@ -54,8 +70,8 @@ export default function AddCall({ navigation }: any) {
   };
 
   return (
-    <ScrollView>
-      <SafeAreaView className="flex-1 p-6">
+    <React.Fragment>
+      <SafeAreaView className="flex-1 p-6 h-full">
         <View>
           <Controller
             control={control}
@@ -169,7 +185,7 @@ export default function AddCall({ navigation }: any) {
                 className="bg-transparent h-40"
                 mode="flat"
                 label="메모"
-                maxLength={100}
+                maxLength={300}
                 underlineColor="#4B5563"
                 activeUnderlineColor="#2563EB"
                 value={value}
@@ -195,6 +211,26 @@ export default function AddCall({ navigation }: any) {
         </View>
       </SafeAreaView>
       <AgeDialouge {...ageDialogProps} />
-    </ScrollView>
+      <Snackbar
+        className="bg-red-600"
+        visible={visibleSnackBar}
+        onDismiss={() => setVisibleSnackBar(false)}
+        action={{
+          label: "x",
+          labelStyle: {
+            color: "#fff",
+          },
+          onPress: () => {
+            setVisibleSnackBar(false);
+          },
+        }}
+        duration={2000}
+      >
+        <View className="flex-row items-center">
+          <Entypo name="warning" size={18} color="#fff" />
+          <Text className="ml-2 text-white">보유 포인트가 부족합니다.</Text>
+        </View>
+      </Snackbar>
+    </React.Fragment>
   );
 }

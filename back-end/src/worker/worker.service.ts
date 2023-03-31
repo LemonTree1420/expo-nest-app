@@ -116,24 +116,28 @@ export class WorkerService {
   ): Promise<Worker> {
     const filter = { _id: id };
 
-    if (updateWorkerAccountDto.password) {
-      const hashedPassword = await this.authService.encryptSecret(
-        updateWorkerAccountDto.password,
-      );
-      updateWorkerAccountDto.password = hashedPassword;
-    }
-    if (updateWorkerAccountDto.pin) {
-      const hashedPin = await this.authService.encryptSecret(
-        updateWorkerAccountDto.pin,
-      );
-      updateWorkerAccountDto.pin = hashedPin;
-    }
+    try {
+      if (updateWorkerAccountDto.password) {
+        const hashedPassword = await this.authService.encryptSecret(
+          updateWorkerAccountDto.password,
+        );
+        updateWorkerAccountDto.password = hashedPassword;
+      }
+      if (updateWorkerAccountDto.pin) {
+        const hashedPin = await this.authService.encryptSecret(
+          updateWorkerAccountDto.pin,
+        );
+        updateWorkerAccountDto.pin = hashedPin;
+      }
 
-    return await this.workerModel.findOneAndUpdate(
-      filter,
-      updateWorkerAccountDto,
-      { new: true },
-    );
+      return await this.workerModel.findOneAndUpdate(
+        filter,
+        updateWorkerAccountDto,
+        { new: true },
+      );
+    } catch (err) {
+      handleMongooseErr(err);
+    }
   }
 
   /**

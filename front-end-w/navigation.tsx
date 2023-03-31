@@ -3,10 +3,9 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Root from "./src/Screens/root";
 import { Ionicons } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { Fontisto } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
-import Home from "./src/Screens/home";
 import SignIn from "./src/Screens/signIn";
 import SignUp from "./src/Screens/signUp";
 import FindIdStepOne from "./src/Screens/findIdStepOne";
@@ -17,6 +16,13 @@ import FindPwStepThree from "./src/Screens/findPwStepThree";
 import Point from "./src/Screens/point";
 import Settings from "./src/Screens/settings";
 import PhoneNumEdit from "./src/Screens/phoneNumEdit";
+import { Pressable } from "react-native";
+import CallRegion from "./src/Screens/callRegion";
+import CallList from "./src/Screens/callList";
+import CallDetail from "./src/Screens/callDetail";
+import CallMatchDetail from "./src/Screens/callMatchDetail";
+import CallMatchList from "./src/Screens/callMatchList";
+import PointChargeList from "./src/Screens/pointChargeList";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -115,7 +121,35 @@ function SubScreen() {
         headerTitleAlign: "center",
       }}
     >
-      <Stack.Screen name="휴대폰번호 수정" component={PhoneNumEdit} />
+      <Stack.Screen
+        name="phoneNumEdit"
+        component={PhoneNumEdit}
+        options={{ headerTitle: "휴대폰 번호 수정" }}
+      />
+      <Stack.Screen
+        name="callRegion"
+        component={CallRegion}
+        options={{ headerTitle: "지역 선택" }}
+      />
+      <Stack.Screen
+        name="callDetail"
+        component={CallDetail}
+        options={{ headerTitle: "콜 정보" }}
+      />
+      <Stack.Screen
+        name="callMatchDetail"
+        component={CallMatchDetail}
+        options={{
+          headerTitle: "매칭 콜 정보",
+        }}
+      />
+      <Stack.Screen
+        name="pointChargeList"
+        component={PointChargeList}
+        options={{
+          headerTitle: "포인트 충전 내역",
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -139,35 +173,77 @@ function TokenBottom() {
         tabBarActiveTintColor: "#fff",
         headerShadowVisible: false,
       }}
-      initialRouteName="home"
+      initialRouteName="callList"
     >
       <Tab.Screen
-        name="home"
-        component={Home}
-        options={{
-          headerTitle: "홈",
-          tabBarLabel: "홈",
+        name="callList"
+        component={CallList}
+        options={({ navigation }) => ({
+          headerTitle: "콜 리스트",
+          tabBarLabel: "콜 리스트",
           tabBarIcon: ({ color, size }) => {
-            return <Entypo name="home" size={size} color={color} />;
+            return <FontAwesome5 name="list" size={size} color={color} />;
+          },
+          headerRight: () => (
+            <Pressable
+              className="px-4"
+              onPress={() =>
+                navigation.navigate("sub", { screen: "callRegion" })
+              }
+            >
+              <FontAwesome5 name="map-marked" size={24} color="#fff" />
+            </Pressable>
+          ),
+        })}
+      />
+      <Tab.Screen
+        name="callMatchList"
+        component={CallMatchList}
+        options={{
+          headerTitle: "매칭 리스트",
+          tabBarLabel: "매칭 리스트",
+          tabBarIcon: ({ color, size }) => {
+            return (
+              <FontAwesome5 name="calendar-check" size={size} color={color} />
+            );
           },
         }}
       />
       <Tab.Screen
         name="point"
         component={Point}
-        options={{
+        options={({ navigation }) => ({
           headerTitle: "포인트",
           tabBarLabel: "포인트 충전",
           tabBarIcon: ({ color, size }) => {
-            return (
-              <MaterialCommunityIcons
-                name="cash-plus"
-                size={size}
-                color={color}
-              />
-            );
+            return <FontAwesome5 name="coins" size={size} color={color} />;
           },
-        }}
+          // headerLeft: () => (
+          //   <Pressable
+          //     className="px-4"
+          //     onPress={
+          //       () => {}
+          //       // navigation.navigate("sub", { screen: "callRegion" })
+          //     }
+          //   >
+          //     <MaterialCommunityIcons
+          //       name="account-cash"
+          //       size={24}
+          //       color="#fff"
+          //     />
+          //   </Pressable>
+          // ),
+          headerRight: () => (
+            <Pressable
+              className="px-4"
+              onPress={() =>
+                navigation.navigate("sub", { screen: "pointChargeList" })
+              }
+            >
+              <Fontisto name="shopping-basket-add" size={24} color="#fff" />
+            </Pressable>
+          ),
+        })}
       />
       <Tab.Screen
         name="settings"
@@ -176,7 +252,7 @@ function TokenBottom() {
           headerTitle: "내 정보",
           tabBarLabel: "내 정보",
           tabBarIcon: ({ color, size }) => {
-            return <Feather name="user" size={24} color={color} />;
+            return <FontAwesome5 name="user-alt" size={24} color={color} />;
           },
         }}
       />

@@ -9,7 +9,7 @@ import {
 } from "react-native-paper";
 import { ageList } from "../../constants/age";
 
-export default function AgeDialouge(props: any) {
+export default function AgeDialog(props: any) {
   const [select, setSelect] = useState<number>(0);
 
   const onSelectAgeHandler = (value: number) => {
@@ -20,7 +20,7 @@ export default function AgeDialouge(props: any) {
   };
 
   useEffect(() => {
-    if (props.value) setSelect(Number(props.value.substr(0, 2)));
+    if (props.value) setSelect(Number(props.value.substring(0, 2)));
     else setSelect(0);
   }, [props]);
 

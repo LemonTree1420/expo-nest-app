@@ -8,7 +8,7 @@ import { Feather } from "@expo/vector-icons";
 import { useRecoilState } from "recoil";
 import { workerState } from "../recoil/atoms";
 import axios from "axios";
-import { API_HEADER } from "../constants/api";
+import { API_ERROR, API_HEADER } from "../constants/api";
 import { Alert } from "react-native";
 import getEnvVars from "../../environment";
 import { onSignOutHandler, tokenValidateHandler } from "../constants/validate";
@@ -34,26 +34,17 @@ export default function Settings({ navigation }: any) {
         `${apiUrl}worker/delete/${worker._id}`,
         API_HEADER(token as string)
       )
-      .then((res) =>
-        Alert.alert("", "회원탈퇴가 완료되었습니다.", [
-          {
-            text: "확인",
-            onPress: () => navigation.replace("noToken", { screen: "signIn" }),
-          },
-        ])
-      )
-      .catch((err) => {
-        if (err.response.status === 401) {
-          Alert.alert("", "인증 세션이 만료되었습니다.\n다시 로그인하세요.", [
-            {
-              text: "확인",
-              onPress: async () =>
-                await onSignOutHandler(setWorker, navigation),
-            },
-          ]);
-        }
-        console.error(err);
-      });
+      .then((res) => onWithDrawalSuccess())
+      .catch((err) => API_ERROR(err, setWorker, navigation));
+  };
+
+  const onWithDrawalSuccess = () => {
+    Alert.alert("", "회원탈퇴가 완료되었습니다.", [
+      {
+        text: "확인",
+        onPress: () => navigation.replace("noToken", { screen: "signIn" }),
+      },
+    ]);
   };
 
   return (
@@ -114,9 +105,7 @@ export default function Settings({ navigation }: any) {
                   name="sign-out"
                   size={24}
                   color="#3F3F46"
-                  onPress={async () =>
-                    await onSignOutHandler(setWorker, navigation)
-                  }
+                  onPress={() => onSignOutHandler(setWorker, navigation)}
                 />
               }
               titleTextStyle={styles.cellTitle}

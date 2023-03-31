@@ -8,7 +8,15 @@ export class RequestChargePointDto {
 
   @IsNotEmpty()
   @IsString()
-  requestName: string;
+  request_auth: Auth;
+
+  @IsNotEmpty()
+  @IsString()
+  requestBankHolder: string;
+
+  @IsNotEmpty()
+  @IsString()
+  requestBankAccountNum: string;
 
   @IsNotEmpty()
   @IsNumber()

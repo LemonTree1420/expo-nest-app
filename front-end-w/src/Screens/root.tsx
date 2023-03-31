@@ -24,13 +24,13 @@ export default function Root({ navigation }: any) {
     await AsyncStorage.setItem(asyncStorageTokenName, data.token);
     delete data.token;
     setWorker(data);
-    return navigation.replace("token", { screen: "home" });
+    return navigation.replace("token", { screen: "callList" });
   };
 
   const validateFailHandler = async () => {
+    navigation.replace("noToken", { screen: "signIn" });
     await AsyncStorage.removeItem(asyncStorageTokenName);
     setWorker(null);
-    return navigation.replace("noToken", { screen: "signIn" });
   };
 
   useEffect(() => {
