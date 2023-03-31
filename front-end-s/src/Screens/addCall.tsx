@@ -88,7 +88,7 @@ export default function AddCall({ navigation }: any) {
                   className="bg-transparent"
                   mode="flat"
                   label="손님 연령대"
-                  editable={false}
+                  // editable={true}
                   underlineColor="#4B5563"
                   activeUnderlineColor="#2563EB"
                   value={value}
@@ -138,7 +138,7 @@ export default function AddCall({ navigation }: any) {
                   className="bg-transparent"
                   mode="flat"
                   label="요청 연령대"
-                  editable={false}
+                  // editable={false}
                   underlineColor="#4B5563"
                   activeUnderlineColor="#2563EB"
                   value={value}

@@ -2,15 +2,15 @@ import Constants from "expo-constants";
 
 const ENV: any = {
   dev: {
-    apiUrl: "http://13.209.57.85:6001/",
+    apiUrl: "http://13.209.57.85:9001/",
     asyncStorageTokenName: "@tkw",
   },
   staging: {
-    apiUrl: "http://13.209.57.85:6001/",
+    apiUrl: "http://13.209.57.85:9001/",
     asyncStorageTokenName: "@tkw",
   },
   prod: {
-    apiUrl: "http://13.209.57.85:6001/",
+    apiUrl: "http://13.209.57.85:9001/",
     asyncStorageTokenName: "@tkw",
   },
 };
