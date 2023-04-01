@@ -20,7 +20,6 @@
     "dayjs": "^1.11.7",
     "expo": "^48.0.9",
     "expo-clipboard": "~4.1.2",
-    "expo-splash-screen": "~0.18.1",
     "expo-status-bar": "~1.4.4",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
@@ -41,10 +40,5 @@
     "@babel/core": "^7.20.0",
     "tailwindcss": "^3.2.7"
   },
-  "private": true,
-  "expo-yarn-workspaces": {
-    "symlinks": [
-      "react-native-unimodules"
-    ]
-  }
+  "private": true
 }

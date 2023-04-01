@@ -3,7 +3,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Cell, Section, TableView } from "react-native-tableview-simple";
 import { Octicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { Divider, Text } from "react-native-paper";
+import { Text } from "react-native-paper";
 import { Feather } from "@expo/vector-icons";
 import { useRecoilState } from "recoil";
 import { storeState } from "../recoil/atoms";
