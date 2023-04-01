@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Linking, Pressable, ScrollView, View } from "react-native";
+import { Alert, Linking, Pressable, ScrollView, View } from "react-native";
 import { Button, HelperText, Text, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { moneyComma } from "../constants/regEx";
@@ -53,7 +53,15 @@ export default function CallDetail({ navigation, route }: any) {
       .catch((err) => API_ERROR(err, setStore, navigation));
   };
 
-  const onDeleteCallHandler = async () => {
+  const onDeleteCallHandler = () => {
+    Alert.alert(
+      "",
+      "콜은 삭제되지만 포인트는 환불되지 않습니다.\n정말 삭제하시겠습니까?",
+      [{ text: "삭제", onPress: () => onDeleteCallAxios() }, { text: "취소" }]
+    );
+  };
+
+  const onDeleteCallAxios = async () => {
     const token = await tokenValidateHandler(setStore, navigation);
     await axios
       .delete(`${apiUrl}call/delete/${call._id}`, API_HEADER(token))

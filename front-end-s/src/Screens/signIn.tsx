@@ -12,7 +12,7 @@ import {
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSetRecoilState } from "recoil";
-import { PLATFORM_NAME } from "../constants/configure";
+import { AUTH, PLATFORM_NAME } from "../constants/configure";
 import { storeState } from "../recoil/atoms";
 import getEnvVars from "../../environment";
 const { apiUrl, asyncStorageTokenName } = getEnvVars();
@@ -56,6 +56,7 @@ export default function SignIn({ navigation }: any) {
         <Text className="text-4xl font-bold text-blue-600">
           {PLATFORM_NAME}
         </Text>
+        <Text className="text-sm font-bold text-blue-600">- {AUTH} - </Text>
       </View>
       <View className="mt-16">
         <Controller

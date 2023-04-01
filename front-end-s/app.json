@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Choice",
-    "slug": "Choice",
+    "name": "ChoiceS",
+    "slug": "ChoiceS",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -10,15 +10,13 @@
       "image": "./assets/splash.png",
       "resizeMode": "contain"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "bundleIdentifier": "com.ww9063choice.choice",
+      "bundleIdentifier": "com.ww9063choice.ChoiceS",
       "buildNumber": "1.0.0"
     },
     "android": {
-      "package": "com.ww9063choice.choice",
+      "package": "com.ww9063choice.ChoiceS",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

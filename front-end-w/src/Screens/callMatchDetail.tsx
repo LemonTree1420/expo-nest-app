@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-import { Linking, Pressable, View } from "react-native";
+import { Alert, Linking, Pressable, View } from "react-native";
 import {
   Button,
   Divider,
@@ -44,6 +44,14 @@ export default function CallMatchDetail({ navigation, route }: any) {
   const onPhoneCallHandler = async (str: string) => {
     const url = `tel://${str}`;
     Linking.openURL(url);
+  };
+
+  const onCancelAlertHandler = () => {
+    Alert.alert(
+      "",
+      "매칭이 취소되지만 포인트는 환불되지 않습니다.\n정말 취소하시겠습니까?",
+      [{ text: "삭제", onPress: () => onCancelCallHandler() }, { text: "취소" }]
+    );
   };
 
   const onCancelCallHandler = async () => {
@@ -153,7 +161,7 @@ export default function CallMatchDetail({ navigation, route }: any) {
               <Button
                 mode="contained"
                 className="bg-blue-600 mt-8 w-full rounded-xl py-1"
-                onPress={onCancelCallHandler}
+                onPress={onCancelAlertHandler}
               >
                 취소
               </Button>
