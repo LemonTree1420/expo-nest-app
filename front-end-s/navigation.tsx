@@ -17,7 +17,6 @@ import { Text } from "react-native-paper";
 import { Pressable } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import CallDetail from "./src/Screens/callDetail";
 import AddCall from "./src/Screens/addCall";
 import CallEndList from "./src/Screens/callEndList";
@@ -212,21 +211,6 @@ function TokenBottom() {
           tabBarIcon: ({ color, size }) => {
             return <FontAwesome5 name="coins" size={size} color={color} />;
           },
-          // headerLeft: () => (
-          //   <Pressable
-          //     className="px-4"
-          //     onPress={
-          //       () => {}
-          //       // navigation.navigate("sub", { screen: "callRegion" })
-          //     }
-          //   >
-          //     <MaterialCommunityIcons
-          //       name="account-cash"
-          //       size={24}
-          //       color="#fff"
-          //     />
-          //   </Pressable>
-          // ),
           headerRight: () => (
             <Pressable
               className="px-4"

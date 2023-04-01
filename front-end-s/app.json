@@ -10,13 +10,15 @@
       "image": "./assets/splash.png",
       "resizeMode": "contain"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "bundleIdentifier": "com.ww9063choice.ChoiceS",
+      "bundleIdentifier": "com.ww9063choice.choices",
       "buildNumber": "1.0.0"
     },
     "android": {
-      "package": "com.ww9063choice.ChoiceS",
+      "package": "com.ww9063choice.choices",
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -25,7 +27,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "80272d58-bd52-4ae3-83f6-761023ba245b"
+        "projectId": "4e483630-a076-4e4d-b6e1-a0286e701c18"
       }
     }
   }
