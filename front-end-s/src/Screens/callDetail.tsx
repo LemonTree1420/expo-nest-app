@@ -75,7 +75,7 @@ export default function CallDetail({ navigation, route }: any) {
             <Text className="font-bold text-lg text-white">
               현재 매칭된 인원 : {call.nowCount}명
             </Text>
-            {call.nowCount.length > 0 && (
+            {call.nowCount > 0 && (
               <React.Fragment>
                 {phoneVisible ? (
                   <Octicons
@@ -96,13 +96,16 @@ export default function CallDetail({ navigation, route }: any) {
             )}
           </View>
           {phoneVisible &&
-            call.workerNumbers.map((phone: string) => (
+            call.workers.map((item: any) => (
               <Pressable
+                key={item.cellPhoneNumber}
                 className="flex-row items-center"
-                onPress={() => onPhoneCallHandler(phone)}
+                onPress={() => onPhoneCallHandler(item.cellPhoneNumber)}
               >
                 <FontAwesome name="phone-square" size={24} color="#fff" />
-                <Text className="mx-2 text-lg text-white">{phone}</Text>
+                <Text className="mx-2 text-lg text-white">
+                  {item.cellPhoneNumber}
+                </Text>
               </Pressable>
             ))}
         </View>

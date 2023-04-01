@@ -113,7 +113,7 @@ export default function FindPwStepOne({ navigation }: any) {
               placeholderTextColor="#9CA3AF"
               style={{ paddingHorizontal: 0 }}
               error={!!errors.pin}
-              inputMode="numeric"
+              keyboardType="numeric"
             />
           )}
         />

@@ -5,7 +5,6 @@ import Root from "./src/Screens/root";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import SignIn from "./src/Screens/signIn";
 import SignUp from "./src/Screens/signUp";
 import FindIdStepOne from "./src/Screens/findIdStepOne";
@@ -23,6 +22,8 @@ import CallDetail from "./src/Screens/callDetail";
 import CallMatchDetail from "./src/Screens/callMatchDetail";
 import CallMatchList from "./src/Screens/callMatchList";
 import PointChargeList from "./src/Screens/pointChargeList";
+import PointAccountInput from "./src/Screens/pointAccountInput";
+import CallMatchInput from "./src/Screens/callMatchInput";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -148,6 +149,20 @@ function SubScreen() {
         component={PointChargeList}
         options={{
           headerTitle: "포인트 충전 내역",
+        }}
+      />
+      <Stack.Screen
+        name="pointAccountInput"
+        component={PointAccountInput}
+        options={{
+          headerTitle: "계좌 정보 입력",
+        }}
+      />
+      <Stack.Screen
+        name="callMatchInput"
+        component={CallMatchInput}
+        options={{
+          headerTitle: "매칭 인원 수 입력",
         }}
       />
     </Stack.Navigator>

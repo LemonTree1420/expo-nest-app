@@ -50,7 +50,7 @@ export default function Settings({ navigation }: any) {
   return (
     <SafeAreaView
       edges={["bottom", "left", "right"]}
-      className="flex-1 items-center space-between"
+      className="flex-1 items-center justify-between"
     >
       <View
         className="flex justify-center items-center w-full bg-blue-600 h-4/6 scale-x-150 overflow-hidden"
@@ -93,7 +93,7 @@ export default function Settings({ navigation }: any) {
           </View>
         </View>
       </View>
-      <View className="absolute bottom-12 w-full h-auto">
+      <View className="w-full h-2/6 flex items-center justify-center">
         <TableView style={styles.table} appearance="light">
           <Section header="서비스" hideSurroundingSeparators>
             <Cell

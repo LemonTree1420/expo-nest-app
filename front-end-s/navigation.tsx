@@ -23,6 +23,7 @@ import AddCall from "./src/Screens/addCall";
 import CallEndList from "./src/Screens/callEndList";
 import CallEndDetail from "./src/Screens/callEndDetail";
 import PointChargeList from "./src/Screens/pointChargeList";
+import PointAccountInput from "./src/Screens/pointAccountInput";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -136,6 +137,13 @@ function SubScreen() {
         component={PointChargeList}
         options={{
           headerTitle: "포인트 충전 내역",
+        }}
+      />
+      <Stack.Screen
+        name="pointAccountInput"
+        component={PointAccountInput}
+        options={{
+          headerTitle: "계좌 정보 입력",
         }}
       />
     </Stack.Navigator>

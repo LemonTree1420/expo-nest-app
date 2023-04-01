@@ -88,10 +88,10 @@ export default function RegionSelect(props: any) {
           </ScrollView>
         </View>
       </View>
-      <View className="bg-white rounded-b-lg flex-row justify-center pt-2 pb-3">
+      <View className="bg-white rounded-b-lg flex-row justify-center pt-2 pb-3 px-4">
         <Button
           mode="contained"
-          className="w-1/2"
+          className="w-full"
           buttonColor="#2563EB"
           onPress={onRegionHandler}
         >

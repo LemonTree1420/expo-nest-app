@@ -67,7 +67,7 @@ export default function PhoneNumEdit({ navigation }: any) {
             value={value}
             onBlur={onBlur}
             onChangeText={onChange}
-            inputMode="tel"
+            keyboardType="numeric"
             placeholder="휴대폰 번호 (- 제외)"
             placeholderTextColor="#9CA3AF"
             style={{ paddingHorizontal: 0 }}

@@ -62,29 +62,22 @@ export default function CallList({ navigation }: any) {
     <React.Fragment key={item._id}>
       {!item.status && (
         <Pressable
-          className="flex-row items-center bg-white h-28 border-t border-b border-gray-300 px-3"
+          className="flex-row justify-around items-center bg-white h-28 border-t border-b border-gray-300 px-3"
           onPress={() =>
             navigation.navigate("sub", { screen: "callDetail", params: item })
           }
         >
-          <View className="flex flex-wrap justify-center items-center h-4/6 w-3/12 bg-blue-600 rounded-xl px-2">
-            <Text className="font-bold text-white text-center">
-              {item.region}
-            </Text>
-          </View>
-          <View className="flex justify-center items-start h-4/6 w-6/12 pl-10">
+          <View className="flex justify-center items-center h-4/6 w-1/2">
             <Text className="font-bold text-lg">{item.customerAge}대 손님</Text>
             <Text className="font-bold text-gray-600">
               요청 나이 {item.expectedAge}대
             </Text>
             <Text className="font-bold text-gray-600">
-              요청 인원 수 {item.headCount}명
-            </Text>
-            <Text className="font-bold">
-              &#8361; {moneyComma(item.fee.toString())}
+              요금 {moneyComma(item.fee.toString())}원
             </Text>
           </View>
-          <View className="flex justify-center items-center h-4/6 w-3/12">
+          <View className="flex justify-center items-center h-4/6 w-1/2">
+            <Text className="font-bold text-lg">매칭 인원 수</Text>
             <Text className="text-xl font-bold text-gray-600">
               {item.nowCount}/{item.headCount}
             </Text>
