@@ -124,14 +124,14 @@ export default function SignUp({ navigation }: any) {
             </Text>
           </View>
           <View className="mt-16">
-            <View className="flex-row items-center">
+            <View className="flex-row justify-between items-center w-full">
               <Controller
                 control={control}
                 name="userId"
                 rules={{ required: true, pattern: basicRegEx.ENGNUM }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
-                    className="w-4/6 bg-transparent"
+                    className="bg-transparent w-4/6"
                     mode="flat"
                     maxLength={12}
                     label="아이디"
@@ -151,7 +151,7 @@ export default function SignUp({ navigation }: any) {
                 )}
               />
               <Button
-                className="w-2/6 mt-2"
+                className="mt-2 w-auto"
                 mode="outlined"
                 textColor={watch("userId")?.length > 0 ? "#2563EB" : "#4B5563"}
                 labelStyle={{ fontSize: 14 }}
@@ -293,7 +293,7 @@ export default function SignUp({ navigation }: any) {
                   placeholderTextColor="#9CA3AF"
                   style={{ paddingHorizontal: 0 }}
                   error={!!errors.pin}
-                  inputMode="numeric"
+                  keyboardType="numeric"
                 />
               )}
             />
@@ -343,7 +343,7 @@ export default function SignUp({ navigation }: any) {
                   value={value}
                   onBlur={onBlur}
                   onChangeText={onChange}
-                  inputMode="tel"
+                  keyboardType="numeric"
                   placeholder="업체 전화번호 (- 제외)"
                   placeholderTextColor="#9CA3AF"
                   style={{ paddingHorizontal: 0 }}
@@ -372,7 +372,7 @@ export default function SignUp({ navigation }: any) {
                   value={value}
                   onBlur={onBlur}
                   onChangeText={onChange}
-                  inputMode="tel"
+                  keyboardType="numeric"
                   placeholder="휴대폰 번호 (- 제외)"
                   placeholderTextColor="#9CA3AF"
                   style={{ paddingHorizontal: 0 }}

@@ -271,7 +271,7 @@ export default function SignUp({ navigation }: any) {
                 placeholderTextColor="#9CA3AF"
                 style={{ paddingHorizontal: 0 }}
                 error={!!errors.pin}
-                inputMode="numeric"
+                keyboardType="numeric"
               />
             )}
           />
@@ -298,7 +298,7 @@ export default function SignUp({ navigation }: any) {
                 value={value}
                 onBlur={onBlur}
                 onChangeText={onChange}
-                inputMode="tel"
+                keyboardType="numeric"
                 placeholder="휴대폰 번호 (- 제외)"
                 placeholderTextColor="#9CA3AF"
                 style={{ paddingHorizontal: 0 }}

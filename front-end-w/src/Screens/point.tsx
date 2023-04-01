@@ -2,12 +2,7 @@ import { useEffect, useState } from "react";
 import { Pressable, Share, View } from "react-native";
 import { Button, Divider, Snackbar, Text, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  ACCOUNT_BANK,
-  ACCOUNT_NUM,
-  ACCOUNT_OWNER,
-  AUTH,
-} from "../constants/configure";
+import { AUTH } from "../constants/configure";
 import { moneyList } from "../constants/money";
 import { Entypo } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -24,18 +19,11 @@ import { Controller, useForm } from "react-hook-form";
 const { apiUrl } = getEnvVars();
 
 export default function Point({ navigation }: any) {
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm();
-
   const [worker, setWorker] = useRecoilState<any>(workerState);
   const [money, setMoney] = useState<number>(0);
   const [point, setPoint] = useState<number>(0);
+  const [account, setAccount] = useState<any>(null);
   const [visibleBottomSheet, setVisibleBottomSheet] = useState<boolean>(false);
-  const [pointBottomSheet, setPointBottomSheet] = useState<boolean>(false);
   const [visibleSnackBar, setVisibleSnackBar] = useState<boolean>(false);
   const [pointSnackBar, setPointSnackBar] = useState<boolean>(false);
 
@@ -47,50 +35,39 @@ export default function Point({ navigation }: any) {
       .catch((err) => API_ERROR(err, setWorker, navigation));
   };
 
+  const getManagerAccount = async () => {
+    const token = await tokenValidateHandler(setWorker, navigation);
+    await axios
+      .get(`${apiUrl}manager/account`, API_HEADER(token))
+      .then((res) => setAccount(res.data))
+      .catch((err) => API_ERROR(err, setWorker, navigation));
+  };
+
   useEffect(() => {
     const focusScreen = navigation.addListener("focus", () => {
       getWorkerInfo();
+      getManagerAccount();
     });
     return focusScreen;
   }, [navigation]);
 
   const onInputPayHandler = () => {
     if (money === 0 || point === 0) setVisibleSnackBar(true);
-    else setPointBottomSheet(true);
+    else
+      navigation.navigate("sub", {
+        screen: "pointAccountInput",
+        params: { money, point },
+      });
   };
-
-  const onPayHandler = async (data: any) => {
-    const token = await tokenValidateHandler(setWorker, navigation);
-    const postData = {
-      ...data,
-      request_id: worker._id,
-      request_auth: AUTH,
-      depositAmount: money,
-      requestPoint: point,
-    };
-    await axios
-      .post(`${apiUrl}point/charge/request`, postData, API_HEADER(token))
-      .then((res) => setPointBottomSheet(false))
-      .catch((err) => API_ERROR(err, setWorker, navigation));
-  };
-
-  useEffect(() => {
-    if (!pointBottomSheet) {
-      setValue("requestBankHolder", "");
-      setValue("requestBankAccountNum", "");
-      setMoney(0);
-      setPoint(0);
-    }
-  }, [pointBottomSheet]);
 
   const copyToClipboard = async () => {
-    await Clipboard.setStringAsync(ACCOUNT_NUM.replaceAll("-", ""));
+    await Clipboard.setStringAsync(account?.accountNumber.replaceAll("-", ""));
     setVisibleBottomSheet(false);
   };
 
   const onShareHandler = async () => {
     Share.share({
-      message: `${ACCOUNT_BANK} ${ACCOUNT_NUM.replaceAll("-", "")}`,
+      message: `${account?.bank} ${account?.accountNumber.replaceAll("-", "")}`,
     });
   };
 
@@ -105,9 +82,9 @@ export default function Point({ navigation }: any) {
   return (
     <SafeAreaView
       edges={["bottom", "left", "right"]}
-      className="flex-1 items-center justify-between"
+      className="flex-1 items-center justify-between pb-6"
     >
-      <View className="flex items-center w-full bg-blue-600 pt-4 pb-40">
+      <View className="flex items-center h-1/6 w-full bg-blue-600">
         <Text variant="bodyLarge" className="text-blue-800">
           사용가능 포인트
         </Text>
@@ -115,8 +92,7 @@ export default function Point({ navigation }: any) {
           {worker.point}P
         </Text>
       </View>
-      <View className="absolute top-36 left-1/2 transform -translate-x-6 rotate-45 w-12 h-12 bg-white"></View>
-      <View className="absolute top-36 w-11/12">
+      <View className="flex items-center justify-center w-11/12 h-4/6">
         <View className="flex bg-white py-6 px-4 rounded-md">
           <View className="flex flex-row justify-between">
             {moneyList.map((item) => (
@@ -167,40 +143,42 @@ export default function Point({ navigation }: any) {
             </View>
           </View>
         </View>
-        <View>
-          <Button
-            mode="contained"
-            onPress={onInputPayHandler}
-            icon={() => (
-              <MaterialCommunityIcons
-                name="lightning-bolt"
-                size={20}
-                color="#fff"
-              />
-            )}
-            className="bg-blue-600 mt-2 py-1"
-            labelStyle={{
-              fontSize: 16,
-            }}
-          >
-            충전
-          </Button>
-        </View>
+        <Button
+          mode="contained"
+          onPress={onInputPayHandler}
+          icon={() => (
+            <MaterialCommunityIcons
+              name="lightning-bolt"
+              size={20}
+              color="#fff"
+            />
+          )}
+          className="bg-blue-600 mt-2 py-1 w-full"
+          labelStyle={{
+            fontSize: 16,
+          }}
+        >
+          충전
+        </Button>
       </View>
-      <View className="rounded-xl bg-cyan-700/90 py-4 px-6 w-11/12 mb-4 shadow shadow-cyan-500/90">
-        <View className="flex-row justify-between items-center mb-8">
-          <Text className="text-lg text-white">{ACCOUNT_BANK}</Text>
-          <Entypo
-            name="dots-three-vertical"
-            size={20}
-            color="#fff"
-            onPress={() => {
-              setVisibleBottomSheet(true);
-            }}
-          />
+      <View className="h-1/6 w-full flex justify-center items-center">
+        <View className="rounded-xl bg-cyan-700/90 py-4 px-6 w-11/12 mb-4 shadow shadow-cyan-500/90">
+          <View className="flex-row justify-between items-center mb-8">
+            <Text className="text-lg text-white">{account?.bank}</Text>
+            <Entypo
+              name="dots-three-vertical"
+              size={20}
+              color="#fff"
+              onPress={() => {
+                setVisibleBottomSheet(true);
+              }}
+            />
+          </View>
+          <Text className="text-lg text-white">{account?.accountHolder}</Text>
+          <Text className="text-lg font-bold text-white">
+            {account?.accountNumber}
+          </Text>
         </View>
-        <Text className="text-lg text-white">{ACCOUNT_OWNER}</Text>
-        <Text className="text-lg font-bold text-white">{ACCOUNT_NUM}</Text>
       </View>
       <BottomSheet
         visible={visibleBottomSheet}
@@ -227,80 +205,6 @@ export default function Point({ navigation }: any) {
             <Entypo name="share" size={24} color="#475569" />
             <Text className="text-xl text-slate-600 ml-4">계좌 공유</Text>
           </Pressable>
-        </View>
-      </BottomSheet>
-      <BottomSheet
-        visible={pointBottomSheet}
-        onBackButtonPress={() => {
-          setPointBottomSheet(false);
-        }}
-        onBackdropPress={() => {
-          setPointBottomSheet(false);
-        }}
-      >
-        <View className="bg-white w-full p-4 justify-center items-center rounded-t-lg">
-          <Controller
-            control={control}
-            name="requestBankHolder"
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                className="bg-transparent w-full"
-                mode="flat"
-                label="예금주"
-                maxLength={12}
-                underlineColor="#4B5563"
-                activeUnderlineColor="#2563EB"
-                value={value}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                placeholder="예금주"
-                placeholderTextColor="#9CA3AF"
-                style={{ paddingHorizontal: 0 }}
-                error={!!errors.requestBankHolder}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="requestBankAccountNum"
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                className="bg-transparent w-full"
-                mode="flat"
-                label="계좌번호"
-                maxLength={14}
-                underlineColor="#4B5563"
-                activeUnderlineColor="#2563EB"
-                value={value}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                placeholder="계좌번호(- 제외)"
-                placeholderTextColor="#9CA3AF"
-                keyboardType="numeric"
-                style={{ paddingHorizontal: 0 }}
-                error={!!errors.requestBankAccountNum}
-              />
-            )}
-          />
-          <Button
-            mode="contained"
-            className="w-full bg-blue-600 mt-4 py-1 rounded-xl"
-            labelStyle={{
-              fontSize: 16,
-            }}
-            onPress={handleSubmit(onPayHandler)}
-            icon={() => (
-              <MaterialCommunityIcons
-                name="lightning-bolt"
-                size={20}
-                color="#fff"
-              />
-            )}
-          >
-            충전
-          </Button>
         </View>
       </BottomSheet>
       <Snackbar

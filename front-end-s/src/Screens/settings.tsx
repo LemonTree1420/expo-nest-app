@@ -50,24 +50,33 @@ export default function Settings({ navigation }: any) {
   return (
     <SafeAreaView
       edges={["bottom", "left", "right"]}
-      className="flex-1 items-center space-between"
+      className="flex-1 items-center justify-between"
     >
-      <View className="relative w-full bg-blue-600 pt-4 pb-32">
-        <View className="absolute top-4 left-1/2 transform -translate-x-10 z-10">
+      <View
+        className="flex justify-center items-center w-full bg-blue-600 h-1/4 scale-x-150 overflow-hidden"
+        style={{
+          borderBottomStartRadius: 200,
+          borderBottomEndRadius: 200,
+        }}
+      >
+        <View
+          className="flex items-center"
+          style={{ transform: [{ scaleX: 0.666 }] }}
+        >
           <View className="h-20 w-20 flex justify-center items-center rounded-full shadow shadow-black bg-white">
-            <FontAwesome5 name="user-alt" size={48} color="#3F3F46" />
+            <View className="h-16 w-16 flex justify-center items-center rounded-full shadow shadow-black bg-white">
+              <FontAwesome5 name="home" size={30} color="#3F3F46" />
+            </View>
+          </View>
+          <View className="flex items-center mt-2">
+            <Text className="text-xl font-bold text-white">{store?.name}</Text>
+            <Text className="text-lg font-bold text-white">
+              {store?.region}
+            </Text>
           </View>
         </View>
-        <View className="absolute top-14 left-1/2 transform -translate-x-40 bg-white rounded-md w-80 pt-12 pb-6 flex items-center shadow-sm shadow-black">
-          <Text className="text-lg font-bold text-zinc-600 mt-1">
-            {store?.name}
-          </Text>
-          <Text className="text-lg font-bold text-zinc-400">
-            {store?.region}
-          </Text>
-        </View>
       </View>
-      <View className="absolute bottom-12 w-full h-auto">
+      <View className="flex items-center justify-end w-full h-2/3 pb-4">
         <TableView style={styles.table} appearance="light">
           <Section header="회원정보" hideSurroundingSeparators>
             <Cell
@@ -93,16 +102,6 @@ export default function Settings({ navigation }: any) {
             />
           </Section>
           <Section header="업체정보" hideSurroundingSeparators>
-            {/* <Cell
-              contentContainerStyle={styles.cell}
-              cellStyle="RightDetail"
-              title="업체명"
-              detail={store?.name}
-              titleTextColor={"#3F3F46"}
-              rightDetailColor={"#3F3F46"}
-              titleTextStyle={styles.cellTitle}
-              hideSeparator
-            /> */}
             <Cell
               contentContainerStyle={styles.cell}
               cellStyle="RightDetail"

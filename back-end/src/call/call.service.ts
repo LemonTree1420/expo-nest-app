@@ -112,7 +112,7 @@ export class CallService {
     const filter = {
       region: region,
       expectedAge: age,
-      workerNumbers: { $nin: [phone] },
+      'workers.cellPhoneNumber': { $not: { $regex: phone, $options: 'i' } },
     };
     const skip = Number(page) * Number(limit);
     return await this.callModel
@@ -138,7 +138,7 @@ export class CallService {
   ): Promise<Call[]> {
     const filter = {
       expectedAge: age,
-      workerNumbers: { $in: [phone] },
+      'workers.cellPhoneNumber': { $regex: phone, $options: 'i' },
     };
     const skip = Number(page) * Number(limit);
     return await this.callModel
@@ -199,9 +199,14 @@ export class CallService {
   ): Promise<Call> {
     const call = await this.callModel.findById(id);
     let workers = call.workers;
-    if (workers.includes(takeCallDto)) {
-      let removed = workers.filter((worker) => worker !== takeCallDto);
-
+    if (
+      workers.some(
+        (item) => JSON.stringify(item) === JSON.stringify(takeCallDto),
+      )
+    ) {
+      let removed = workers.filter(
+        (worker) => JSON.stringify(worker) !== JSON.stringify(takeCallDto),
+      );
       let nowCount = call.nowCount - Number(takeCallDto.count);
       if (nowCount > call.headCount || nowCount < 0)
         throw new BadRequestException(

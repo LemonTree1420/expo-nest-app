@@ -24,33 +24,33 @@ export default function AgeDialouge(props: any) {
   }, [props]);
 
   return (
-    <Portal>
-      <Dialog onDismiss={props.close} visible={props.visible}>
-        <Dialog.ScrollArea className="max-h-96">
-          <ScrollView>
-            <View>
-              {ageList.map((item) => (
-                <TouchableRipple
-                  key={item.value}
-                  onPress={() => {
-                    onSelectAgeHandler(item.value);
-                  }}
-                >
-                  <View className="flex-row justify-between items-center py-2">
-                    <Text className="pl-4 text-lg">{item.label}</Text>
-                    <View pointerEvents="none">
-                      <RadioButton
-                        value="normal"
-                        status={item.value === select ? "checked" : "unchecked"}
-                      />
-                    </View>
+    // <Portal>
+    <Dialog onDismiss={props.close} visible={props.visible}>
+      <Dialog.ScrollArea className="max-h-96">
+        <ScrollView>
+          <View>
+            {ageList.map((item) => (
+              <TouchableRipple
+                key={item.value}
+                onPress={() => {
+                  onSelectAgeHandler(item.value);
+                }}
+              >
+                <View className="flex-row justify-between items-center py-2">
+                  <Text className="pl-4 text-lg">{item.label}</Text>
+                  <View pointerEvents="none">
+                    <RadioButton
+                      value="normal"
+                      status={item.value === select ? "checked" : "unchecked"}
+                    />
                   </View>
-                </TouchableRipple>
-              ))}
-            </View>
-          </ScrollView>
-        </Dialog.ScrollArea>
-      </Dialog>
-    </Portal>
+                </View>
+              </TouchableRipple>
+            ))}
+          </View>
+        </ScrollView>
+      </Dialog.ScrollArea>
+    </Dialog>
+    // </Portal>
   );
 }

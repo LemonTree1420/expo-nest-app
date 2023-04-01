@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-import { Linking, Pressable, View } from "react-native";
-import { Button, Snackbar, Text, TextInput } from "react-native-paper";
+import { Alert, Linking, Pressable, View } from "react-native";
+import {
+  Button,
+  Divider,
+  HelperText,
+  Text,
+  TextInput,
+} from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { tokenValidateHandler } from "../constants/validate";
 import { useRecoilState } from "recoil";
@@ -12,24 +18,13 @@ import getEnvVars from "../../environment";
 import { API_ERROR, API_HEADER } from "../constants/api";
 import { DEDUCT_POINT } from "../constants/point";
 import { moneyComma } from "../constants/regEx";
-import { BottomSheet } from "react-native-btr";
-import { Controller, useForm } from "react-hook-form";
 const { apiUrl } = getEnvVars();
 
 export default function CallMatchDetail({ navigation, route }: any) {
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm();
-
   const call = route.params;
 
   const [worker, setWorker] = useRecoilState(workerState);
   const [store, setStore] = useState<any>(null);
-  const [visibleBottomSheet, setVisibleBottomSheet] = useState<boolean>(false);
-  const [visibleSnackBar, setVisibleSnackBar] = useState<boolean>(false);
 
   const getStoreInfo = async () => {
     const token = await tokenValidateHandler(setWorker, navigation);
@@ -51,20 +46,20 @@ export default function CallMatchDetail({ navigation, route }: any) {
     Linking.openURL(url);
   };
 
-  const onCallNowCountHandler = () => {
-    setVisibleBottomSheet(true);
+  const onCancelAlertHandler = () => {
+    Alert.alert(
+      "",
+      "매칭이 취소되지만 포인트는 환불되지 않습니다.\n정말 취소하시겠습니까?",
+      [{ text: "삭제", onPress: () => onCancelCallHandler() }, { text: "취소" }]
+    );
   };
 
-  const onCancelCallHandler = async (data: any) => {
-    if (worker.point * data.count < DEDUCT_POINT * data.count) {
-      setVisibleBottomSheet(false);
-      return setVisibleSnackBar(true);
-    }
+  const onCancelCallHandler = async () => {
+    const findMatchWorker = call.workers.filter(
+      (item: any) => worker.cellPhoneNumber === item.cellPhoneNumber
+    );
     const token = await tokenValidateHandler(setWorker, navigation);
-    const patchData = {
-      workerNumber: worker.cellPhoneNumber,
-      count: data.count,
-    };
+    const patchData = findMatchWorker[0];
     await axios
       .patch(`${apiUrl}call/cancel/${call._id}`, patchData, API_HEADER(token))
       .then((res) => onCancelCallSuccess())
@@ -78,162 +73,102 @@ export default function CallMatchDetail({ navigation, route }: any) {
 
   const onCancelCallError = (err: any) => {
     API_ERROR(err, setWorker, navigation);
-    if (err.response.data.message.includes("Point"))
-      return setVisibleSnackBar(true);
   };
 
-  useEffect(() => {
-    if (!visibleBottomSheet) {
-      setValue("count", "");
-    }
-  }, [visibleBottomSheet]);
-
   return (
-    <React.Fragment>
-      <SafeAreaView
-        edges={["bottom", "left", "right"]}
-        className="flex-1 items-center space-between"
-      >
-        {call && store && (
-          <React.Fragment>
-            <View className="relative w-full bg-blue-600 pt-4 pb-32">
-              <View className="absolute top-4 left-1/2 transform -translate-x-10 z-10">
-                <View className="h-20 w-20 flex justify-center items-center rounded-full shadow shadow-black bg-white">
-                  <FontAwesome5 name="home" size={48} color="#27272A" />
+    <SafeAreaView
+      edges={["bottom", "left", "right"]}
+      className="flex-1 items-center space-between"
+    >
+      {call && store && (
+        <React.Fragment>
+          <View
+            className="flex justify-center items-center w-full bg-blue-600 h-1/3 scale-x-150 overflow-hidden"
+            style={{
+              borderBottomStartRadius: 200,
+              borderBottomEndRadius: 200,
+            }}
+          >
+            <View
+              className="flex items-center"
+              style={{ transform: [{ scaleX: 0.666 }] }}
+            >
+              <View className="h-20 w-20 flex justify-center items-center rounded-full shadow shadow-black bg-white">
+                <View className="h-16 w-16 flex justify-center items-center rounded-full shadow shadow-black bg-white">
+                  <FontAwesome5 name="home" size={30} color="#27272A" />
                 </View>
               </View>
-              <View className="absolute top-14 left-1/2 transform -translate-x-40 bg-white rounded-md w-80 pt-12 pb-4 flex items-center shadow-sm shadow-black">
-                <Text className="text-2xl font-bold text-zinc-800 mt-1">
+              <View className="flex items-center mt-2">
+                <Text className="text-2xl font-bold text-white">
                   {store?.name}
                 </Text>
-                <Pressable
-                  className="flex-row items-center"
-                  onPress={() => onPhoneCallHandler(store?.phoneNumber)}
-                >
-                  <Entypo name="old-phone" size={20} color="#52525B" />
-                  <Text className="mt-2 mx-2 text-lg font-bold text-zinc-600">
-                    {store?.phoneNumber}
-                  </Text>
-                </Pressable>
-                <Pressable
-                  className="flex-row items-center"
-                  onPress={() => onPhoneCallHandler(store?.cellPhoneNumber)}
-                >
-                  <FontAwesome5 name="phone-alt" size={18} color="#52525B" />
-                  <Text className="mx-2 text-lg font-bold text-zinc-600">
-                    {store?.cellPhoneNumber}
-                  </Text>
-                </Pressable>
               </View>
+              <Divider className="w-16 divide-white my-2" />
+              <Pressable
+                className="flex-row items-center"
+                onPress={() => onPhoneCallHandler(store?.phoneNumber)}
+              >
+                <Entypo name="old-phone" size={16} color="#fff" />
+                <Text className="ml-1 text-lg font-bold text-white">
+                  {store?.phoneNumber}
+                </Text>
+              </Pressable>
+              <Pressable
+                className="flex-row items-center"
+                onPress={() => onPhoneCallHandler(store?.cellPhoneNumber)}
+              >
+                <FontAwesome5 name="phone-alt" size={14} color="#fff" />
+                <Text className="ml-1 text-lg font-bold text-white">
+                  {store?.cellPhoneNumber}
+                </Text>
+              </Pressable>
             </View>
-            <View className="absolute bottom-4 w-11/12 h-auto">
-              <View className="bg-white shadow-sm shadow-black py-2 px-4">
-                <Text className="text-zinc-800">가게 주소</Text>
-                <Text className="text-zinc-600">
-                  {store?.address1} {store?.address2}
-                </Text>
-              </View>
-              <View className="mt-4 bg-white shadow-sm shadow-black py-2 px-4">
-                <Text className="text-zinc-800">매칭 인원 수</Text>
-                <Text className="text-zinc-600">
-                  {call.nowCount} / {call.headCount}
-                </Text>
-              </View>
-              <View className="bg-white shadow-sm shadow-black py-2 px-4">
-                <Text className="text-zinc-800">손님 나이</Text>
-                <Text className="text-zinc-600">{call.customerAge}대</Text>
-              </View>
-              <View className="bg-white shadow-sm shadow-black py-2 px-4">
-                <Text className="text-zinc-800">요청 나이</Text>
-                <Text className="text-zinc-600">{call.expectedAge}대</Text>
-              </View>
-              <View className="bg-white shadow-sm shadow-black py-2 px-4">
-                <Text className="text-zinc-800">요금</Text>
-                <Text className="text-zinc-600">
-                  {moneyComma(call.fee.toString())}원
-                </Text>
-              </View>
-              <View className="bg-white shadow-sm shadow-black py-2 px-4">
-                <Text className="text-zinc-800">메모</Text>
-                <Text className="text-zinc-600">{call.memo}</Text>
-              </View>
-              {call.status ? (
-                <View className="mt-8 h-12"></View>
-              ) : (
-                <Button
-                  mode="contained"
-                  className="bg-blue-600 mt-8 rounded-xl py-1"
-                  onPress={onCallNowCountHandler}
-                >
-                  취소
-                </Button>
-              )}
-            </View>
-          </React.Fragment>
-        )}
-        <Snackbar
-          className="bg-red-600"
-          visible={visibleSnackBar}
-          onDismiss={() => setVisibleSnackBar(false)}
-          action={{
-            label: "x",
-            labelStyle: {
-              color: "#fff",
-            },
-            onPress: () => {
-              setVisibleSnackBar(false);
-            },
-          }}
-          duration={2000}
-        >
-          <View className="flex-row items-center">
-            <Entypo name="warning" size={18} color="#fff" />
-            <Text className="ml-2 text-white">보유 포인트가 부족합니다.</Text>
           </View>
-        </Snackbar>
-      </SafeAreaView>
-      <BottomSheet
-        visible={visibleBottomSheet}
-        onBackButtonPress={() => {
-          setVisibleBottomSheet(false);
-        }}
-        onBackdropPress={() => {
-          setVisibleBottomSheet(false);
-        }}
-      >
-        <View className="bg-white w-full p-4 justify-center items-center rounded-t-lg">
-          <Controller
-            control={control}
-            name="count"
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                className="bg-transparent w-full"
-                mode="flat"
-                label="취소할 인원 수"
-                maxLength={2}
-                underlineColor="#4B5563"
-                activeUnderlineColor="#2563EB"
-                value={value}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                placeholder="현재 콜에 취소할 인원 수를 입력해 주세요."
-                placeholderTextColor="#9CA3AF"
-                keyboardType="numeric"
-                style={{ paddingHorizontal: 0 }}
-                error={!!errors.count}
-              />
+          <View className="flex items-center justify-end w-11/12 h-2/3 pb-4">
+            <View className="w-full bg-white shadow-sm shadow-black py-2 px-4">
+              <Text className="text-zinc-800">가게 주소</Text>
+              <Text className="text-zinc-600">
+                {store?.address1} {store?.address2}
+              </Text>
+            </View>
+            <View className="mt-4 w-full bg-white shadow-sm shadow-black py-2 px-4">
+              <Text className="text-zinc-800">매칭 인원 수</Text>
+              <Text className="text-zinc-600">
+                {call.nowCount} / {call.headCount}
+              </Text>
+            </View>
+            <View className="w-full bg-white shadow-sm shadow-black py-2 px-4">
+              <Text className="text-zinc-800">손님 나이</Text>
+              <Text className="text-zinc-600">{call.customerAge}대</Text>
+            </View>
+            <View className="w-full bg-white shadow-sm shadow-black py-2 px-4">
+              <Text className="text-zinc-800">요청 나이</Text>
+              <Text className="text-zinc-600">{call.expectedAge}대</Text>
+            </View>
+            <View className="w-full bg-white shadow-sm shadow-black py-2 px-4">
+              <Text className="text-zinc-800">요금</Text>
+              <Text className="text-zinc-600">
+                {moneyComma(call.fee.toString())}원
+              </Text>
+            </View>
+            <View className="w-full bg-white shadow-sm shadow-black py-2 px-4">
+              <Text className="text-zinc-800">메모</Text>
+              <Text className="text-zinc-600">{call.memo}</Text>
+            </View>
+            {call.status ? (
+              <View className="mt-8 h-12"></View>
+            ) : (
+              <Button
+                mode="contained"
+                className="bg-blue-600 mt-8 w-full rounded-xl py-1"
+                onPress={onCancelAlertHandler}
+              >
+                취소
+              </Button>
             )}
-          />
-          <Button
-            mode="contained"
-            className="bg-blue-600 w-full mt-8 rounded-xl py-1"
-            onPress={handleSubmit(onCancelCallHandler)}
-          >
-            취소
-          </Button>
-        </View>
-      </BottomSheet>
-    </React.Fragment>
+          </View>
+        </React.Fragment>
+      )}
+    </SafeAreaView>
   );
 }
