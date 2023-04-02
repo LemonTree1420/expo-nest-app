@@ -2,11 +2,9 @@ FROM node:18.15-slim
 
 WORKDIR /app
 
-COPY ./package*.json ./yarn.lock ./
+COPY ./ ./
 
 RUN yarn install
-
-COPY ./ ./
 
 RUN yarn build
 
