@@ -8,22 +8,36 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./back-end
-    ports:
-      - 9196:9196
+    container_name: back-end
     environment:
-      PORT: 9196
-      MONGO_URL: mongodb://lemontree1420:rudqud9196@db:27017
-      DB_NAME: choice
+      PORT: ${PORT}
+      DB_URI: mongodb://${HOST_IP}:${MONGO_PORT}
+      DB_USERNAME: ${MONGO_USERNAME}
+      DB_PASSWORD: ${MONGO_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - ./back-end:/app
+    logging:
+      driver: "json-file"
 
   db:
     image: mongo
     restart: always
-    ports:
-      - 27017:27017
+    container_name: db
     environment:
-      MONGO_INIT_ROOT_USERNAME: lemontree1420
-      MONGO_INIT_ROOT_PASSWORD: rudqud9196!
-      MONGO_INITDB_DATABASE: choice
-
-volumes:
-  db-data: {}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${DB_NAME}
+      TZ: Asia/Seoul
+    ports:
+      - ${MONGO_PORT}:27017
+    command: mongod --auth
+    volumes:
+      - /mongo/data:/data
+      - /mongo/data/db:/data/db
+      - /mongo/data/configdb:/data/configdb
+    logging:
+      driver: "json-file"

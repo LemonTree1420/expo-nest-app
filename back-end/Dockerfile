@@ -2,13 +2,13 @@ FROM node:18.15-slim
 
 WORKDIR /app
 
-COPY ./package*.json ./
+COPY ./package*.json ./yarn.lock ./
 
-RUN npm install --only=production
+RUN yarn install
 
 COPY ./ ./
 
-RUN npm run build
+RUN yarn build
 
 EXPOSE 9001
 
