@@ -49,8 +49,8 @@ export default function CallMatchDetail({ navigation, route }: any) {
   const onCancelAlertHandler = () => {
     Alert.alert(
       "",
-      "매칭이 취소되지만 포인트는 환불되지 않습니다.\n정말 취소하시겠습니까?",
-      [{ text: "삭제", onPress: () => onCancelCallHandler() }, { text: "취소" }]
+      "매칭이 취소되지만 포인트는 환불되지 않습니다.\n매칭을 취소하시겠습니까?",
+      [{ text: "확인", onPress: () => onCancelCallHandler() }, { text: "취소" }]
     );
   };
 

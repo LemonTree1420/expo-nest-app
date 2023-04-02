@@ -19,6 +19,7 @@ const Login = () => {
   const router = useRouter();
 
   const onPressHandler = async () => {
+    console.log("hi");
     const data = {
       userId: userId,
       password: password,

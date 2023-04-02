@@ -6,16 +6,19 @@ import { API_HEADER } from "../constants/api";
 import { storeState } from "../recoil/atoms";
 import getEnvVars from "../../environment";
 import { tokenValidateHandler } from "../constants/validate";
-const { apiUrl, asyncStorageTokenName } = getEnvVars();
+const { apiUrl, asyncStorageTokenName, notificationTokenName } = getEnvVars();
 
 export default function Root({ navigation }: any) {
   const setStore = useSetRecoilState(storeState);
 
   const validateToken = async () => {
     const token = await tokenValidateHandler(setStore, navigation);
-
+    const notificationToken = await AsyncStorage.getItem(notificationTokenName);
+    const data = {
+      notificationToken,
+    };
     return await axios
-      .post(`${apiUrl}store/validate/token`, null, API_HEADER(token))
+      .post(`${apiUrl}store/validate/token`, data, API_HEADER(token))
       .then((res) => validateSuccessHandler(res.data))
       .catch((err) => validateFailHandler());
   };

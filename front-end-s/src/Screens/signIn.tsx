@@ -15,7 +15,7 @@ import { useSetRecoilState } from "recoil";
 import { AUTH, PLATFORM_NAME } from "../constants/configure";
 import { storeState } from "../recoil/atoms";
 import getEnvVars from "../../environment";
-const { apiUrl, asyncStorageTokenName } = getEnvVars();
+const { apiUrl, asyncStorageTokenName, notificationTokenName } = getEnvVars();
 
 export default function SignIn({ navigation }: any) {
   const { control, handleSubmit, watch, clearErrors } = useForm();
@@ -33,8 +33,13 @@ export default function SignIn({ navigation }: any) {
   }, [navigation]);
 
   const onSignInHandler = async (data: any) => {
+    const notificationToken = await AsyncStorage.getItem(notificationTokenName);
+    const signInData = {
+      ...data,
+      notificationToken,
+    };
     await axios
-      .post(`${apiUrl}store/login`, data)
+      .post(`${apiUrl}store/login`, signInData)
       .then((res) => signInSuccess(res.data))
       .catch((err) =>
         setCheckAccount(

@@ -56,8 +56,8 @@ export default function CallDetail({ navigation, route }: any) {
   const onDeleteCallHandler = () => {
     Alert.alert(
       "",
-      "콜은 삭제되지만 포인트는 환불되지 않습니다.\n정말 삭제하시겠습니까?",
-      [{ text: "삭제", onPress: () => onDeleteCallAxios() }, { text: "취소" }]
+      "콜은 삭제되지만 포인트는 환불되지 않습니다.\n콜을 삭제하시겠습니까?",
+      [{ text: "확인", onPress: () => onDeleteCallAxios() }, { text: "취소" }]
     );
   };
 

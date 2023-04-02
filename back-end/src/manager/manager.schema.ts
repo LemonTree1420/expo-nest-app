@@ -26,6 +26,9 @@ export class Manager {
 
   @Prop()
   accountNumber: string;
+
+  @Prop({ unique: true })
+  notificationToken: string;
 }
 
 export const ManagerSchema = SchemaFactory.createForClass(Manager);

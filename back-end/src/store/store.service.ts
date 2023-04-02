@@ -194,6 +194,12 @@ export class StoreService {
       };
       const token = await this.authService.createToken(authTokenDto);
       store.password = undefined;
+
+      if (store.notificationToken !== loginDto.notificationToken)
+        await this.updateStoreAccount(store._id, {
+          notificationToken: loginDto.notificationToken,
+        });
+
       return { ...store.toObject(), token: token };
     } else {
       throw new UnauthorizedException('Login failed.');

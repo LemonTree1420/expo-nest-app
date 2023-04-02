@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateManagerDto {
   @IsNotEmpty()
@@ -20,6 +20,10 @@ export class CreateManagerDto {
   @IsNotEmpty()
   @IsString()
   accountNumber: string;
+
+  @IsNotEmpty()
+  @IsString()
+  notificationToken: string;
 }
 
 export class UpdateAccountDto {
@@ -34,4 +38,8 @@ export class UpdateAccountDto {
   @IsNotEmpty()
   @IsString()
   accountNumber: string;
+
+  @IsOptional()
+  @IsString()
+  notificationToken?: string;
 }

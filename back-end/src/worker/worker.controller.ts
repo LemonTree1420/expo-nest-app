@@ -43,8 +43,14 @@ export class WorkerController {
   @UseGuards(AuthGuard())
   async validateToken(
     @AuthTokenInfo() token: AuthTokenDto,
+    @Body() updateWorkerAccountDto: UpdateWorkerAccountDto,
   ): Promise<WorkerWithToken> {
     const worker = await this.workerService.getWorkerByToken(token);
+    if (worker.notificationToken !== updateWorkerAccountDto.notificationToken)
+      await this.workerService.updateWorkerAccount(
+        worker._id,
+        updateWorkerAccountDto,
+      );
     const token2 = await this.authService.createToken(token);
     logging(worker.userId, Process.CONTROLLER, 'validateToken');
     return { ...worker.toObject(), token: token2 };

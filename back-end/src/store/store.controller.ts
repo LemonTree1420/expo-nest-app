@@ -38,8 +38,15 @@ export class StoreController {
   @UseGuards(AuthGuard())
   async validateToken(
     @AuthTokenInfo() token: AuthTokenDto,
+    @Body() updateStoreAccountDto: UpdateStoreAccountDto,
   ): Promise<StoreWithToken> {
     const store = await this.storeService.getStoreByToken(token);
+    if (store.notificationToken !== updateStoreAccountDto.notificationToken)
+      await this.storeService.updateStoreAccount(
+        store._id,
+        updateStoreAccountDto,
+      );
+
     const token2 = await this.authService.createToken(token);
     logging(store.userId, Process.CONTROLLER, 'validateToken');
     return { ...store.toObject(), token: token2 };

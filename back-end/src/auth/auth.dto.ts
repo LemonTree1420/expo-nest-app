@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { Types } from 'mongoose';
 import { Auth } from './auth.constants';
 
@@ -10,6 +10,10 @@ export class LoginDto {
   @IsNotEmpty()
   @IsString()
   password: string;
+
+  @IsOptional()
+  @IsString()
+  notificationToken?: string;
 }
 
 export class PinDto {
