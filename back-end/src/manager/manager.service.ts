@@ -23,7 +23,6 @@ export class ManagerService {
     createManagerDto: CreateManagerDto,
   ): Promise<ManagerWithToken> {
     const createdManager = new this.managerModel(createManagerDto);
-    console.log(createdManager);
 
     const hashedPassword = await this.authService.encryptSecret(
       createManagerDto.password,

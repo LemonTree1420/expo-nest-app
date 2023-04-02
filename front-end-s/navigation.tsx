@@ -230,7 +230,7 @@ function TokenBottom() {
           headerTitle: "내 정보",
           tabBarLabel: "내 정보",
           tabBarIcon: ({ color, size }) => {
-            return <FontAwesome5 name="user-alt" size={24} color={color} />;
+            return <FontAwesome5 name="user-alt" size={size} color={color} />;
           },
         }}
       />

@@ -10,10 +10,6 @@ export class LoginDto {
   @IsNotEmpty()
   @IsString()
   password: string;
-
-  @IsOptional()
-  @IsString()
-  notificationToken?: string;
 }
 
 export class PinDto {

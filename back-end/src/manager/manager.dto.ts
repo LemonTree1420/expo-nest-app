@@ -20,26 +20,18 @@ export class CreateManagerDto {
   @IsNotEmpty()
   @IsString()
   accountNumber: string;
-
-  @IsNotEmpty()
-  @IsString()
-  notificationToken: string;
 }
 
 export class UpdateAccountDto {
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  bank: string;
-
-  @IsNotEmpty()
-  @IsString()
-  accountHolder: string;
-
-  @IsNotEmpty()
-  @IsString()
-  accountNumber: string;
+  bank?: string;
 
   @IsOptional()
   @IsString()
-  notificationToken?: string;
+  accountHolder?: string;
+
+  @IsOptional()
+  @IsString()
+  accountNumber?: string;
 }

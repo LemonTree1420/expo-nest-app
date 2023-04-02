@@ -36,7 +36,7 @@ export class PointController {
    * @param request_id
    * @returns
    */
-  @Get('/:id')
+  @Get('/request/:id')
   getPointsById(
     @Param('id') request_id: Types.ObjectId,
     @Query('limit') limit: string,
@@ -46,12 +46,27 @@ export class PointController {
   }
 
   /**
-   * 충전 요청 중인 포인트들 받아오기
+   * 충전 요청 중인 포인트들 받아오기 - Admin
    * @returns
    */
   @Get('/yet')
-  getRequestPoints(): Promise<Point[]> {
-    return this.pointService.getRequestPoints();
+  getRequestPoints(
+    @Query('limit') limit: string,
+    @Query('page') page: string,
+  ): Promise<Point[]> {
+    return this.pointService.getRequestPoints(limit, page);
+  }
+
+  /**
+   * 충전 완료된 포인트들 받아오기 - Admin
+   * @returns
+   */
+  @Get('/end')
+  getEndPoints(
+    @Query('limit') limit: string,
+    @Query('page') page: string,
+  ): Promise<Point[]> {
+    return this.pointService.getEndPoints(limit, page);
   }
 
   /**

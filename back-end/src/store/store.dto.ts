@@ -37,10 +37,6 @@ export class CreateStoreAccountDto {
   @IsNotEmpty()
   @IsString()
   region: string;
-
-  @IsNotEmpty()
-  @IsString()
-  notificationToken: string;
 }
 
 export class StoreFindOptions {
@@ -77,8 +73,4 @@ export class UpdateStoreAccountDto {
   @IsOptional()
   @IsNumber()
   point?: number;
-
-  @IsOptional()
-  @IsString()
-  notificationToken?: string;
 }

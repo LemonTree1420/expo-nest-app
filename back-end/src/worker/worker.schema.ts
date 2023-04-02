@@ -28,9 +28,6 @@ export class Worker {
 
   @Prop({ default: 0 })
   point: number;
-
-  @Prop({ unique: true })
-  notificationToken: string;
 }
 
 export const WorkerSchema = SchemaFactory.createForClass(Worker);

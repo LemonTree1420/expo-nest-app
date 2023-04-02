@@ -197,13 +197,8 @@ export class WorkerService {
         auth: worker.auth,
       };
       const token = await this.authService.createToken(authTokenDto);
+
       worker.password = undefined;
-
-      if (worker.notificationToken !== loginDto.notificationToken)
-        await this.updateWorkerAccount(worker._id, {
-          notificationToken: loginDto.notificationToken,
-        });
-
       return { ...worker.toObject(), token: token };
     } else {
       throw new UnauthorizedException('Login failed.');

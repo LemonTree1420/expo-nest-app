@@ -12,10 +12,10 @@ import {
 } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSetRecoilState } from "recoil";
-import { AUTH, PLATFORM_NAME } from "../constants/configure";
+import { PLATFORM_NAME } from "../constants/configure";
 import { workerState } from "../recoil/atoms";
 import getEnvVars from "../../environment";
-const { apiUrl, asyncStorageTokenName, notificationTokenName } = getEnvVars();
+const { apiUrl, asyncStorageTokenName } = getEnvVars();
 
 export default function SignIn({ navigation }: any) {
   const { control, handleSubmit, watch, clearErrors } = useForm();
@@ -33,13 +33,8 @@ export default function SignIn({ navigation }: any) {
   }, [navigation]);
 
   const onSignInHandler = async (data: any) => {
-    const notificationToken = await AsyncStorage.getItem(notificationTokenName);
-    const signInData = {
-      ...data,
-      notificationToken,
-    };
     await axios
-      .post(`${apiUrl}worker/login`, signInData)
+      .post(`${apiUrl}worker/login`, data)
       .then((res) => signInSuccess(res.data))
       .catch((err) =>
         setCheckAccount(
@@ -61,7 +56,7 @@ export default function SignIn({ navigation }: any) {
         <Text className="text-4xl font-bold text-blue-600">
           {PLATFORM_NAME}
         </Text>
-        <Text className="text-sm font-bold text-blue-600">- {AUTH} - </Text>
+        <Text className="text-sm font-bold text-blue-600">- 직원 - </Text>
       </View>
       <View className="mt-16">
         <Controller

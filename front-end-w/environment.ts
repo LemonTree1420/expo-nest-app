@@ -4,17 +4,14 @@ const ENV: any = {
   dev: {
     apiUrl: "http://13.209.57.85:9001/",
     asyncStorageTokenName: "@tkw",
-    notificationTokenName: "@nts",
   },
   staging: {
     apiUrl: "http://13.209.57.85:9001/",
     asyncStorageTokenName: "@tkw",
-    notificationTokenName: "@nts",
   },
   prod: {
     apiUrl: "http://13.209.57.85:9001/",
     asyncStorageTokenName: "@tkw",
-    notificationTokenName: "@nts",
   },
 };
 

@@ -40,9 +40,6 @@ export class Store {
 
   @Prop({ default: 0 })
   point: number;
-
-  @Prop({ unique: true })
-  notificationToken: string;
 }
 
 export const StoreSchema = SchemaFactory.createForClass(Store);

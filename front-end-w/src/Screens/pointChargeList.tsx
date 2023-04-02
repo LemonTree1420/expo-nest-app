@@ -25,7 +25,7 @@ export default function PointChargeList({ navigation }: any) {
     const token = await tokenValidateHandler(setWorker, navigation);
     return await axios
       .get(
-        `${apiUrl}point/${worker._id}?limit=10&page=${listPage}`,
+        `${apiUrl}point/request/${worker._id}?limit=10&page=${listPage}`,
         API_HEADER(token)
       )
       .then((res) => getPointChargeSuccess(res.data))

@@ -11,7 +11,7 @@ import { workerState } from "../recoil/atoms";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AgeDialog from "./dialog/age.dialog";
 import getEnvVars from "../../environment";
-const { apiUrl, asyncStorageTokenName, notificationTokenName } = getEnvVars();
+const { apiUrl, asyncStorageTokenName } = getEnvVars();
 
 export default function SignUp({ navigation }: any) {
   const {
@@ -67,15 +67,9 @@ export default function SignUp({ navigation }: any) {
 
     delete data.passwordCheck;
     data.age = Number(data.age.substring(0, 2));
-    const notificationToken = await AsyncStorage.getItem(notificationTokenName);
-
-    const signUpData = {
-      ...data,
-      notificationToken: notificationToken,
-    };
 
     return await axios
-      .post(`${apiUrl}worker/register`, signUpData)
+      .post(`${apiUrl}worker/register`, data)
       .then((res) => signUpSuccessHandler(res.data))
       .catch((err) => {
         if (err.response.data.message === "cellPhoneNumber")

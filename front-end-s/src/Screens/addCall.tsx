@@ -49,7 +49,7 @@ export default function AddCall({ navigation }: any) {
 
   const onAddCallSuccess = () => {
     setStore({ ...store, point: store.point - DEDUCT_POINT });
-    navigation.navigate("token", { screen: "list" });
+    navigation.navigate("token", { screen: "callList" });
   };
 
   const onAddCallError = (err: any) => {

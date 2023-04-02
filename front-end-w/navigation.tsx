@@ -233,21 +233,6 @@ function TokenBottom() {
           tabBarIcon: ({ color, size }) => {
             return <FontAwesome5 name="coins" size={size} color={color} />;
           },
-          // headerLeft: () => (
-          //   <Pressable
-          //     className="px-4"
-          //     onPress={
-          //       () => {}
-          //       // navigation.navigate("sub", { screen: "callRegion" })
-          //     }
-          //   >
-          //     <MaterialCommunityIcons
-          //       name="account-cash"
-          //       size={24}
-          //       color="#fff"
-          //     />
-          //   </Pressable>
-          // ),
           headerRight: () => (
             <Pressable
               className="px-4"

@@ -21,10 +21,6 @@ export class CreateWorkerAccountDto {
   @IsNotEmpty()
   @IsString()
   cellPhoneNumber: string;
-
-  @IsNotEmpty()
-  @IsString()
-  notificationToken: string;
 }
 
 export class WorkerFindOptions {
@@ -57,8 +53,4 @@ export class UpdateWorkerAccountDto {
   @IsOptional()
   @IsNumber()
   point?: number;
-
-  @IsOptional()
-  @IsString()
-  notificationToken?: string;
 }

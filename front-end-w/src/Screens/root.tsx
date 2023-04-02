@@ -4,21 +4,18 @@ import { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import { API_HEADER } from "../constants/api";
 import { workerState } from "../recoil/atoms";
-import { tokenValidateHandler } from "../constants/validate";
 import getEnvVars from "../../environment";
-const { apiUrl, asyncStorageTokenName, notificationTokenName } = getEnvVars();
+import { tokenValidateHandler } from "../constants/validate";
+const { apiUrl, asyncStorageTokenName } = getEnvVars();
 
 export default function Root({ navigation }: any) {
   const setWorker = useSetRecoilState(workerState);
 
   const validateToken = async () => {
     const token = await tokenValidateHandler(setWorker, navigation);
-    const notificationToken = await AsyncStorage.getItem(notificationTokenName);
-    const data = {
-      notificationToken,
-    };
+
     return await axios
-      .post(`${apiUrl}worker/validate/token`, data, API_HEADER(token))
+      .post(`${apiUrl}worker/validate/token`, null, API_HEADER(token))
       .then((res) => validateSuccessHandler(res.data))
       .catch((err) => validateFailHandler());
   };

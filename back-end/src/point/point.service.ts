@@ -51,12 +51,31 @@ export class PointService {
   }
 
   /**
-   * 포인트들 받아오기 - Admin
+   * 요청 중인 포인트들 받아오기 - Admin
    * @returns
    */
-  async getRequestPoints(): Promise<Point[]> {
-    const allPoints = await this.pointModel.find();
-    return allPoints;
+  async getRequestPoints(limit: string, page: string): Promise<Point[]> {
+    const filter = { responsePoint: 0 };
+    const skip = Number(page) * Number(limit);
+    return await this.pointModel
+      .find(filter)
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(Number(limit));
+  }
+
+  /**
+   * 충전 완료된 포인트들 받아오기 - Admin
+   * @returns
+   */
+  async getEndPoints(limit: string, page: string): Promise<Point[]> {
+    const filter = { responsePoint: { $ne: 0 } };
+    const skip = Number(page) * Number(limit);
+    return await this.pointModel
+      .find(filter)
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(Number(limit));
   }
 
   /**

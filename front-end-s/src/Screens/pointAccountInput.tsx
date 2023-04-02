@@ -9,7 +9,6 @@ import { AUTH } from "../constants/configure";
 import axios from "axios";
 import getEnvVars from "../../environment";
 import { API_ERROR, API_HEADER } from "../constants/api";
-import { moneyComma } from "../constants/regEx";
 const { apiUrl } = getEnvVars();
 
 export default function PointAccountInput({ navigation, route }: any) {
@@ -33,29 +32,8 @@ export default function PointAccountInput({ navigation, route }: any) {
     };
     await axios
       .post(`${apiUrl}point/charge/request`, postData, API_HEADER(token))
-      .then((res) => onPaySuccessHandler())
+      .then((res) => navigation.pop())
       .catch((err) => API_ERROR(err, setStore, navigation));
-  };
-
-  const onPaySuccessHandler = async () => {
-    await axios.post(
-      "https://exp.host/--/api/v2/push/send",
-      {
-        to: "ExponentPushToken[dLATnzEhQN4NQoepBap84C]",
-        title: `포인트 충전 요청`,
-        body: `[가게] [${store.name}] ${moneyComma(
-          pointData.point.toString()
-        )} 포인트`,
-      },
-      {
-        headers: {
-          Accept: "application/json",
-          "Accept-encoding": "gzip, deflate",
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    navigation.pop();
   };
 
   return (

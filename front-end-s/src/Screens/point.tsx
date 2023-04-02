@@ -86,9 +86,15 @@ export default function Point({ navigation }: any) {
         <Text variant="bodyLarge" className="text-blue-800">
           사용가능 포인트
         </Text>
-        <Text className="text-white font-bold text-5xl mt-4">
-          {store.point}P
-        </Text>
+        <View className="flex-row items-end mt-4">
+          <Text className="text-white font-bold text-5xl">{store.point}P</Text>
+          <Ionicons
+            name="md-refresh-circle"
+            size={24}
+            color="#fff"
+            onPress={getWorkerInfo}
+          />
+        </View>
       </View>
       <View className="flex items-center justify-center w-11/12 h-4/6">
         <View className="flex bg-white py-6 px-4 rounded-md">

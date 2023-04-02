@@ -14,7 +14,7 @@ import { useSetRecoilState } from "recoil";
 import { storeState } from "../recoil/atoms";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import getEnvVars from "../../environment";
-const { apiUrl, asyncStorageTokenName, notificationTokenName } = getEnvVars();
+const { apiUrl, asyncStorageTokenName } = getEnvVars();
 
 export default function SignUp({ navigation }: any) {
   const {
@@ -84,12 +84,9 @@ export default function SignUp({ navigation }: any) {
 
     delete data.passwordCheck;
 
-    const notificationToken = await AsyncStorage.getItem(notificationTokenName);
-
     const signUpData = {
       ...data,
       region: `${region1} ${region2}`,
-      notificationToken: notificationToken,
     };
 
     return await axios
@@ -105,7 +102,7 @@ export default function SignUp({ navigation }: any) {
     await AsyncStorage.setItem(asyncStorageTokenName, data.token);
     delete data.token;
     setStore(data);
-    return navigation.replace("token", { screen: "list" });
+    return navigation.replace("token", { screen: "callList" });
   };
 
   const regionModalProps = {

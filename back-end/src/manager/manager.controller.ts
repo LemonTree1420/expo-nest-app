@@ -32,6 +32,7 @@ export class ManagerController {
    * @returns
    */
   @Post('/validate/token')
+  @UseGuards(AuthGuard())
   async validateToken(
     @AuthTokenInfo() token: AuthTokenDto,
   ): Promise<ManagerWithToken> {
@@ -75,7 +76,7 @@ export class ManagerController {
   @UsePipes(ValidationPipe)
   updateAccount(
     @Param('id') id: Types.ObjectId,
-    updateAccountDto: UpdateAccountDto,
+    @Body() updateAccountDto: UpdateAccountDto,
   ): Promise<Manager> {
     return this.managerService.updateAccount(id, updateAccountDto);
   }
