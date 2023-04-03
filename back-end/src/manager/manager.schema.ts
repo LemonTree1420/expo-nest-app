@@ -18,6 +18,9 @@ export class Manager {
   @Prop({ select: false })
   password: string;
 
+  @Prop({ select: false })
+  pin: string;
+
   @Prop()
   bank: string;
 
