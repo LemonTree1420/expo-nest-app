@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { Auth } from 'src/auth/auth.constants';
+import { Role } from './manager.constants';
 
 export type ManagerDocument = HydratedDocument<Manager>;
 
@@ -26,6 +27,9 @@ export class Manager {
 
   @Prop()
   accountNumber: string;
+
+  @Prop({ default: Role.NORMAL })
+  role: string;
 }
 
 export const ManagerSchema = SchemaFactory.createForClass(Manager);

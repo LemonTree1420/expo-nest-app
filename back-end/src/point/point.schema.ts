@@ -17,6 +17,9 @@ export class Point {
   @Prop()
   request_auth: Auth;
 
+  @Prop()
+  manager_id: Types.ObjectId;
+
   // 입금 계좌의 예금주
   @Prop()
   requestBankHolder: string;
@@ -29,7 +32,7 @@ export class Point {
   @Prop()
   depositAmount: number;
 
-  // 충전 신청 포인트 - 입금액 / 10
+  // 충전 신청 포인트 - 입금액 / 100
   @Prop()
   requestPoint: number;
 

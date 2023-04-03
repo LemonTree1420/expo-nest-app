@@ -28,6 +28,9 @@ export class Worker {
 
   @Prop({ default: 0 })
   point: number;
+
+  @Prop()
+  managerUserId: string;
 }
 
 export const WorkerSchema = SchemaFactory.createForClass(Worker);
