@@ -9,6 +9,8 @@ import { WorkerService } from 'src/worker/worker.service';
 import { Store, StoreSchema } from 'src/store/store.schema';
 import { Worker, WorkerSchema } from 'src/worker/worker.schema';
 import { AuthService } from 'src/auth/auth.service';
+import { Manager, ManagerSchema } from 'src/manager/manager.schema';
+import { ManagerService } from 'src/manager/manager.service';
 
 @Module({
   imports: [
@@ -17,9 +19,16 @@ import { AuthService } from 'src/auth/auth.service';
       { name: Point.name, schema: PointSchema },
       { name: Store.name, schema: StoreSchema },
       { name: Worker.name, schema: WorkerSchema },
+      { name: Manager.name, schema: ManagerSchema },
     ]),
   ],
   controllers: [PointController],
-  providers: [PointService, AuthService, StoreService, WorkerService],
+  providers: [
+    PointService,
+    AuthService,
+    StoreService,
+    WorkerService,
+    ManagerService,
+  ],
 })
 export class PointModule {}

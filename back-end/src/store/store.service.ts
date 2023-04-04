@@ -15,12 +15,14 @@ import {
 } from './store.dto';
 import { StoreWithToken } from './store.model';
 import { Store, StoreDocument } from './store.schema';
+import { ManagerService } from 'src/manager/manager.service';
 
 @Injectable()
 export class StoreService {
   constructor(
     @InjectModel(Store.name) private storeModel: Model<StoreDocument>,
     private readonly authService: AuthService,
+    private readonly managerService: ManagerService,
   ) {}
 
   /**
@@ -32,6 +34,12 @@ export class StoreService {
     createStoreAccountDto: CreateStoreAccountDto,
   ): Promise<StoreWithToken> {
     try {
+      const manager = await this.managerService.getManagerByUserId(
+        createStoreAccountDto.managerUserId,
+      );
+      if (!manager) {
+        throw new Error('Does not exist this manager.');
+      }
       const createdStore = new this.storeModel(createStoreAccountDto);
 
       const hashedPassword = await this.authService.encryptSecret(

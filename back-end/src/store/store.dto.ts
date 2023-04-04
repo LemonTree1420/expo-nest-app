@@ -37,6 +37,10 @@ export class CreateStoreAccountDto {
   @IsNotEmpty()
   @IsString()
   region: string;
+
+  @IsNotEmpty()
+  @IsString()
+  managerUserId: string;
 }
 
 export class StoreFindOptions {

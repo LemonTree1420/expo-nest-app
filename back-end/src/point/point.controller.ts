@@ -46,31 +46,37 @@ export class PointController {
   }
 
   /**
-   * 충전 요청 중인 포인트들 받아오기 - Admin
+   * manager별 요청 포인트 리스트 받아오기 - Master manager, Normal manager
    * @returns
    */
   @Get('/yet')
-  getRequestPoints(
+  getRequestPointsByManager(
+    @Query('manager') managerUserId: string,
     @Query('limit') limit: string,
     @Query('page') page: string,
   ): Promise<Point[]> {
-    return this.pointService.getRequestPoints(limit, page);
+    return this.pointService.getRequestPointsByManager(
+      managerUserId,
+      limit,
+      page,
+    );
   }
 
   /**
-   * 충전 완료된 포인트들 받아오기 - Admin
+   * manager별 충전 완료된 포인트 리스트 받아오기 - Master manager, Normal Manager
    * @returns
    */
   @Get('/end')
   getEndPoints(
+    @Query('manager') managerUserId: string,
     @Query('limit') limit: string,
     @Query('page') page: string,
   ): Promise<Point[]> {
-    return this.pointService.getEndPoints(limit, page);
+    return this.pointService.getEndPointsByManager(managerUserId, limit, page);
   }
 
   /**
-   * Store 포인트 충전 - Admin
+   * Store 포인트 충전 - Master manager, Normal Manager
    * @param id
    * @param responseChargePointDto
    * @returns
@@ -87,7 +93,7 @@ export class PointController {
   }
 
   /**
-   * Worker 포인트 충전 - Admin
+   * Worker 포인트 충전 - Master manager, Normal Manager
    * @param id
    * @param responseChargePointDto
    * @returns

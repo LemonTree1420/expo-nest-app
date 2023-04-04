@@ -15,16 +15,16 @@ export class RequestChargePointDto {
   requestBankHolder: string;
 
   @IsNotEmpty()
-  @IsString()
-  requestBankAccountNum: string;
-
-  @IsNotEmpty()
   @IsNumber()
   depositAmount: number;
 
   @IsNotEmpty()
   @IsNumber()
   requestPoint: number;
+
+  @IsNotEmpty()
+  @IsString()
+  managerUserId: string;
 }
 
 export class ResponseChargePointDto {

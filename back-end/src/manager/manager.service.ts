@@ -28,6 +28,10 @@ export class ManagerService {
       createManagerDto.password,
     );
     createdManager.password = hashedPassword;
+    const hashedPin = await this.authService.encryptSecret(
+      createManagerDto.pin,
+    );
+    createdManager.pin = hashedPin;
 
     const manager = await createdManager.save();
     if (!manager) {
@@ -49,7 +53,11 @@ export class ManagerService {
    * @returns
    */
   async getManagerById(id: Types.ObjectId): Promise<Manager> {
-    return await this.managerModel.findById(id);
+    const manager = await this.managerModel.findById(id);
+    if (!manager) {
+      throw new Error("Doesn't exist.");
+    }
+    return manager;
   }
 
   /**
@@ -59,6 +67,20 @@ export class ManagerService {
    */
   async getManagerByToken(token: AuthTokenDto): Promise<ManagerDocument> {
     const manager = await this.managerModel.findById(token._id);
+    if (!manager) {
+      throw new Error("Doesn't exist.");
+    }
+    return manager;
+  }
+
+  /**
+   * userId로 manager 검색 - Store, Worker 회원가입 시.
+   * @param userId
+   * @returns
+   */
+  async getManagerByUserId(userId: string): Promise<Manager> {
+    const filter = { userId: userId };
+    const manager = await this.managerModel.findOne(filter);
     if (!manager) {
       throw new Error("Doesn't exist.");
     }

@@ -18,7 +18,7 @@ export class Point {
   request_auth: Auth;
 
   @Prop()
-  manager_id: Types.ObjectId;
+  managerUserId: string;
 
   // 입금 계좌의 예금주
   @Prop()

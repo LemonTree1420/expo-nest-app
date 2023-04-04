@@ -21,6 +21,10 @@ export class CreateWorkerAccountDto {
   @IsNotEmpty()
   @IsString()
   cellPhoneNumber: string;
+
+  @IsNotEmpty()
+  @IsString()
+  managerUserId: string;
 }
 
 export class WorkerFindOptions {

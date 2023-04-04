@@ -46,7 +46,7 @@ export class ManagerController {
    * @param createManagerDto
    * @returns
    */
-  @Post('/create')
+  @Post('/register')
   @UsePipes(ValidationPipe)
   createManager(
     @Body() createManagerDto: CreateManagerDto,

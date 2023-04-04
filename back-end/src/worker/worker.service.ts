@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  NotAcceptableException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -16,12 +17,14 @@ import {
 } from './worker.dto';
 import { WorkerWithToken } from './worker.model';
 import { Worker, WorkerDocument } from './worker.schema';
+import { ManagerService } from 'src/manager/manager.service';
 
 @Injectable()
 export class WorkerService {
   constructor(
     @InjectModel(Worker.name) private workerModel: Model<WorkerDocument>,
     private readonly authService: AuthService,
+    private readonly managerService: ManagerService,
   ) {}
 
   /**
@@ -33,6 +36,12 @@ export class WorkerService {
     createWorkerAccountDto: CreateWorkerAccountDto,
   ): Promise<WorkerWithToken> {
     try {
+      const manager = await this.managerService.getManagerByUserId(
+        createWorkerAccountDto.managerUserId,
+      );
+      if (!manager) {
+        throw new Error('Does not exist this manager.');
+      }
       const createdWorker = new this.workerModel(createWorkerAccountDto);
 
       const hashedPassword = await this.authService.encryptSecret(

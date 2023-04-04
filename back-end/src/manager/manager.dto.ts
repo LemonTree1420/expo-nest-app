@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Role } from './manager.constants';
 
 export class CreateManagerDto {
   @IsNotEmpty()
@@ -11,6 +12,10 @@ export class CreateManagerDto {
 
   @IsNotEmpty()
   @IsString()
+  pin: string;
+
+  @IsNotEmpty()
+  @IsString()
   bank: string;
 
   @IsNotEmpty()
@@ -20,6 +25,10 @@ export class CreateManagerDto {
   @IsNotEmpty()
   @IsString()
   accountNumber: string;
+
+  @IsOptional()
+  @IsEnum(Role)
+  role: string;
 }
 
 export class UpdateAccountDto {

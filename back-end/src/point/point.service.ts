@@ -5,6 +5,7 @@ import { StoreService } from 'src/store/store.service';
 import { WorkerService } from 'src/worker/worker.service';
 import { RequestChargePointDto, ResponseChargePointDto } from './point.dto';
 import { Point, PointDocument } from './point.schema';
+import { ManagerService } from 'src/manager/manager.service';
 
 @Injectable()
 export class PointService {
@@ -50,12 +51,65 @@ export class PointService {
     return await this.pointModel.findOneAndDelete(filter);
   }
 
+  // /**
+  //  * 요청 중인 포인트 리스트 받아오기 - Master manager
+  //  * @returns
+  //  */
+  // async getRequestPoints(limit: string, page: string): Promise<Point[]> {
+  //   const filter = { responsePoint: 0 };
+  //   const skip = Number(page) * Number(limit);
+  //   return await this.pointModel
+  //     .find(filter)
+  //     .sort({ _id: -1 })
+  //     .skip(skip)
+  //     .limit(Number(limit));
+  // }
+
   /**
-   * 요청 중인 포인트들 받아오기 - Admin
+   * manager별 요청 포인트 리스트 받아오기 - Master manager, Normal manager
+   * @param managerUserId
+   * @param limit
+   * @param page
    * @returns
    */
-  async getRequestPoints(limit: string, page: string): Promise<Point[]> {
-    const filter = { responsePoint: 0 };
+  async getRequestPointsByManager(
+    managerUserId: string,
+    limit: string,
+    page: string,
+  ): Promise<Point[]> {
+    const filter = { responsePoint: 0, managerUserId: managerUserId };
+    const skip = Number(page) * Number(limit);
+    return await this.pointModel
+      .find(filter)
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(Number(limit));
+  }
+
+  // /**
+  //  * 충전 완료된 포인트 리스트 받아오기 - Master manager
+  //  * @returns
+  //  */
+  // async getEndPoints(limit: string, page: string): Promise<Point[]> {
+  //   const filter = { responsePoint: { $ne: 0 } };
+  //   const skip = Number(page) * Number(limit);
+  //   return await this.pointModel
+  //     .find(filter)
+  //     .sort({ _id: -1 })
+  //     .skip(skip)
+  //     .limit(Number(limit));
+  // }
+
+  /**
+   * manager별 충전 완료된 포인트 리스트 받아오기 - Master manager, Normal Manager
+   * @returns
+   */
+  async getEndPointsByManager(
+    managerUserId: string,
+    limit: string,
+    page: string,
+  ): Promise<Point[]> {
+    const filter = { responsePoint: { $ne: 0 }, managerUserId: managerUserId };
     const skip = Number(page) * Number(limit);
     return await this.pointModel
       .find(filter)
@@ -65,21 +119,7 @@ export class PointService {
   }
 
   /**
-   * 충전 완료된 포인트들 받아오기 - Admin
-   * @returns
-   */
-  async getEndPoints(limit: string, page: string): Promise<Point[]> {
-    const filter = { responsePoint: { $ne: 0 } };
-    const skip = Number(page) * Number(limit);
-    return await this.pointModel
-      .find(filter)
-      .sort({ _id: -1 })
-      .skip(skip)
-      .limit(Number(limit));
-  }
-
-  /**
-   * Store 포인트 충전 - Admin
+   * Store 포인트 충전 - Master manager, Normal Manager
    * @param id
    * @param responseChargePointDto
    * @returns
@@ -115,7 +155,7 @@ export class PointService {
   }
 
   /**
-   * Worker 포인트 충전 - Admin
+   * Worker 포인트 충전 - Master manager, Normal Manager
    * @param id
    * @param responseChargePointDto
    * @returns
