@@ -51,19 +51,19 @@ export class PointService {
     return await this.pointModel.findOneAndDelete(filter);
   }
 
-  // /**
-  //  * 요청 중인 포인트 리스트 받아오기 - Master manager
-  //  * @returns
-  //  */
-  // async getRequestPoints(limit: string, page: string): Promise<Point[]> {
-  //   const filter = { responsePoint: 0 };
-  //   const skip = Number(page) * Number(limit);
-  //   return await this.pointModel
-  //     .find(filter)
-  //     .sort({ _id: -1 })
-  //     .skip(skip)
-  //     .limit(Number(limit));
-  // }
+  /**
+   * 요청 중인 포인트 리스트 받아오기 - Master manager
+   * @returns
+   */
+  async getRequestPoints(limit: string, page: string): Promise<Point[]> {
+    const filter = { responsePoint: 0 };
+    const skip = Number(page) * Number(limit);
+    return await this.pointModel
+      .find(filter)
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(Number(limit));
+  }
 
   /**
    * manager별 요청 포인트 리스트 받아오기 - Master manager, Normal manager
@@ -86,19 +86,19 @@ export class PointService {
       .limit(Number(limit));
   }
 
-  // /**
-  //  * 충전 완료된 포인트 리스트 받아오기 - Master manager
-  //  * @returns
-  //  */
-  // async getEndPoints(limit: string, page: string): Promise<Point[]> {
-  //   const filter = { responsePoint: { $ne: 0 } };
-  //   const skip = Number(page) * Number(limit);
-  //   return await this.pointModel
-  //     .find(filter)
-  //     .sort({ _id: -1 })
-  //     .skip(skip)
-  //     .limit(Number(limit));
-  // }
+  /**
+   * 충전 완료된 포인트 리스트 받아오기 - Master manager
+   * @returns
+   */
+  async getEndPoints(limit: string, page: string): Promise<Point[]> {
+    const filter = { responsePoint: { $ne: 0 } };
+    const skip = Number(page) * Number(limit);
+    return await this.pointModel
+      .find(filter)
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(Number(limit));
+  }
 
   /**
    * manager별 충전 완료된 포인트 리스트 받아오기 - Master manager, Normal Manager

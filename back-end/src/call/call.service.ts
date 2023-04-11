@@ -24,14 +24,14 @@ export class CallService {
    */
   async createCall(createCallDto: CreateCallDto): Promise<Call> {
     const store = await this.storeService.getStoreById(createCallDto.store);
-    if (store.point < DEDUCT_POINT) {
-      throw new Error('Point is not enough. Please charge.');
-    }
-    const storeOption = { point: store.point - DEDUCT_POINT };
-    await this.storeService.updateStoreAccount(
-      createCallDto.store,
-      storeOption,
-    );
+    // if (store.point < DEDUCT_POINT) {
+    //   throw new Error('Point is not enough. Please charge.');
+    // }
+    // const storeOption = { point: store.point - DEDUCT_POINT };
+    // await this.storeService.updateStoreAccount(
+    //   createCallDto.store,
+    //   storeOption,
+    // );
 
     const createCallOption = { ...createCallDto, region: store.region };
     return await new this.callModel(createCallOption).save();

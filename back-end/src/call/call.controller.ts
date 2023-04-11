@@ -76,7 +76,7 @@ export class CallController {
   }
 
   /**
-   * 콜 삭제 - Store
+   * 콜 삭제 (마감) - Store
    * @param id
    * @returns
    */

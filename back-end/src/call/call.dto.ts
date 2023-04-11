@@ -8,7 +8,7 @@ export class CreateCallDto {
 
   @IsNotEmpty()
   @IsNumber()
-  customerAge: number;
+  customerAge: string;
 
   @IsNotEmpty()
   @IsNumber()
@@ -16,7 +16,7 @@ export class CreateCallDto {
 
   @IsNotEmpty()
   @IsNumber()
-  expectedAge: number;
+  expectedAge: string;
 
   @IsNotEmpty()
   @IsNumber()

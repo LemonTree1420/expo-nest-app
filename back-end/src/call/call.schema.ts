@@ -15,7 +15,7 @@ export class Call {
   region: string;
 
   @Prop()
-  customerAge: number;
+  customerAge: string;
 
   @Prop()
   headCount: number;
@@ -24,7 +24,7 @@ export class Call {
   nowCount: number;
 
   @Prop()
-  expectedAge: number;
+  expectedAge: string;
 
   @Prop()
   fee: number;

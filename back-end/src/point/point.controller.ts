@@ -63,16 +63,44 @@ export class PointController {
   }
 
   /**
+   * 요청 중인 모든 포인트 리스트 받아오기 - Master
+   * @param limit
+   * @param page
+   * @returns
+   */
+  @Get('/yet/all')
+  getRequestPoints(
+    @Query('limit') limit: string,
+    @Query('page') page: string,
+  ): Promise<Point[]> {
+    return this.pointService.getRequestPoints(limit, page);
+  }
+
+  /**
    * manager별 충전 완료된 포인트 리스트 받아오기 - Master manager, Normal Manager
    * @returns
    */
   @Get('/end')
-  getEndPoints(
+  getEndPointsByManager(
     @Query('manager') managerUserId: string,
     @Query('limit') limit: string,
     @Query('page') page: string,
   ): Promise<Point[]> {
     return this.pointService.getEndPointsByManager(managerUserId, limit, page);
+  }
+
+  /**
+   * 충전 완료된 모든 모인트 리스트 받아오기 - Master
+   * @param limit
+   * @param page
+   * @returns
+   */
+  @Get('/end/all')
+  getEndPoints(
+    @Query('limit') limit: string,
+    @Query('page') page: string,
+  ): Promise<Point[]> {
+    return this.pointService.getEndPoints(limit, page);
   }
 
   /**
