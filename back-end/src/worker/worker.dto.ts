@@ -15,8 +15,8 @@ export class CreateWorkerAccountDto {
   pin: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  age: number;
+  @IsString()
+  age: string;
 
   @IsNotEmpty()
   @IsString()

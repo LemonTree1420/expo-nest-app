@@ -1,40 +1,29 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Pressable, View } from "react-native";
-import { Button, Snackbar, Text, TextInput } from "react-native-paper";
+import { View } from "react-native";
+import { Button, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRecoilState } from "recoil";
-import { Entypo } from "@expo/vector-icons";
 import { storeState } from "../recoil/atoms";
-import AgeDialouge from "./dialog/age.dialog";
 import getEnvVars from "../../environment";
 import { API_ERROR, API_HEADER } from "../constants/api";
 import { tokenValidateHandler } from "../constants/validate";
 import { moneyComma } from "../constants/regEx";
-import { DEDUCT_POINT } from "../constants/point";
 const { apiUrl } = getEnvVars();
 
 export default function AddCall({ navigation }: any) {
   const {
     control,
     handleSubmit,
-    watch,
-    setValue,
-    clearErrors,
+
     formState: { errors },
   } = useForm();
 
   const [store, setStore] = useRecoilState(storeState);
-  const [ageDialog, setAgeDialog] = useState<boolean>(false);
-  const [inputKey, setInputKey] = useState<string>("");
-  const [visibleSnackBar, setVisibleSnackBar] = useState<boolean>(false);
 
   const onAddCallHandler = async (data: any) => {
-    if (store.point < DEDUCT_POINT) return setVisibleSnackBar(true);
-
-    data.customerAge = Number(data.customerAge.substring(0, 2));
-    data.expectedAge = Number(data.expectedAge.substring(0, 2));
+    data.expectedAge = data.expectedAge.substring(0, 2);
     data.headCount = Number(data.headCount);
     data.fee = Number(data.fee.replaceAll(",", ""));
     if (!data.memo) delete data.memo;
@@ -48,25 +37,11 @@ export default function AddCall({ navigation }: any) {
   };
 
   const onAddCallSuccess = () => {
-    setStore({ ...store, point: store.point - DEDUCT_POINT });
     navigation.navigate("token", { screen: "callList" });
   };
 
   const onAddCallError = (err: any) => {
     API_ERROR(err, setStore, navigation);
-    if (err.response.data.message.includes("Point"))
-      return setVisibleSnackBar(true);
-  };
-
-  const ageDialogProps = {
-    visible: ageDialog,
-    close: () => {
-      setAgeDialog(false);
-    },
-    inputKey,
-    value: watch(inputKey),
-    setValue,
-    clearErrors,
   };
 
   return (
@@ -78,26 +53,18 @@ export default function AddCall({ navigation }: any) {
             name="customerAge"
             rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
-              <Pressable
-                onPress={() => {
-                  setInputKey("customerAge");
-                  setAgeDialog(true);
-                }}
-              >
-                <TextInput
-                  className="bg-transparent"
-                  mode="flat"
-                  label="손님 연령대"
-                  editable={false}
-                  underlineColor="#4B5563"
-                  activeUnderlineColor="#2563EB"
-                  value={value}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  style={{ paddingHorizontal: 0 }}
-                  error={!!errors.customerAge}
-                />
-              </Pressable>
+              <TextInput
+                className="bg-transparent"
+                mode="flat"
+                label="손님 나이"
+                underlineColor="#4B5563"
+                activeUnderlineColor="#2563EB"
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                style={{ paddingHorizontal: 0 }}
+                error={!!errors.customerAge}
+              />
             )}
           />
           <Controller
@@ -128,26 +95,18 @@ export default function AddCall({ navigation }: any) {
             name="expectedAge"
             rules={{ required: true }}
             render={({ field: { onChange, onBlur, value } }) => (
-              <Pressable
-                onPress={() => {
-                  setInputKey("expectedAge");
-                  setAgeDialog(true);
-                }}
-              >
-                <TextInput
-                  className="bg-transparent"
-                  mode="flat"
-                  label="요청 연령대"
-                  editable={false}
-                  underlineColor="#4B5563"
-                  activeUnderlineColor="#2563EB"
-                  value={value}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  style={{ paddingHorizontal: 0 }}
-                  error={!!errors.expectedAge}
-                />
-              </Pressable>
+              <TextInput
+                className="bg-transparent"
+                mode="flat"
+                label="요청 나이"
+                underlineColor="#4B5563"
+                activeUnderlineColor="#2563EB"
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                style={{ paddingHorizontal: 0 }}
+                error={!!errors.expectedAge}
+              />
             )}
           />
           <Controller
@@ -210,27 +169,6 @@ export default function AddCall({ navigation }: any) {
           </Button>
         </View>
       </SafeAreaView>
-      <AgeDialouge {...ageDialogProps} />
-      <Snackbar
-        className="bg-red-600"
-        visible={visibleSnackBar}
-        onDismiss={() => setVisibleSnackBar(false)}
-        action={{
-          label: "x",
-          labelStyle: {
-            color: "#fff",
-          },
-          onPress: () => {
-            setVisibleSnackBar(false);
-          },
-        }}
-        duration={2000}
-      >
-        <View className="flex-row items-center">
-          <Entypo name="warning" size={18} color="#fff" />
-          <Text className="ml-2 text-white">보유 포인트가 부족합니다.</Text>
-        </View>
-      </Snackbar>
     </React.Fragment>
   );
 }

@@ -9,6 +9,7 @@ import axios from "axios";
 import getEnvVars from "../../environment";
 import { API_ERROR, API_HEADER } from "../constants/api";
 import { workerState } from "../recoil/atoms";
+import { Alert } from "react-native";
 const { apiUrl } = getEnvVars();
 
 export default function PointAccountInput({ navigation, route }: any) {
@@ -29,10 +30,15 @@ export default function PointAccountInput({ navigation, route }: any) {
       request_auth: AUTH,
       depositAmount: pointData.money,
       requestPoint: pointData.point,
+      managerUserId: worker.managerUserId,
     };
     await axios
       .post(`${apiUrl}point/charge/request`, postData, API_HEADER(token))
-      .then((res) => navigation.pop())
+      .then((res) =>
+        Alert.alert("", "포인트 요청 완료", [
+          { text: "확인", onPress: () => navigation.pop() },
+        ])
+      )
       .catch((err) => API_ERROR(err, setWorker, navigation));
   };
 

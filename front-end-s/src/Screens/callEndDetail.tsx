@@ -74,13 +74,13 @@ export default function CallEndDetail({ navigation, route }: any) {
             <View className="w-full bg-white shadow-sm shadow-black py-2 px-4">
               <Text className="text-base text-zinc-800">손님 나이</Text>
               <Text className="text-base text-zinc-600">
-                {call.customerAge}대
+                {call.customerAge}
               </Text>
             </View>
             <View className="w-full bg-white shadow-sm shadow-black py-2 px-4">
               <Text className="text-base text-zinc-800">요청 나이</Text>
               <Text className="text-base text-zinc-600">
-                {call.expectedAge}대
+                {call.expectedAge}
               </Text>
             </View>
             <View className="w-full bg-white shadow-sm shadow-black py-2 px-4">

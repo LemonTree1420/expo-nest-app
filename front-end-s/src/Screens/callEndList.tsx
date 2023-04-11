@@ -70,9 +70,9 @@ export default function CallEndList({ navigation }: any) {
       }
     >
       <View className="flex justify-center items-center h-4/6 w-1/2">
-        <Text className="font-bold text-lg">{item.customerAge}대 손님</Text>
+        <Text className="font-bold text-lg">{item.customerAge} 손님</Text>
         <Text className="font-bold text-gray-600">
-          요청 나이 {item.expectedAge}대
+          요청 나이 {item.expectedAge}
         </Text>
         <Text className="font-bold text-gray-600">
           요금 {moneyComma(item.fee.toString())}원

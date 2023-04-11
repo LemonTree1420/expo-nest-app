@@ -7,7 +7,7 @@ import { useForm, Controller } from "react-hook-form";
 import { basicRegEx, formRegEx } from "../constants/regEx";
 import axios from "axios";
 import { useSetRecoilState } from "recoil";
-import { workerState } from "../recoil/atoms";
+import { adminState } from "../recoil/atoms";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import getEnvVars from "../../environment";
 const { apiUrl, asyncStorageTokenName } = getEnvVars();
@@ -37,13 +37,13 @@ export default function SignUp({ navigation }: any) {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(true);
   const [passwordCheckVisible, setPasswordCheckVisible] =
     useState<boolean>(true);
-  const setWorker = useSetRecoilState(workerState);
+  const setAdmin = useSetRecoilState(adminState);
 
   const onUserIdCheckHandler = async () => {
     const userId = watch("userId");
     if (!userId || userId.length === 0) return false;
     return await axios
-      .get(`${apiUrl}worker/duplicate/${userId}`)
+      .get(`${apiUrl}manager/duplicate/${userId}`)
       .then((res) => idCheckSuccessHandler(res.data))
       .catch((err) => console.error(err));
   };
@@ -65,12 +65,15 @@ export default function SignUp({ navigation }: any) {
 
     delete data.passwordCheck;
 
+    const signUpData = {
+      ...data,
+      role: "normal",
+    };
+
     return await axios
-      .post(`${apiUrl}worker/register`, data)
+      .post(`${apiUrl}manager/register`, signUpData)
       .then((res) => signUpSuccessHandler(res.data))
       .catch((err) => {
-        if (err.response.data.message === "managerUserId")
-          setError("managerUserId", { type: "check" });
         if (err.response.data.message === "cellPhoneNumber")
           setError("cellPhoneNumber", { type: "check" });
       });
@@ -79,8 +82,8 @@ export default function SignUp({ navigation }: any) {
   const signUpSuccessHandler = async (data: any) => {
     await AsyncStorage.setItem(asyncStorageTokenName, data.token);
     delete data.token;
-    setWorker(data);
-    return navigation.replace("token", { screen: "callList" });
+    setAdmin(data);
+    return navigation.replace("token", { screen: "pointYetList" });
   };
 
   return (
@@ -277,88 +280,6 @@ export default function SignUp({ navigation }: any) {
             errors.pin?.type === "minLength") && (
             <HelperText type="error" style={{ paddingHorizontal: 0 }}>
               형식에 맞게 입력하세요.
-            </HelperText>
-          )}
-        </View>
-        <View className="mt-8">
-          <Controller
-            control={control}
-            name="cellPhoneNumber"
-            rules={{ required: true, pattern: formRegEx.HP_NUM }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                className="bg-transparent"
-                mode="flat"
-                label="휴대폰 번호"
-                maxLength={11}
-                underlineColor="#4B5563"
-                activeUnderlineColor="#2563EB"
-                value={value}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                keyboardType="numeric"
-                placeholder="휴대폰 번호 (- 제외)"
-                placeholderTextColor="#9CA3AF"
-                style={{ paddingHorizontal: 0 }}
-                error={!!errors.cellPhoneNumber}
-              />
-            )}
-          />
-          {errors.cellPhoneNumber?.type === "pattern" && (
-            <HelperText type="error" style={{ paddingHorizontal: 0 }}>
-              형식에 맞게 입력하세요.
-            </HelperText>
-          )}
-          {errors.cellPhoneNumber?.type === "check" && (
-            <HelperText type="error" style={{ paddingHorizontal: 0 }}>
-              이미 가입된 휴대폰번호입니다.
-            </HelperText>
-          )}
-          <Controller
-            control={control}
-            name="age"
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                className="bg-transparent"
-                mode="flat"
-                label="나이"
-                underlineColor="#4B5563"
-                activeUnderlineColor="#2563EB"
-                value={value}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                style={{ paddingHorizontal: 0 }}
-                error={!!errors.age}
-                keyboardType="numeric"
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="managerUserId"
-            rules={{ required: true }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                className="bg-transparent"
-                mode="flat"
-                label="매니저 ID"
-                maxLength={12}
-                underlineColor="#4B5563"
-                activeUnderlineColor="#2563EB"
-                value={value}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                placeholder="매니저에게 받은 ID"
-                placeholderTextColor="#9CA3AF"
-                style={{ paddingHorizontal: 0 }}
-                error={!!errors.managerUserId}
-              />
-            )}
-          />
-          {errors.managerUserId?.type === "check" && (
-            <HelperText type="error" style={{ paddingHorizontal: 0 }}>
-              유효하지 않은 매니저 ID입니다.
             </HelperText>
           )}
         </View>

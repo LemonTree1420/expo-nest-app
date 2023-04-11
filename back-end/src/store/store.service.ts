@@ -38,7 +38,7 @@ export class StoreService {
         createStoreAccountDto.managerUserId,
       );
       if (!manager) {
-        throw new Error('Does not exist this manager.');
+        throw new BadRequestException('managerUserId');
       }
       const createdStore = new this.storeModel(createStoreAccountDto);
 

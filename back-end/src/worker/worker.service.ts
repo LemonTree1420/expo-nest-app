@@ -40,7 +40,7 @@ export class WorkerService {
         createWorkerAccountDto.managerUserId,
       );
       if (!manager) {
-        throw new Error('Does not exist this manager.');
+        throw new BadRequestException('managerUserId');
       }
       const createdWorker = new this.workerModel(createWorkerAccountDto);
 

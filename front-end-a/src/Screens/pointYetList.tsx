@@ -23,8 +23,12 @@ export default function PointYetList({ navigation }: any) {
 
   const getCallList = async () => {
     const token = await tokenValidateHandler(setAdmin, navigation);
+    const api =
+      admin.role === "master"
+        ? `${apiUrl}point/yet/all?limit=10&page=${listPage}`
+        : `${apiUrl}point/yet?manager=${admin.userId}&limit=10&page=${listPage}`;
     return await axios
-      .get(`${apiUrl}point/yet?limit=10&page=${listPage}`, API_HEADER(token))
+      .get(api, API_HEADER(token))
       .then((res) => getCallSuccess(res.data))
       .catch((err) => API_ERROR(err, setAdmin, navigation));
   };
@@ -104,7 +108,11 @@ export default function PointYetList({ navigation }: any) {
             </Text>
           </View>
           <View className="flex-row justify-between items-center">
-            <View className="flex-row justify-around items-center bg-white h-28 w-3/4 px-3">
+            <View
+              className={`flex-row justify-around items-center bg-white h-28 px-3 ${
+                admin.role === "master" && "w-3/4"
+              }`}
+            >
               <View className="flex justify-center items-start h-5/6 w-3/5">
                 <View>
                   <Text className="font-bold text-gray-600">예금주</Text>
@@ -134,14 +142,16 @@ export default function PointYetList({ navigation }: any) {
                 </View>
               </View>
             </View>
-            <View className="flex justify-center items-center bg-white h-28 w-1/4">
-              <Pressable
-                className="flex items-center justify-center w-5/6 h-1/2 bg-blue-400 rounded-xl"
-                onPress={() => onChargeRequestHandler(item)}
-              >
-                <Text className="font-bold text-white text-xl">충전</Text>
-              </Pressable>
-            </View>
+            {admin.role === "master" && (
+              <View className="flex justify-center items-center bg-white h-28 w-1/4">
+                <Pressable
+                  className="flex items-center justify-center w-5/6 h-1/2 bg-blue-400 rounded-xl"
+                  onPress={() => onChargeRequestHandler(item)}
+                >
+                  <Text className="font-bold text-white text-xl">충전</Text>
+                </Pressable>
+              </View>
+            )}
           </View>
         </View>
       )}

@@ -20,7 +20,7 @@ export default function Settings({ navigation }: any) {
   const onReConfirmHandler = () => {
     Alert.alert(
       "회원탈퇴",
-      "회원 탈퇴 시 서비스에 설정된 모든 데이터가 삭제됩니다.\n\n- 보유 중인 포인트도 삭제됩니다.\n\n 정말 탈퇴하시겠습니까?",
+      "회원 탈퇴 시 서비스에 설정된 모든 데이터가 삭제됩니다.\n\n 정말 탈퇴하시겠습니까?",
       [
         { text: "취소", style: "cancel" },
         { text: "탈퇴", onPress: onWithDrawalHandler },
@@ -30,10 +30,7 @@ export default function Settings({ navigation }: any) {
   const onWithDrawalHandler = async () => {
     const token = await tokenValidateHandler(setStore, navigation);
     await axios
-      .delete(
-        `${apiUrl}store/delete/${store._doc._id}`,
-        API_HEADER(token as string)
-      )
+      .delete(`${apiUrl}store/delete/${store._id}`, API_HEADER(token as string))
       .then((res) => onWithDrawalSuccess())
       .catch((err) => API_ERROR(err, setStore, navigation));
   };

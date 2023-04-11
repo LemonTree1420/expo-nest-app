@@ -54,11 +54,10 @@ export default function CallDetail({ navigation, route }: any) {
   };
 
   const onDeleteCallHandler = () => {
-    Alert.alert(
-      "",
-      "콜은 삭제되지만 포인트는 환불되지 않습니다.\n콜을 삭제하시겠습니까?",
-      [{ text: "확인", onPress: () => onDeleteCallAxios() }, { text: "취소" }]
-    );
+    Alert.alert("", "콜을 마감하시겠습니까?", [
+      { text: "확인", onPress: () => onDeleteCallAxios() },
+      { text: "취소" },
+    ]);
   };
 
   const onDeleteCallAxios = async () => {
@@ -75,10 +74,10 @@ export default function CallDetail({ navigation, route }: any) {
         <View className="flex items-center bg-blue-600 w-full pt-2 pb-4">
           <View className="flex items-center">
             <Text className="font-bold text-white">
-              손님 나이 : {call.customerAge}대
+              손님 나이 : {call.customerAge}
             </Text>
             <Text className="font-bold text-white mb-2">
-              요청 나이 : {call.expectedAge}대
+              요청 나이 : {call.expectedAge}
             </Text>
             <Text className="font-bold text-lg text-white">
               현재 매칭된 인원 : {call.nowCount}명
@@ -214,7 +213,7 @@ export default function CallDetail({ navigation, route }: any) {
               textColor="#2563EB"
               className="flex justify-center bg-white border-blue-600 mt-2 py-1"
             >
-              삭제
+              마감
             </Button>
           </View>
         </View>

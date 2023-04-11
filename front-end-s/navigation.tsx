@@ -131,13 +131,13 @@ function SubScreen() {
         component={CallEndDetail}
         options={{ headerTitle: "마감된 콜 정보" }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="pointChargeList"
         component={PointChargeList}
         options={{
           headerTitle: "포인트 충전 내역",
         }}
-      />
+      /> */}
       <Stack.Screen
         name="pointAccountInput"
         component={PointAccountInput}
@@ -202,7 +202,7 @@ function TokenBottom() {
           },
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="point"
         component={Point}
         options={({ navigation }) => ({
@@ -222,7 +222,7 @@ function TokenBottom() {
             </Pressable>
           ),
         })}
-      />
+      /> */}
       <Tab.Screen
         name="settings"
         component={Settings}

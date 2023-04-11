@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -42,7 +43,7 @@ export class ManagerController {
   }
 
   /**
-   * 매니저 생성 - 개발자
+   * 매니저 생성
    * @param createManagerDto
    * @returns
    */
@@ -52,6 +53,16 @@ export class ManagerController {
     @Body() createManagerDto: CreateManagerDto,
   ): Promise<ManagerWithToken> {
     return this.managerService.createManager(createManagerDto);
+  }
+
+  /**
+   * 아이디 중복 체크
+   * @param userId
+   * @returns
+   */
+  @Get('/duplicate/:id')
+  checkWorkerDuplicate(@Param('id') userId: string): Promise<boolean> {
+    return this.managerService.checkManagerDuplicate(userId);
   }
 
   /**
@@ -89,5 +100,15 @@ export class ManagerController {
   @UseGuards(AuthGuard())
   getManagerAccount(): Promise<AccountInfo> {
     return this.managerService.getManagerAccount();
+  }
+
+  /**
+   * 계정 삭제
+   * @param id
+   * @returns
+   */
+  @Delete('/delete/:id')
+  deleteWorkerAccountById(@Param('id') id: Types.ObjectId): Promise<void> {
+    return this.managerService.deleteManagerAccountById(id);
   }
 }

@@ -14,19 +14,19 @@ export class CreateManagerDto {
   @IsString()
   pin: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  bank: string;
-
-  @IsNotEmpty()
-  @IsString()
-  accountHolder: string;
-
-  @IsNotEmpty()
-  @IsString()
-  accountNumber: string;
+  bank?: string;
 
   @IsOptional()
+  @IsString()
+  accountHolder?: string;
+
+  @IsOptional()
+  @IsString()
+  accountNumber?: string;
+
+  @IsNotEmpty()
   @IsEnum(Role)
   role: string;
 }

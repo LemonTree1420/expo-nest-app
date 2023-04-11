@@ -72,9 +72,7 @@ export default function Settings({ navigation }: any) {
             <Text className="text-3xl font-bold text-white">
               {worker?.userId}
             </Text>
-            <Text className="text-xl font-bold text-white">
-              {`${worker?.age}대`}
-            </Text>
+            <Text className="text-xl font-bold text-white">{worker?.age}</Text>
           </View>
           <Divider className="w-24 divide-white mt-4 mb-8" />
           <View className="flex-row items-center">

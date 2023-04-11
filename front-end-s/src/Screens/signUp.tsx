@@ -93,6 +93,8 @@ export default function SignUp({ navigation }: any) {
       .post(`${apiUrl}store/register`, signUpData)
       .then((res) => signUpSuccessHandler(res.data))
       .catch((err) => {
+        if (err.response.data.message === "managerUserId")
+          setError("managerUserId", { type: "check" });
         if (err.response.data.message === "cellPhoneNumber")
           setError("cellPhoneNumber", { type: "check" });
       });
@@ -297,6 +299,15 @@ export default function SignUp({ navigation }: any) {
                 />
               )}
             />
+            <View className="flex-row items-center">
+              <Ionicons name="information-circle" size={16} color="#2563EB" />
+              <HelperText
+                type="info"
+                style={{ paddingHorizontal: 0, color: "#2563EB" }}
+              >
+                &nbsp;PIN 번호는 계정 찾기에 사용되는 6자리 숫자입니다.
+              </HelperText>
+            </View>
             {(errors.pin?.type === "pattern" ||
               errors.pin?.type === "minLength") && (
               <HelperText type="error" style={{ paddingHorizontal: 0 }}>
@@ -456,6 +467,33 @@ export default function SignUp({ navigation }: any) {
                   : `${region1} ${region2}`}
               </Text>
             </Pressable>
+            <Controller
+              control={control}
+              name="managerUserId"
+              rules={{ required: true }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  className="bg-transparent"
+                  mode="flat"
+                  label="매니저 ID"
+                  maxLength={12}
+                  underlineColor="#4B5563"
+                  activeUnderlineColor="#2563EB"
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  placeholder="매니저에게 받은 ID"
+                  placeholderTextColor="#9CA3AF"
+                  style={{ paddingHorizontal: 0 }}
+                  error={!!errors.managerUserId}
+                />
+              )}
+            />
+            {errors.managerUserId?.type === "check" && (
+              <HelperText type="error" style={{ paddingHorizontal: 0 }}>
+                유효하지 않은 매니저 ID입니다.
+              </HelperText>
+            )}
           </View>
           <View className="mt-8">
             <Button

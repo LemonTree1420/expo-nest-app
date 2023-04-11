@@ -10,6 +10,7 @@ import Settings from "./src/Screens/settings";
 import BankEdit from "./src/Screens/bankEdit";
 import AccountHolderEdit from "./src/Screens/accountHolderEdit";
 import AccountNumberEdit from "./src/Screens/accountNumberEdit";
+import SignUp from "./src/Screens/signUp";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -35,6 +36,13 @@ function NoToken({ navigation }: any) {
         name="signIn"
         component={SignIn}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="signUp"
+        component={SignUp}
+        options={{
+          headerTitle: "회원가입",
+        }}
       />
     </Stack.Navigator>
   );

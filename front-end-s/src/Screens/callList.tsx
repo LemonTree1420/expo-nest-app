@@ -9,7 +9,7 @@ import getEnvVars from "../../environment";
 const { apiUrl } = getEnvVars();
 import { API_ERROR, API_HEADER } from "../constants/api";
 import { tokenValidateHandler } from "../constants/validate";
-import { FlatList, Pressable, View } from "react-native";
+import { Alert, FlatList, Pressable, View } from "react-native";
 import { moneyComma } from "../constants/regEx";
 import Loading from "./loading";
 
@@ -58,6 +58,21 @@ export default function CallList({ navigation }: any) {
     setRefresh(true);
   };
 
+  const onDeleteCallHandler = (id: string) => {
+    Alert.alert("", "콜을 마감하시겠습니까?", [
+      { text: "확인", onPress: () => onDeleteCallAxios(id) },
+      { text: "취소" },
+    ]);
+  };
+
+  const onDeleteCallAxios = async (id: string) => {
+    const token = await tokenValidateHandler(setStore, navigation);
+    await axios
+      .delete(`${apiUrl}call/delete/${id}`, API_HEADER(token))
+      .then((res) => onRefreshHandler())
+      .catch((err) => API_ERROR(err, setStore, navigation));
+  };
+
   const renderCallList = ({ item }: any) => (
     <React.Fragment key={item._id}>
       {!item.status && (
@@ -67,20 +82,28 @@ export default function CallList({ navigation }: any) {
             navigation.navigate("sub", { screen: "callDetail", params: item })
           }
         >
-          <View className="flex justify-center items-center h-4/6 w-1/2">
-            <Text className="font-bold text-lg">{item.customerAge}대 손님</Text>
+          <View className="flex justify-center items-center h-4/6 w-4/12">
+            <Text className="font-bold text-lg">{item.customerAge} 손님</Text>
             <Text className="font-bold text-gray-600">
-              요청 나이 {item.expectedAge}대
+              요청 나이 {item.expectedAge}
             </Text>
             <Text className="font-bold text-gray-600">
               요금 {moneyComma(item.fee.toString())}원
             </Text>
           </View>
-          <View className="flex justify-center items-center h-4/6 w-1/2">
+          <View className="flex justify-center items-center h-4/6 w-5/12">
             <Text className="font-bold text-lg">매칭 인원 수</Text>
             <Text className="text-xl font-bold text-gray-600">
               {item.nowCount}/{item.headCount}
             </Text>
+          </View>
+          <View className="flex justify-center items-center h-28 w-3/12">
+            <Pressable
+              className="flex items-center justify-center w-5/6 h-1/2 bg-blue-400 rounded-xl"
+              onPress={() => onDeleteCallHandler(item._id)}
+            >
+              <Text className="font-bold text-white text-xl">마감</Text>
+            </Pressable>
           </View>
         </Pressable>
       )}

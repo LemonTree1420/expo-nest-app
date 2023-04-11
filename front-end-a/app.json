@@ -10,7 +10,9 @@
       "image": "./assets/splash.png",
       "resizeMode": "contain"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "bundleIdentifier": "com.choice9063ww.choicea",
       "buildNumber": "1.0.0"
@@ -25,6 +27,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f48db9ca-4ca4-4ad3-a154-d69436878be1"
+      }
     }
   }
 }

@@ -23,8 +23,12 @@ export default function PointEndList({ navigation }: any) {
 
   const getCallList = async () => {
     const token = await tokenValidateHandler(setAdmin, navigation);
+    const api =
+      admin.role === "master"
+        ? `${apiUrl}point/end/all?limit=10&page=${listPage}`
+        : `${apiUrl}point/end?manager=${admin.userId}&limit=10&page=${listPage}`;
     return await axios
-      .get(`${apiUrl}point/end?limit=10&page=${listPage}`, API_HEADER(token))
+      .get(api, API_HEADER(token))
       .then((res) => getCallSuccess(res.data))
       .catch((err) => API_ERROR(err, setAdmin, navigation));
   };
@@ -103,7 +107,7 @@ export default function PointEndList({ navigation }: any) {
             color="#3F3F46"
           />
           <Text className="mt-4 text-lg text-gray-600">
-            포인트 요청 중인 사용자가 없습니다.
+            포인트 완료 리스트가 없습니다.
           </Text>
         </View>
       ) : (

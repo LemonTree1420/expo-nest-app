@@ -6,6 +6,7 @@ import { AuthService } from 'src/auth/auth.service';
 import { CreateManagerDto, UpdateAccountDto } from './manager.dto';
 import { AccountInfo, ManagerWithToken } from './manager.model';
 import { Manager, ManagerDocument } from './manager.schema';
+import { Role } from './manager.constants';
 
 @Injectable()
 export class ManagerService {
@@ -138,12 +139,39 @@ export class ManagerService {
    * @returns
    */
   async getManagerAccount(): Promise<AccountInfo> {
-    const manager: AccountInfo = await this.managerModel.findOne();
+    const manager: AccountInfo = await this.managerModel.findOne({
+      role: Role.MASTER,
+    });
     const accountInfo = {
       bank: manager.bank,
       accountHolder: manager.accountHolder,
       accountNumber: manager.accountNumber,
     };
     return accountInfo;
+  }
+
+  /**
+   * 아이디 중복 체크
+   * @param userId
+   * @returns
+   */
+  async checkManagerDuplicate(userId: string): Promise<boolean> {
+    const filter = { userId: userId };
+    const result = await this.managerModel.find(filter);
+    if (result.length === 0) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Worker 계정 삭제
+   * @param id
+   * @returns
+   */
+  async deleteManagerAccountById(id: Types.ObjectId): Promise<void> {
+    const filter = { _id: id };
+    await this.managerModel.findOneAndDelete(filter);
+    return;
   }
 }

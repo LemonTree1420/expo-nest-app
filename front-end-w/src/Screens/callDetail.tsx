@@ -103,11 +103,11 @@ export default function CallDetail({ navigation, route }: any) {
             </View>
             <View className="w-full bg-white shadow-sm shadow-black py-2 px-4">
               <Text className="text-zinc-800">손님 나이</Text>
-              <Text className="text-zinc-600">{call.customerAge}대</Text>
+              <Text className="text-zinc-600">{call.customerAge}</Text>
             </View>
             <View className="w-full bg-white shadow-sm shadow-black py-2 px-4">
               <Text className="text-zinc-800">요청 나이</Text>
-              <Text className="text-zinc-600">{call.expectedAge}대</Text>
+              <Text className="text-zinc-600">{call.expectedAge}</Text>
             </View>
             <View className="w-full bg-white shadow-sm shadow-black py-2 px-4">
               <Text className="text-zinc-800">요금</Text>

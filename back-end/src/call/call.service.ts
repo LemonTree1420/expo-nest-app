@@ -111,7 +111,8 @@ export class CallService {
   ): Promise<Call[]> {
     const filter = {
       region: region,
-      expectedAge: age,
+      // expectedAge: age,
+      status: false,
       'workers.cellPhoneNumber': { $not: { $regex: phone, $options: 'i' } },
     };
     const skip = Number(page) * Number(limit);
@@ -137,7 +138,7 @@ export class CallService {
     page: string,
   ): Promise<Call[]> {
     const filter = {
-      expectedAge: age,
+      // expectedAge: age,
       'workers.cellPhoneNumber': { $regex: phone, $options: 'i' },
     };
     const skip = Number(page) * Number(limit);
