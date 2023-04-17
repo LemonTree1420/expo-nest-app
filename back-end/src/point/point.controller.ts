@@ -136,4 +136,40 @@ export class PointController {
       responseChargePointDto,
     );
   }
+
+  /**
+   * 당일 전체 충전완료 금액 합계 - master
+   * @returns
+   */
+  @Get('/today/settlement')
+  getTodaySettlement(): Promise<number> {
+    return this.pointService.getTodaySettlement();
+  }
+
+  /**
+   * normal manager 별 당일 충전 완료 금액 합계 - master
+   * @returns
+   */
+  @Get('/today/settlement/bymanager')
+  getTodaySettlementListByManager(): Promise<any[]> {
+    return this.pointService.getTodaySettlementListByManager();
+  }
+
+  /**
+   * 당월 전체 충전완료 금액 합계 - master
+   * @returns
+   */
+  @Get('/month/settlement')
+  getThisMonthSettlement(): Promise<number> {
+    return this.pointService.getThisMonthSettlement();
+  }
+
+  /**
+   * normal manager 별 당일 충전 완료 금액 합계 - master
+   * @returns
+   */
+  @Get('/month/settlement/bymanager')
+  getThisMonthSettlementListByManager(): Promise<any[]> {
+    return this.pointService.getThisMonthSettlementListByManager();
+  }
 }

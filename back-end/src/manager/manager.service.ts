@@ -89,6 +89,15 @@ export class ManagerService {
   }
 
   /**
+   * normal manager list 검색
+   * @returns
+   */
+  async getNormalManagers(): Promise<Manager[]> {
+    const filter = { role: 'normal' };
+    return this.managerModel.find(filter);
+  }
+
+  /**
    * 매니저 로그인
    * @param loginDto
    * @returns

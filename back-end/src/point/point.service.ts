@@ -6,6 +6,8 @@ import { WorkerService } from 'src/worker/worker.service';
 import { RequestChargePointDto, ResponseChargePointDto } from './point.dto';
 import { Point, PointDocument } from './point.schema';
 import { ManagerService } from 'src/manager/manager.service';
+import * as dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 
 @Injectable()
 export class PointService {
@@ -13,6 +15,7 @@ export class PointService {
     @InjectModel(Point.name) private pointModel: Model<PointDocument>,
     private readonly storeService: StoreService,
     private readonly workerService: WorkerService,
+    private readonly managerService: ManagerService,
   ) {}
 
   /**
@@ -188,5 +191,127 @@ export class PointService {
       responseChargePointDto,
       { new: true },
     );
+  }
+
+  /**
+   * 당일 전체 충전완료 금액 합계 - master
+   * @returns
+   */
+  async getTodaySettlement(): Promise<number> {
+    const setToday = dayjs().set('hour', 0).set('minute', 0).set('second', 0);
+    const today = setToday.toDate();
+    const tomorrow = setToday.add(1, 'day').toDate();
+
+    const filter = {
+      responsePoint: { $ne: 0 },
+      createdAt: { $gte: today, $lt: tomorrow },
+    };
+
+    const todayEndPoints = await this.pointModel.find(filter);
+    let sumOfAmount = 0;
+    todayEndPoints.map((point: any) => {
+      sumOfAmount += point.depositAmount;
+    });
+    return sumOfAmount;
+  }
+
+  /**
+   * normal manager 별 당일 충전 완료 금액 합계 - master
+   * @returns
+   */
+  async getTodaySettlementListByManager(): Promise<any[]> {
+    const setToday = dayjs().set('hour', 0).set('minute', 0).set('second', 0);
+    const today = setToday.toDate();
+    const tomorrow = setToday.add(1, 'day').toDate();
+
+    const normalManagers = await this.managerService.getNormalManagers();
+
+    let amountList = await Promise.all(
+      normalManagers.map(async (manager: any) => {
+        let filter = {
+          managerUserId: manager.userId,
+          responsePoint: { $ne: 0 },
+          createdAt: { $gte: today, $lt: tomorrow },
+        };
+        let endPointsBymanager = await this.pointModel.find(filter);
+
+        let sumOfAmount = 0;
+        if (endPointsBymanager) {
+          endPointsBymanager.map((point: any) => {
+            sumOfAmount += point.depositAmount;
+          });
+        }
+        return {
+          managerUserId: manager.userId,
+          sumOfAmount: sumOfAmount,
+        };
+      }),
+    );
+    return amountList;
+  }
+
+  /**
+   * 당월 전체 충전완료 금액 합계 - master
+   * @returns
+   */
+  async getThisMonthSettlement(): Promise<number> {
+    const setThisMonth = dayjs()
+      .set('day', 1)
+      .set('hour', 0)
+      .set('minute', 0)
+      .set('second', 0);
+    const thisMonth = setThisMonth.toDate();
+    const nextMonth = setThisMonth.add(1, 'month').toDate();
+
+    const filter = {
+      responsePoint: { $ne: 0 },
+      createdAt: { $gte: thisMonth, $lt: nextMonth },
+    };
+
+    const todayEndPoints = await this.pointModel.find(filter);
+    let sumOfAmount = 0;
+    todayEndPoints.map((point: any) => {
+      sumOfAmount += point.depositAmount;
+    });
+    return sumOfAmount;
+  }
+
+  /**
+   * normal manager 별 당월 충전 완료 금액 합계 - master
+   * @returns
+   */
+  async getThisMonthSettlementListByManager(): Promise<any[]> {
+    const setThisMonth = dayjs()
+      .set('day', 1)
+      .set('hour', 0)
+      .set('minute', 0)
+      .set('second', 0);
+    const thisMonth = setThisMonth.toDate();
+    const nextMonth = setThisMonth.add(1, 'month').toDate();
+
+    const normalManagers = await this.managerService.getNormalManagers();
+
+    let amountList = await Promise.all(
+      normalManagers.map(async (manager: any) => {
+        let filter = {
+          managerUserId: manager.userId,
+          responsePoint: { $ne: 0 },
+          createdAt: { $gte: thisMonth, $lt: nextMonth },
+        };
+        let endPointsBymanager = await this.pointModel.find(filter);
+
+        let sumOfAmount = 0;
+        if (endPointsBymanager) {
+          endPointsBymanager.map((point: any) => {
+            sumOfAmount += point.depositAmount;
+          });
+        }
+        return {
+          managerUserId: manager.userId,
+          sumOfAmount: sumOfAmount,
+        };
+      }),
+    );
+    return amountList;
   }
 }
