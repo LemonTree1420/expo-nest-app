@@ -8,6 +8,8 @@ import { Point, PointDocument } from './point.schema';
 import { ManagerService } from 'src/manager/manager.service';
 import * as dayjs from 'dayjs';
 import 'dayjs/locale/ko';
+import { Settlement } from './point.model';
+import { Manager } from 'src/manager/manager.schema';
 
 @Injectable()
 export class PointService {
@@ -209,7 +211,7 @@ export class PointService {
 
     const todayEndPoints = await this.pointModel.find(filter);
     let sumOfAmount = 0;
-    todayEndPoints.map((point: any) => {
+    todayEndPoints.map((point: Point) => {
       sumOfAmount += point.depositAmount;
     });
     return sumOfAmount;
@@ -219,7 +221,7 @@ export class PointService {
    * normal manager 별 당일 충전 완료 금액 합계 - master
    * @returns
    */
-  async getTodaySettlementListByManager(): Promise<any[]> {
+  async getTodaySettlementListByManager(): Promise<Settlement[]> {
     const setToday = dayjs().set('hour', 0).set('minute', 0).set('second', 0);
     const today = setToday.toDate();
     const tomorrow = setToday.add(1, 'day').toDate();
@@ -227,7 +229,7 @@ export class PointService {
     const normalManagers = await this.managerService.getNormalManagers();
 
     let amountList = await Promise.all(
-      normalManagers.map(async (manager: any) => {
+      normalManagers.map(async (manager: Manager) => {
         let filter = {
           managerUserId: manager.userId,
           responsePoint: { $ne: 0 },
@@ -237,7 +239,7 @@ export class PointService {
 
         let sumOfAmount = 0;
         if (endPointsBymanager) {
-          endPointsBymanager.map((point: any) => {
+          endPointsBymanager.map((point: Point) => {
             sumOfAmount += point.depositAmount;
           });
         }
@@ -270,7 +272,7 @@ export class PointService {
 
     const todayEndPoints = await this.pointModel.find(filter);
     let sumOfAmount = 0;
-    todayEndPoints.map((point: any) => {
+    todayEndPoints.map((point: Point) => {
       sumOfAmount += point.depositAmount;
     });
     return sumOfAmount;
@@ -280,7 +282,7 @@ export class PointService {
    * normal manager 별 당월 충전 완료 금액 합계 - master
    * @returns
    */
-  async getThisMonthSettlementListByManager(): Promise<any[]> {
+  async getThisMonthSettlementListByManager(): Promise<Settlement[]> {
     const setThisMonth = dayjs()
       .set('day', 1)
       .set('hour', 0)
@@ -292,7 +294,7 @@ export class PointService {
     const normalManagers = await this.managerService.getNormalManagers();
 
     let amountList = await Promise.all(
-      normalManagers.map(async (manager: any) => {
+      normalManagers.map(async (manager: Manager) => {
         let filter = {
           managerUserId: manager.userId,
           responsePoint: { $ne: 0 },
@@ -302,7 +304,7 @@ export class PointService {
 
         let sumOfAmount = 0;
         if (endPointsBymanager) {
-          endPointsBymanager.map((point: any) => {
+          endPointsBymanager.map((point: Point) => {
             sumOfAmount += point.depositAmount;
           });
         }

@@ -13,6 +13,7 @@ import { Types } from 'mongoose';
 import { RequestChargePointDto, ResponseChargePointDto } from './point.dto';
 import { Point } from './point.schema';
 import { PointService } from './point.service';
+import { Settlement } from './point.model';
 
 @Controller('point')
 @UseGuards(AuthGuard())
@@ -151,7 +152,7 @@ export class PointController {
    * @returns
    */
   @Get('/today/settlement/bymanager')
-  getTodaySettlementListByManager(): Promise<any[]> {
+  getTodaySettlementListByManager(): Promise<Settlement[]> {
     return this.pointService.getTodaySettlementListByManager();
   }
 
@@ -169,7 +170,7 @@ export class PointController {
    * @returns
    */
   @Get('/month/settlement/bymanager')
-  getThisMonthSettlementListByManager(): Promise<any[]> {
+  getThisMonthSettlementListByManager(): Promise<Settlement[]> {
     return this.pointService.getThisMonthSettlementListByManager();
   }
 }
