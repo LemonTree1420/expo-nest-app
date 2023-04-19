@@ -11,6 +11,11 @@ import BankEdit from "./src/Screens/bankEdit";
 import AccountHolderEdit from "./src/Screens/accountHolderEdit";
 import AccountNumberEdit from "./src/Screens/accountNumberEdit";
 import SignUp from "./src/Screens/signUp";
+import SettlementList from "./src/Screens/settlementList";
+import { Fontisto } from "@expo/vector-icons";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { adminState, settlementRefreshState } from "./src/recoil/atoms";
+import { Pressable } from "react-native";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -83,6 +88,11 @@ function SubScreen() {
 }
 
 function TokenBottom() {
+  const admin = useRecoilValue(adminState);
+  const [settlementRefresh, setSettlementRefresh] = useRecoilState(
+    settlementRefreshState
+  );
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -127,6 +137,29 @@ function TokenBottom() {
           },
         }}
       />
+      {admin.role === "master" && (
+        <Tab.Screen
+          name="settlementList"
+          component={SettlementList}
+          options={{
+            headerTitle: "정산 내역",
+            tabBarLabel: "정산 내역",
+            tabBarIcon: ({ color, size }) => {
+              return <Fontisto name="wallet" size={size} color={color} />;
+            },
+            headerRight: () => (
+              <Pressable
+                className="px-4"
+                onPress={() => {
+                  setSettlementRefresh(settlementRefresh + 1);
+                }}
+              >
+                <Fontisto name="spinner-refresh" size={24} color="#fff" />
+              </Pressable>
+            ),
+          }}
+        />
+      )}
       <Tab.Screen
         name="settings"
         component={Settings}
