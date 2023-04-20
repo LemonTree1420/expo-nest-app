@@ -15,7 +15,7 @@ export default function TodaySettlement(props: any) {
       </View>
       <View className="w-full h-4/5 items-center bg-white pb-20">
         <View className="my-4">
-          <Text className="text-base">업체별 정산 금액</Text>
+          <Text className="text-base">매니저 별 정산 금액</Text>
         </View>
         {props.list.length === 0 ? (
           <View className="w-11/12 flex-1 justify-center items-center">

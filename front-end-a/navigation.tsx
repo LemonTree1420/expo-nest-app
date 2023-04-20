@@ -110,6 +110,7 @@ function TokenBottom() {
         },
         tabBarActiveTintColor: "#fff",
         headerShadowVisible: false,
+        tabBarHideOnKeyboard: true,
       }}
       initialRouteName="pointYetList"
     >

@@ -65,28 +65,24 @@ export default function PointEndList({ navigation }: any) {
       {!item.status && (
         <View className="mb-2">
           <View className="w-full bg-zinc-400 flex-row justify-around items-center py-1 px-3">
-            <Text className="font-bold text-base text-gray-100 w-1/2">
+            <Text className="text-center font-bold text-base text-gray-100 w-1/2">
               {item.request_auth === "worker" ? "직원" : "가게"}
             </Text>
-            <Text className="font-bold text-base text-gray-100 w-1/2">
+            <Text className="text-center font-bold text-base text-gray-100 w-1/2">
               {dayjs(item.createdAt).format("YYYY.MM.DD HH:mm")}
             </Text>
           </View>
           <View className="flex-row justify-around items-center bg-white h-20 px-3">
-            <View className="flex justify-center items-start h-4/6 w-1/2">
-              <Text className="font-bold text-gray-600">
-                예금주 {item.requestBankHolder}
-              </Text>
-              <Text className="font-bold text-gray-600">
-                계좌번호 {item.requestBankAccountNum}
+            <View className="w-1/2 flex items-center">
+              <Text className="font-bold text-gray-500">예금주</Text>
+              <Text className="text-xl font-bold text-gray-600">
+                {item.requestBankHolder}
               </Text>
             </View>
-            <View className="flex justify-center items-start h-4/6 w-1/2">
-              <Text className="font-bold text-gray-600">
-                입금 금액 {moneyComma(item.depositAmount.toString())}원
-              </Text>
-              <Text className="font-bold text-gray-600">
-                요청 포인트 {moneyComma(item.requestPoint.toString())}p
+            <View className="w-1/2 flex items-center">
+              <Text className="font-bold text-gray-500">입금 금액</Text>
+              <Text className="text-xl font-bold text-gray-600">
+                {moneyComma(item.depositAmount.toString())}원
               </Text>
             </View>
           </View>

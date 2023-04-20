@@ -22,7 +22,6 @@ import CallDetail from "./src/Screens/callDetail";
 import CallMatchDetail from "./src/Screens/callMatchDetail";
 import CallMatchList from "./src/Screens/callMatchList";
 import PointChargeList from "./src/Screens/pointChargeList";
-import PointAccountInput from "./src/Screens/pointAccountInput";
 import CallMatchInput from "./src/Screens/callMatchInput";
 
 const Stack = createNativeStackNavigator();
@@ -152,13 +151,6 @@ function SubScreen() {
         }}
       />
       <Stack.Screen
-        name="pointAccountInput"
-        component={PointAccountInput}
-        options={{
-          headerTitle: "계좌 정보 입력",
-        }}
-      />
-      <Stack.Screen
         name="callMatchInput"
         component={CallMatchInput}
         options={{
@@ -187,6 +179,7 @@ function TokenBottom() {
         },
         tabBarActiveTintColor: "#fff",
         headerShadowVisible: false,
+        tabBarHideOnKeyboard: true,
       }}
       initialRouteName="callList"
     >

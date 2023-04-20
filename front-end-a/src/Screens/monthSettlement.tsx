@@ -15,7 +15,7 @@ export default function MonthSettlement(props: any) {
       </View>
       <View className="w-full h-4/5 items-center bg-white pb-20">
         <View className="my-4">
-          <Text className="text-base">업체별 정산 금액</Text>
+          <Text className="text-base">매니저 별 정산 금액</Text>
         </View>
         {props.list.length === 0 ? (
           <View className="w-11/12 flex-1 justify-center items-center">
@@ -25,7 +25,7 @@ export default function MonthSettlement(props: any) {
               color="#3F3F46"
             />
             <Text className="mt-4 text-lg text-gray-600">
-              당일 정산 내역이 없습니다.
+              당월 정산 내역이 없습니다.
             </Text>
           </View>
         ) : (
