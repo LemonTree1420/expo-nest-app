@@ -77,7 +77,6 @@ export default function Point({ navigation }: any) {
       setPoint(0);
       clearErrors();
       setValue("requestBankHolder", "");
-      setValue("requestBankAccountNum", "");
     });
     return focusScreen;
   }, [navigation]);
@@ -151,7 +150,7 @@ export default function Point({ navigation }: any) {
                   </Pressable>
                 ))}
               </View>
-              <View className="w-full">
+              <View className="w-full mt-2">
                 <Controller
                   control={control}
                   name="requestBankHolder"
@@ -174,51 +173,28 @@ export default function Point({ navigation }: any) {
                     />
                   )}
                 />
-                <Controller
-                  control={control}
-                  name="requestBankAccountNum"
-                  rules={{ required: true }}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                      className="bg-transparent w-full"
-                      mode="flat"
-                      label="계좌번호"
-                      maxLength={14}
-                      underlineColor="#4B5563"
-                      activeUnderlineColor="#2563EB"
-                      value={value}
-                      onBlur={onBlur}
-                      onChangeText={onChange}
-                      placeholder="계좌번호(- 제외)"
-                      placeholderTextColor="#9CA3AF"
-                      keyboardType="numeric"
-                      style={{ paddingHorizontal: 0 }}
-                      error={!!errors.requestBankAccountNum}
-                    />
-                  )}
-                />
               </View>
               <View className="flex w-full mt-4">
                 <View className="flex">
                   <View className="flex-row mb-2">
-                    <Text className="text-base font-bold">
+                    <Text className="text-lg font-bold">
                       &#8251; 포인트 충전 방법
                     </Text>
-                    <Text className="text-base font-bold text-red-600">
+                    <Text className="text-lg font-bold text-red-600">
                       {" "}
                       (필독)
                     </Text>
                   </View>
-                  <Text className="text-md text-slate-600">
+                  <Text className="text-base text-slate-600">
                     1. 원하시는 금액을 선택해 충전하세요.
                   </Text>
-                  <Text className="text-md text-slate-600">
+                  <Text className="text-base text-slate-600">
                     2. 해당 금액을 아래 계좌에 입금해주세요.
                   </Text>
-                  <Text className="text-md text-slate-600">
+                  <Text className="text-base text-slate-600">
                     3. 입금이 확인되면, 포인트가 충전됩니다.
                   </Text>
-                  <Text className="text-xs text-slate-600 mt-2">
+                  <Text className="text-md text-slate-600 mt-2">
                     * 포인트가 충전되기까지 시간이 지연될 수 있습니다.
                   </Text>
                 </View>
@@ -226,7 +202,7 @@ export default function Point({ navigation }: any) {
             </View>
             <Button
               mode="contained"
-              className="w-11/12 bg-blue-600 mt-2 py-1 rounded-xl"
+              className="w-11/12 bg-blue-600 mt-4 py-1 rounded-xl"
               labelStyle={{
                 fontSize: 16,
               }}
@@ -242,23 +218,23 @@ export default function Point({ navigation }: any) {
               충전
             </Button>
           </View>
-          <View className="w-full flex justify-center items-center mt-2">
-            <View className="rounded-xl bg-cyan-700/90 py-3 px-5 w-11/12 shadow shadow-cyan-500/90">
+          <View className="w-full flex justify-center items-center mt-4">
+            <View className="rounded-xl bg-cyan-700/90 py-4 px-6 w-11/12 shadow shadow-cyan-500/90">
               <View className="flex-row justify-between items-center mb-6">
-                <Text className="text-lg text-white">{account?.bank}</Text>
+                <Text className="text-xl text-white">{account?.bank}</Text>
                 <Entypo
                   name="dots-three-vertical"
-                  size={20}
+                  size={22}
                   color="#fff"
                   onPress={() => {
                     setVisibleBottomSheet(true);
                   }}
                 />
               </View>
-              <Text className="text-lg text-white">
+              <Text className="text-xl text-white">
                 {account?.accountHolder}
               </Text>
-              <Text className="text-lg font-bold text-white">
+              <Text className="text-xl font-bold text-white">
                 {account?.accountNumber}
               </Text>
             </View>

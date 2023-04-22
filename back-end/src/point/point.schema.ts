@@ -24,10 +24,6 @@ export class Point {
   @Prop()
   requestBankHolder: string;
 
-  // 입금 계좌
-  @Prop()
-  requestBankAccountNum: string;
-
   // 입금액
   @Prop()
   depositAmount: number;

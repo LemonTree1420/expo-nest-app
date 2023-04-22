@@ -65,7 +65,7 @@ export default function PointYetList({ navigation }: any) {
       "",
       `아래 정보로 입금되었는지 확인하세요.\n\n예금주 ${
         item.requestBankHolder
-      }\n계좌번호 ${item.requestBankAccountNum}\n결제금액 ${moneyComma(
+      }\n결제금액 ${moneyComma(
         item.depositAmount.toString()
       )}원\n\n정말 충전하시겠습니까?`,
       [
